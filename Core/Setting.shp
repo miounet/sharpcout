@@ -1,0 +1,12 @@
+﻿OpenCould=False
+AutoUpdate=False
+AutoRun=False
+OpenLink=False
+SkinHeith=46
+Skinbstring=-1
+Skinbcstring=-23296
+Skinfbcstring=-256
+SkinFontName=宋体
+SkinFontSize=13
+DictVersion=1.0.0
+ApiUrl=http://srapi.ieimg.com/api/ZQRequest
