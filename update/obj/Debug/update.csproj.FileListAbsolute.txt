@@ -1,0 +1,9 @@
+D:\work\速录宝\update\bin\Debug\update.exe
+D:\work\速录宝\update\bin\Debug\update.pdb
+D:\work\速录宝\update\bin\Debug\ICSharpCode.SharpZipLib.dll
+D:\work\速录宝\update\obj\Debug\update.Form1.resources
+D:\work\速录宝\update\obj\Debug\update.Properties.Resources.resources
+D:\work\速录宝\update\obj\Debug\update.csproj.GenerateResource.Cache
+D:\work\速录宝\update\obj\Debug\update.exe
+D:\work\速录宝\update\obj\Debug\update.pdb
+D:\work\速录宝\update\obj\Debug\update.csprojResolveAssemblyReference.cache
