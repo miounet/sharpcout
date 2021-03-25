@@ -14,7 +14,7 @@ namespace Core.Comm
         /// <summary>
         /// Decrypt key
         /// </summary>
-        const string Decrypt_string = "srbkey";
+        const string Decrypt_string = "jmsrb";
  
         /// <summary>
         /// 加密
