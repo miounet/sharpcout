@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,11 +36,49 @@ namespace Core.Win
         public bool LoadMasterDict()
         {
             Input.MasterDit = Function.Decrypt(Input.MasterDitPath);
-             
+            Input.MasterDit = Input.MasterDit.Where(w => w.Length > 0).OrderBy(o => o.Substring(0, 1)).ToArray();
+            /*
             
+             //去重复字词
+            Dictionary<string, List<string>> dict = new Dictionary<string, List<string>>();
+            List<string> dl = new List<string>();
+            List<string> keys = new List<string>();
+            foreach (string item in Input.MasterDit)
+            {
+                string key=item.Split(' ')[0].Trim();
+                if (key.Trim().Length == 0) continue;
+                if (item.Trim().Length > 0 && !dict.ContainsKey(key))
+                {
+                    if (item.Substring(key.Length).Trim().Length > 0)
+                    {
+                        dict.Add(key, item.Substring(key.Length).Trim().Split(' ').ToList());
+                        keys.Add(key);
+                    }
+                }
+                else
+                {
+                    List<string> ll = dict[key];
+                    List<string> nl = item.Substring(key.Length).Trim().Split(' ').ToList();
+                    foreach (string data in nl)
+                    {
+                        if (ll.Find(l => l == data.Trim()) == null)
+                        {
+                            ll.Add(data.Trim());
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < keys.Count; i++)
+            {
+                string vk = keys[i]+" ";
+                vk+=" "+string.Join(" ", dict[keys[i]]);
+                dl.Add(vk);
+            }
+            File.WriteAllLines(Input.MasterDitPath, dl.ToArray());
+            */
             //初始化索引
             Input.CreateIndex(Input.MasterDit, ref Input.DictIndex.IndexList, 1, 0, Input.MasterDit.Length);
-
+ 
             LoadProDict();
             
             return true;
@@ -252,7 +290,7 @@ namespace Core.Win
             Input.ProDitPath = System.IO.Path.Combine(Input.AppPath, "prodict");
             Input.EnDitPath = System.IO.Path.Combine(Input.AppPath, "dict", "EnDit.shp");
             Input.UserDitPath = System.IO.Path.Combine(Input.AppPath, "dict", "UserDit.shp");
-            Input.SettingPath = System.IO.Path.Combine(Input.AppPath,  "Setting.shp");
+            Input.SettingPath = System.IO.Path.Combine(Input.AppPath, "Setting.shp");
             Input.CloundDitPath = System.IO.Path.Combine(Input.AppPath, "dict", "CloundDitPath.shp");
             #endregion
 
@@ -263,12 +301,18 @@ namespace Core.Win
             Input.qjywdict = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "qjen.shp"));
             Input.bjywdict = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "bjen.shp"));
             Input.onedict = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "one.shp"));
-            Input.linkdict = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "LinkDit.shp"));
+           var templist=Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "LinkDit.shp")).Where(w => !string.IsNullOrEmpty(w)).GroupBy(g => g.Substring(0, 3)).Select(
+                group =>
+                {
+                    Input.linkdictp.Add(group.Key.ToString(), group.ToList());
+                    return "";
+                }
+               ).ToArray()[0];
             LoadSettting();
             LoadMasterDict();
             LoadEnDict();
             LoadUserDict();
- 
+
             #endregion
 
             #region 速录映射
@@ -743,7 +787,8 @@ namespace Core.Win
                         if (queuecount > 1)
                             srinput += "~";
                     }
-                    srinput += Input.CheckKeysString(_lkey.KeyData);
+                    else
+                        srinput += Input.CheckKeysString(_lkey.KeyData);
                     
                 }
                
@@ -753,6 +798,25 @@ namespace Core.Win
                 InputStatus.Clear();
             }
             psrinput = srinput;
+            if (Input.IsChinese == 2 && (psrinput.Replace("~", "").Length == 1 || psrinput.Length==0))
+            {
+                Input.isActiveInput = false;
+
+                try
+                {
+                    if (psrinput.Replace("~", "").Length == 1)
+                        InputStatusFrm.SendText(psrinput.Replace("~", ""), true);
+                    if (srspace)
+                        InputStatusFrm.SendText(" ", true);
+                    InputStatus.ClearOnly();
+                   
+                }
+                catch { }
+
+                Input.isActiveInput = true;
+                this.Show();
+                return;
+            }
             bool hleft = false;
             bool hright = false;
             bool allNum = false;
@@ -817,7 +881,8 @@ namespace Core.Win
                     {
                         delprestr = false;
                         InputStatusFrm.LastLinkNum += srinput;
-                        srinput = srinput.Substring(srinput.IndexOf("$") - 1, 2);
+                        if (srinput.IndexOf("$") > 0)
+                            srinput = srinput.Substring(srinput.IndexOf("$") - 1, 2);
                         InputStatusFrm.LastLinkNum = InputStatusFrm.LastLinkNum.Replace(srinput, "");
                     }
                     if (srinput=="Y$")
@@ -903,6 +968,13 @@ namespace Core.Win
                         {
                             //切换至英文
                             Input.IsChinese = 0;
+                            Input.IsCnBd = false;
+                            Input.IsQJ = false;
+                        }
+                        else if (Input.IsChinese == 0)
+                        {
+                            //切换至速路助手
+                            Input.IsChinese = 2;
                             Input.IsCnBd = false;
                             Input.IsQJ = false;
                         }
@@ -1078,7 +1150,7 @@ namespace Core.Win
            
        
             SetCurPos();
- 
+
             if (srinput.Length > 0)
             {
                 string inputss = string.Empty;
@@ -1091,31 +1163,31 @@ namespace Core.Win
                     else
                         nostr += srinput.Substring(i, 1);
                 }
-                if (Input.IsChinese == 1 && InputStatus.inputstr.Length==2 
+                if (Input.IsChinese == 1 && InputStatus.inputstr.Length == 2
                     && inputss.Length == 1 && hright)
                 {
                     //第3码是右手顶字上屏
                     InputStatus.ShangPing(1);
                 }
-               
-                if (Input.IsChinese == 0 && inputss.Length == 0 && nostr==" ")
+
+                if (Input.IsChinese == 0 && inputss.Length == 0 && nostr == " ")
                 {
                     InputStatus.inputstr += nostr;
                     InputStatus.input = nostr;
                 }
                 else if (Input.IsChinese == 1 && InputStatus.inputstr.Length == 0
-                    && (nostr.Length==0 || nostr=="　" )
+                    && (nostr.Length == 0 || nostr == "　")
                     && inputss.Length == 1)
                 {
                     if (srspace) inputss += "~";
                     InputStatusFrm.SendText(Input.GetLROne(inputss, hleft));
-                    if (InputStatusFrm.LastLinkString.Length > 2 || (Input.IsChinese==0 && InputStatusFrm.LastLinkString.Length > 0))
+                    if (InputStatusFrm.LastLinkString.Length > 2 || (Input.IsChinese == 0 && InputStatusFrm.LastLinkString.Length > 0))
                         InputStatus.GetDreamValue(InputStatusFrm.LastLinkString);
                     return;
                 }
-                else if (Input.IsChinese == 1 &&  InputStatus.inputstr.Length == 0 && nostr == "~" && inputss.Length == 1)
+                else if (Input.IsChinese == 1 && InputStatus.inputstr.Length == 0 && nostr == "~" && inputss.Length == 1)
                 {
-                    InputStatusFrm.SendText(Input.GetLROne(nostr+inputss, hleft));
+                    InputStatusFrm.SendText(Input.GetLROne(nostr + inputss, hleft));
                     if (InputStatusFrm.LastLinkString.Length > 2 || (Input.IsChinese == 0 && InputStatusFrm.LastLinkString.Length > 0))
                         InputStatus.GetDreamValue(InputStatusFrm.LastLinkString);
                     return;
@@ -1130,22 +1202,53 @@ namespace Core.Win
                     if (!srspace) srspace = true;
                     else srspace = false;
                 }
-                if (InputStatus.inputstr.Length == 4 && psrinput.IndexOf("~") >= 0)
-                    InputStatus.ShowInput(srspace, InputStatus.inputstr.Length > 3 ? false : true, 0, true);
-                else
-                    InputStatus.ShowInput(srspace, InputStatus.inputstr.Length > 3 ? false : true);
-                
-                if (InputStatus.inputstr.Length>0 && InputStatus.inputstr.Length <= 2 && psrinput.IndexOf("~") >= 0)
-                    InputStatus.ShangPing(1);
-
-                if (Input.IsChinese == 0 && inputss.Length>0 && srspace)
+                if (Input.IsChinese == 2)
                 {
-                    //英文速录下起作用
-                    //完成字母上屏后有空格按键则补空格
-                    InputStatusFrm.SendText(" ");
+                    Input.isActiveInput = false;
+                    try
+                    {
+                        if (inputss.Length > 0)
+                        {
+                            if (srspace)
+                            {
+                                //完成字母上屏后有空格按键则补空格
+                                InputStatusFrm.SendText(inputss.Replace("~", ""), true);
+                                InputStatusFrm.SendText(" ", true);
+
+                            }
+                            else
+                            {
+                                InputStatusFrm.SendText(inputss.Replace("~", ""), true);
+                            }
+                        }
+                        else if (srspace) InputStatusFrm.SendText(" ", true);
+
+                        InputStatus.ClearOnly();
+                    }
+                    catch { }
+                   
+                    Input.isActiveInput = true;
+                    this.Show();
                 }
-                else if (Input.IsChinese == 0 && InputStatusFrm.LastLinkString.Length>2)
-                    InputStatus.GetDreamValue(InputStatusFrm.LastLinkString);
+                else
+                {
+                    if (InputStatus.inputstr.Length == 4 && psrinput.IndexOf("~") >= 0)
+                        InputStatus.ShowInput(srspace, InputStatus.inputstr.Length > 3 ? false : true, 0, true);
+                    else
+                        InputStatus.ShowInput(srspace, InputStatus.inputstr.Length > 3 ? false : true,0, psrinput.IndexOf("~") > 0);
+
+                    if (InputStatus.inputstr.Length > 0 && InputStatus.inputstr.Length <= 2 && psrinput.IndexOf("~") >= 0)
+                        InputStatus.ShangPing(1);
+
+                    if (Input.IsChinese == 0 && inputss.Length > 0 && srspace)
+                    {
+                        //英文速录下起作用
+                        //完成字母上屏后有空格按键则补空格
+                        InputStatusFrm.SendText(" ");
+                    }
+                    else if (Input.IsChinese == 0 && InputStatusFrm.LastLinkString.Length > 2)
+                        InputStatus.GetDreamValue(InputStatusFrm.LastLinkString);
+                }
             }
 
         }
@@ -1648,12 +1751,13 @@ namespace Core.Win
             catch
             {
 
-                MessageBox.Show("未找到速录教程文档!","巧指速录");
+                MessageBox.Show("未找到速录教程文档!","速录宝");
 
             }
         }
         private void label1_Click(object sender, EventArgs e)
         {
+            
  
             bool ok = false;
             if (e == null) ok = true;
