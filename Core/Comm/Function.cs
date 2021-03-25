@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,20 +48,16 @@ namespace Core.Comm
 
             string pToDecrypt = string.Empty;
             pToDecrypt = File.ReadAllText(sourceFile, Encoding.UTF8);
-            return pToDecrypt.Replace("\r\n", "\n").Split('\n');
+
             if (pToDecrypt == "")
             {
                 return null;
             }
 
-            StringBuilder sb = new StringBuilder();
-            pToDecrypt = Security.DecryptCommon(pToDecrypt);
-            for (int i = 0; i < pToDecrypt.Length; i++)
-            {
-                sb.Append((char)(pToDecrypt[i] + 1));
-            }
 
-            return sb.ToString().Replace("\r\n", "\n").Split('\n');
+            pToDecrypt = Security.DecryptCommon(pToDecrypt);
+
+            return pToDecrypt.Replace("\r\n", "\n").Split('\n');
 
         }
 
@@ -88,7 +84,9 @@ namespace Core.Comm
 
         public static string ConvertToChinese(string xx)
         {
- 
+            #if DEBUG
+            return xx;
+            #endif
 
             double x=0;
             if (double.TryParse(xx, out x))
@@ -102,7 +100,9 @@ namespace Core.Comm
 
         public static string SentConverToDate(string x)
         {
- 
+#if DEBUG
+            return x;
+#endif
             string v = string.Empty;
             try
             {
@@ -141,7 +141,9 @@ namespace Core.Comm
 
         public static string SentConverToMonth(string x)
         {
- 
+#if DEBUG
+            return x;
+#endif
             string v = string.Empty;
             try
             {
@@ -195,7 +197,9 @@ namespace Core.Comm
 
         public static string SentConverToDay(string x)
         {
- 
+#if DEBUG
+            return x;
+#endif
             string v = string.Empty;
             try
             {
@@ -232,7 +236,9 @@ namespace Core.Comm
 
         public static string SentConverToWeek(string x)
         {
- 
+#if DEBUG
+            return x;
+#endif
             string v = string.Empty;
             try
             {
