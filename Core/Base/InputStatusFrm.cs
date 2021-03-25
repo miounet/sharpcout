@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -260,6 +260,12 @@ namespace Core.Base
             input = string.Empty;
             HideWindow();
         }
+        public void ClearOnly()
+        {
+            inputstr = string.Empty;
+            input = string.Empty;
+ 
+        }
         public InputStatusFrm(InputMode input)
         {
             CheckForIllegalCrossThreadCalls = false;
@@ -339,13 +345,14 @@ namespace Core.Base
             if (!this.Visible && f)
             {
                 ShowWindow(this.Handle, SW_SHOWNOACTIVATE);
-                SetWindowPos(this.Handle, HWND_TOPMOST,  this.Left, this.Top, this.Width, this.Height, SWP_NoActiveWINDOW);
+                SetWindowPos(this.Handle, HWND_TOPMOST, this.Left, this.Top, this.Width, this.Height, SWP_NoActiveWINDOW);
             }
             else if (!f)
             {
- 
+
                 this.Hide();
                 ShowWindow(this.Handle, SW_HIDE);
+
             }
         }
 
@@ -359,8 +366,10 @@ namespace Core.Base
         /// </summary>
         public void HideWindow()
         {
-           Input.ClearShow();
-           this.ShowWindow(false);
+
+            Input.ClearShow();
+
+            this.ShowWindow(false);
         }
         /// <summary>
         /// 上一次的字词
@@ -406,6 +415,24 @@ namespace Core.Base
                     //无重码直接上屏
                     ShangPing(1);
                 }
+                else if(smspace && valuearry.Length == 2)
+                {
+                    //3码时，带空格，只有1重码，输出第2位字词。
+                    ShangPing(2,0,false);
+                    //this.ShowWindow(true);
+                }
+                //else if (smspace && valuearry.Length > 2 
+                //    && valuearry[0].Split('|')[1].Length== 1 && valuearry[1].Split('|')[1].Length == 1
+                //    &&  valuearry[2].Split('|')[1].Length >1)
+                //{
+                //    //3码时，带空格，只有1重码，输出第2位字词。
+                //    ShangPing(2, 0, false);
+                //    //this.ShowWindow(true);
+                //}
+                //else if(this.inputstr.Length==3 && smspace)
+                //{
+                //    ShangPing(1, 0, false);
+                //}
                 else if (smspace && count == 2)
                 {
                     ShangPing(2);
@@ -441,23 +468,38 @@ namespace Core.Base
         }
         public  void GetDreamValue(string v)
         {
- 
+#if DEBUG
+            return  ;
+#endif
+
             if (!InputMode.OpenLink) return;
 
             int count = 0;
             string valuestr = string.Empty;
+            string tinput = v.Length > 3 ? v.Substring(1) : v;
             if (Input.IsChinese == 1)
             {
-                for (int i = 0; i < Input.linkdict.Length; i++)
+                if (Input.linkdictp.ContainsKey(tinput))
                 {
-                    if (count >= this.PageSize) break;
-
-                    if (Input.linkdict[i].StartsWith(v))
+                    count++;
+                    valuestr += count + "z|" + v + "|\n";
+                    foreach (var item in Input.linkdictp[tinput])
                     {
+                        if (count >= this.PageSize) break;
                         count++;
-                        valuestr += count + "z|" + Input.linkdict[i] + "|\n";
+                        valuestr += count + "z|" + item + "|\n";
                     }
                 }
+                //for (int i = 0; i < Input.linkdict.Length; i++)
+                //{
+                //    if (count >= this.PageSize) break;
+
+                //    if (Input.linkdict[i].StartsWith(v))
+                //    {
+                //        count++;
+                //        valuestr += count + "z|" + Input.linkdict[i] + "|\n";
+                //    }
+                //}
 
 
                 if (valuestr.Length > 0)
@@ -468,7 +510,7 @@ namespace Core.Base
                         //转繁体
                         try
                         {
-                           valuestr = Microsoft.VisualBasic.Strings.StrConv(valuestr, Microsoft.VisualBasic.VbStrConv.TraditionalChinese, 0);
+                            valuestr = Microsoft.VisualBasic.Strings.StrConv(valuestr, Microsoft.VisualBasic.VbStrConv.TraditionalChinese, 0);
                         }
                         catch { }
                     }
@@ -480,10 +522,9 @@ namespace Core.Base
                     int postcount = 0;
                     for (int i = 0; i < pagesi && i < valuearry.Length; i++)
                     {
-                        if (LastLinkString != valuearry[i].Split('|')[1])
-                            cachearry[postcount++] = valuearry[i];
-                        else
-                            pagesi++;
+
+                        cachearry[postcount++] = valuearry[i];
+
                     }
                     if (postcount == 0)
                     {
