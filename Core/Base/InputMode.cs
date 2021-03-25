@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Drawing;
 using System.Collections.Generic;
@@ -32,7 +32,8 @@ namespace Core.Base
         public string[] qjywdict;//全角英文按键字典
         public string[] bjywdict;//半角英文按键字典
         public string[] onedict;//左右一简
-        public string[] linkdict;//汉字联想的词库
+     
+        public Dictionary<string, List<string>> linkdictp=new Dictionary<string, List<string>>();//汉字联想的词库
         public int MaxLen = 40;//上屏编码最大长度
         public  List<MapintKey> mapsortkeys = new List<MapintKey>();
         public List<MapintKey> mapkeys = new List<MapintKey>();
@@ -59,8 +60,8 @@ namespace Core.Base
         /// <returns></returns>
         public string GetSkinBKImg()
         {
-            string skin = string.Format("{0}{1}{2}.png",(this.IsChinese==1?"z":"y")
-                ,(this.IsQJ?"q":"b"),(this.IsJT?"j":"f"));
+            string skin = this.IsChinese == 2 ? "srzs.png" : (string.Format("{0}{1}{2}.png", (this.IsChinese == 1 ? "z" : "y")
+                , (this.IsQJ ? "q" : "b"), (this.IsJT ? "j" : "f")));
             return skin;
         }
         /// <summary>
@@ -1247,6 +1248,7 @@ namespace Core.Base
 
         public void ClearShow()
         {
+
             this.Show = false;
         }
         public System.Threading.Thread workth = null;
