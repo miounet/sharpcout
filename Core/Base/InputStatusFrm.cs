@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -14,7 +14,7 @@ namespace Core.Base
     {
         public string inputstr = string.Empty;//当前的
         public string input = string.Empty;//本次输入的码元
-  
+        public static string zdzjstr = string.Empty;//自动造句
         private static InputMode Input = null;
         /// <summary>
         /// 在联想状态
@@ -60,6 +60,8 @@ namespace Core.Base
         public static void SendText(string message, bool keysend = false)
         {
             if (string.IsNullOrEmpty(message)) return;
+            Input.IsPressLAlt = false;
+            Input.IsPressRAlt = false;
             if (keysend || message.StartsWith("sendkey"))
             {
                 SendKeys.Send(message.StartsWith("sendkey") ? message.Split(':')[1] : message);
@@ -107,7 +109,7 @@ namespace Core.Base
             
             LastSPValue = message;
             LastLinkString += message;
-            if (Input.IsChinese == 1 && !CheckChinese(message))
+            if (Input.IsChinese == 1 && !CheckChinese(message,true))
             {
                 LastLinkString = string.Empty;
                 if (Dream)
@@ -115,6 +117,7 @@ namespace Core.Base
                     Input.Show = false;
                     Dream = false;
                 }
+                AutoZJ();
             }
             else if (Input.IsChinese == 0 && !IsLowerLetter(message) && !IsUpperLetter(message))
             {
@@ -128,15 +131,47 @@ namespace Core.Base
             if (Input.IsChinese == 1 && LastLinkString.Length > 4) LastLinkString = LastLinkString.Substring(LastLinkString.Length-4);
 
         }
-  
+
+        //自动造4字以上的句，词作为联想字库，输入重请后消失。
+        public static void AutoZJ()
+        {
+            //if (InputMode.OpenLink)
+            //{
+            //    zdzjstr = zdzjstr.Trim();
+            //    if (zdzjstr.Length > 3)
+            //    {
+            //        if (!Input.linkdictp.ContainsKey(zdzjstr.Substring(0, 3)))
+            //        {
+            //            Input.linkdictp.Add(zdzjstr.Substring(0, 3), new List<string>() { zdzjstr });
+            //        }
+            //        else
+            //        {
+            //            var tl = Input.linkdictp[zdzjstr.Substring(0, 3)];
+            //            bool add = true;
+            //            foreach (var item in tl)
+            //            {
+            //                if (item == zdzjstr)
+            //                {
+            //                    add = false;
+            //                    break;
+            //                }
+            //            }
+            //            if (add) tl.Add(zdzjstr);
+            //        }
+            //    }
+            //}
+            //zdzjstr = string.Empty;
+        }
         /// <summary>
         /// 判定是否为汉字
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static bool CheckChinese(string str)
+        public static bool CheckChinese(string str, bool sp = false)
         {
-            return Regex.IsMatch(str, @"^[\u4e00-\u9fa5]+$");
+            bool vv = Regex.IsMatch(str, @"^[\u4e00-\u9fa5]+$");
+            //if (sp) zdzjstr += str;
+            return vv;
         }
         /// <summary>
         /// 判断输入的编码是否是26个小写字母
@@ -692,7 +727,7 @@ namespace Core.Base
            
             BufferedGraphicsContext context = BufferedGraphicsManager.Current;
             BufferedGraphics grafx = context.Allocate(e.Graphics, e.ClipRectangle);
-            
+      
             try
             {
                 if (this.inputstr.Length==0 && !Dream) return;
@@ -708,7 +743,9 @@ namespace Core.Base
                 grafx.Graphics.DrawRectangle(bordpen, hzrec);
                 int inputy = InputMode.SkinFontJG;
                 string ins = InputStatusFrm.Dream ? "智能联想" : this.inputstr;
-                grafx.Graphics.DrawString(ins, new Font(InputMode.SkinFontName, InputMode.SkinFontSize, FontStyle.Bold), bstring, new Point(0 + 3, 0 + 4));
+                int fontsize = InputMode.SkinFontSize;
+ 
+                grafx.Graphics.DrawString(ins, new Font(InputMode.SkinFontName, fontsize, FontStyle.Bold), bstring, new Point(0 + 3, 0 + 4));
                 if (valuearry != null && valuearry.Length > 0 && !InputStatusFrm.Dream) //分页数显示
                     grafx.Graphics.DrawString(string.Format("{0}/{1}", PageNum, (valuearry.Length % PageSize == 0 ? valuearry.Length / PageSize : valuearry.Length / PageSize + 1)), new Font("", 10F), bstring, new Point(Width - 44, 0 + 4));
                 if (ViewType == 0)
@@ -722,18 +759,21 @@ namespace Core.Base
                         string v = GetCutStr(cachearry[i].Split('|')[1]);
 
                         string pos = i == 9 ? "0." : (i + 1).ToString() + ".";
-                        Font tfont = new Font(InputMode.SkinFontName, InputMode.SkinFontSize);
+                        
+
+                        Font tfont = new Font(InputMode.SkinFontName, fontsize);
                         if (i == 0)
                             grafx.Graphics.DrawString(pos + v, tfont, fbcstring, new Point(wx, inputy));
                         else
                             grafx.Graphics.DrawString(pos + v, tfont, bstring, new Point(wx, inputy));
 
                         InputMode.lbinputv[i].Text = pos + v;
-                        if (InputMode.lbinputv[i].Text.Length > 3)
-                            wx += InputMode.lbinputv[i].PreferredWidth - 10;
-                        else
-                            wx += InputMode.lbinputv[i].PreferredWidth - 7;
-                        grafx.Graphics.DrawString(cachearry[i].Split('|')[2], new Font("宋体", InputMode.SkinFontSize - 1), bcstring, new Point(wx, inputy));
+                        //if (InputMode.lbinputv[i].Text.Length > 3)
+                        //    wx += InputMode.lbinputv[i].PreferredWidth - 10;
+                        //else
+                        //    wx += InputMode.lbinputv[i].PreferredWidth - 10;
+                        wx += InputMode.lbinputv[i].PreferredWidth - 10;
+                        grafx.Graphics.DrawString(cachearry[i].Split('|')[2], new Font("宋体", fontsize - 1), bcstring, new Point(wx, inputy));
                         if (string.IsNullOrEmpty(InputMode.lbinputc[i].Text))
                         {
                             wx += 4;

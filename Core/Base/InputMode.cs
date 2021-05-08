@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text;
 using System.Drawing;
 using System.Collections.Generic;
@@ -105,6 +105,8 @@ namespace Core.Base
         public  bool isActiveInput = true;
         public  bool IsPressShift = false;
         public  bool IsPressAlt = false;
+        public bool IsPressLAlt = false;
+        public bool IsPressRAlt = false;
         public  bool IsPressCtrl = false;
         public  bool IsPressWin = false;
 
