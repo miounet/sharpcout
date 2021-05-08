@@ -32,6 +32,7 @@ namespace Core.Win
             InputMode.AutoRun = this.chkAutoRun.Checked;
             InputMode.AutoUpdate = this.ckAutoUpdate.Checked;
             InputMode.OpenLink = this.ckLink.Checked;
+            winput.curTrac = this.tracchk.Checked;
             winput.SaveSetting();
             Comm.Function.RunWhenStart(InputMode.AutoRun);
             this.DialogResult = DialogResult.OK;
@@ -49,7 +50,7 @@ namespace Core.Win
             this.btnSkinbcstring.ForeColor = InputMode.Skinbcstring;
             this.btnSkinfbcstring.ForeColor = InputMode.Skinfbcstring;
             this.btnSkinFontName.Font = new System.Drawing.Font(InputMode.SkinFontName, InputMode.SkinFontSize);
-
+            this.tracchk.Checked = winput.curTrac;
 
         }
  
