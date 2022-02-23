@@ -26,7 +26,7 @@ namespace Core.Base
         /// <summary>
         /// 每页显示数量
         /// </summary>
-        public int PageSize = 7;
+        public int PageSize = 6;
         /// <summary>
         /// 当前页
         /// </summary>
@@ -59,6 +59,7 @@ namespace Core.Base
         /// <param name="keysend"></param>
         public static void SendText(string message, bool keysend = false)
         {
+ 
             if (string.IsNullOrEmpty(message)) return;
             Input.IsPressLAlt = false;
             Input.IsPressRAlt = false;
@@ -135,32 +136,32 @@ namespace Core.Base
         //自动造4字以上的句，词作为联想字库，输入重请后消失。
         public static void AutoZJ()
         {
-            //if (InputMode.OpenLink)
-            //{
-            //    zdzjstr = zdzjstr.Trim();
-            //    if (zdzjstr.Length > 3)
-            //    {
-            //        if (!Input.linkdictp.ContainsKey(zdzjstr.Substring(0, 3)))
-            //        {
-            //            Input.linkdictp.Add(zdzjstr.Substring(0, 3), new List<string>() { zdzjstr });
-            //        }
-            //        else
-            //        {
-            //            var tl = Input.linkdictp[zdzjstr.Substring(0, 3)];
-            //            bool add = true;
-            //            foreach (var item in tl)
-            //            {
-            //                if (item == zdzjstr)
-            //                {
-            //                    add = false;
-            //                    break;
-            //                }
-            //            }
-            //            if (add) tl.Add(zdzjstr);
-            //        }
-            //    }
-            //}
-            //zdzjstr = string.Empty;
+            if (InputMode.OpenLink)
+            {
+                zdzjstr = zdzjstr.Trim();
+                if (zdzjstr.Length > 3)
+                {
+                    if (!Input.linkdictp.ContainsKey(zdzjstr.Substring(0, 3)))
+                    {
+                        Input.linkdictp.Add(zdzjstr.Substring(0, 3), new List<string>() { zdzjstr });
+                    }
+                    else
+                    {
+                        var tl = Input.linkdictp[zdzjstr.Substring(0, 3)];
+                        bool add = true;
+                        foreach (var item in tl)
+                        {
+                            if (item == zdzjstr)
+                            {
+                                add = false;
+                                break;
+                            }
+                        }
+                        if (add) tl.Add(zdzjstr);
+                    }
+                }
+            }
+            zdzjstr = string.Empty;
         }
         /// <summary>
         /// 判定是否为汉字
@@ -755,6 +756,7 @@ namespace Core.Base
                     int wx = 1;
                     for (int i = 0; i < cachearry.Length; i++)
                     {
+                        if (InputMode.lbinputc[i] == null) break;
                         if (string.IsNullOrEmpty(cachearry[i])) break; ;
                         string v = GetCutStr(cachearry[i].Split('|')[1]);
 
@@ -766,12 +768,13 @@ namespace Core.Base
                             grafx.Graphics.DrawString(pos + v, tfont, fbcstring, new Point(wx, inputy));
                         else
                             grafx.Graphics.DrawString(pos + v, tfont, bstring, new Point(wx, inputy));
-
+                        if (InputMode.lbinputv == null || InputMode.lbinputv[i] == null) return;
                         InputMode.lbinputv[i].Text = pos + v;
                         //if (InputMode.lbinputv[i].Text.Length > 3)
                         //    wx += InputMode.lbinputv[i].PreferredWidth - 10;
                         //else
                         //    wx += InputMode.lbinputv[i].PreferredWidth - 10;
+
                         wx += InputMode.lbinputv[i].PreferredWidth - 10;
                         grafx.Graphics.DrawString(cachearry[i].Split('|')[2], new Font("宋体", fontsize - 1), bcstring, new Point(wx, inputy));
                         if (string.IsNullOrEmpty(InputMode.lbinputc[i].Text))

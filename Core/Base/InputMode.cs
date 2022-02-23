@@ -19,6 +19,7 @@ namespace Core.Base
         public string[] EnDit = null;
         public List<string> ClouddDit = new List<string>();
         public string AppPath = string.Empty;
+       
         public string MasterDitPath = string.Empty;
         public string ProDitPath = string.Empty;
         public string UserDitPath = string.Empty;
@@ -100,7 +101,7 @@ namespace Core.Base
         /// <summary>
         /// 参与的编码
         /// </summary>
-        protected string mdcode = "qwertyuiopasdfghjkl;'zxcvbnm,./QWERTYUIOPASDFGHJKL:ZXCVBNM<>?!，。、；’‘，．／";
+        protected string mdcode = "qwertyuiopasdfghjkl;'zxcvbnm,./QWERTYUIOPASDFGHJKL:ZXCVBNM<>?!，。、；’‘，．／`~@*_";
        
         public  bool isActiveInput = true;
         public  bool IsPressShift = false;
@@ -121,9 +122,11 @@ namespace Core.Base
 
         #region static
         public static string ApiUrl = "http://api.qzxxi.com/";
+        public static string CDPath = string.Empty;//当前词库目录
         public static bool OpenCould=true;//云词库
         public static bool AutoUpdate = true;//自动升级 
         public static bool OpenLink = true;//智能联想
+        public static bool OpenAltSelect = false;//左alt选重
         public static bool AutoRun = true;//自动运行
         public static string SkinFontName = "宋体";//字体名
         public static int SkinFontSize = 13;//字体大小
@@ -855,33 +858,41 @@ namespace Core.Base
         {
             hleft = false;
             hright = false;
+
+            //if (v.Replace("~", "").Length ==1)
+            //{
+            //    hleft = SRLeft(v.Replace("~", ""));
+            //    hright = SRRight(v.Replace("~", ""));
+            //    return;
+            //}
+
             string oldv = v;
-            v = v.Replace("；", ";").Replace("，", ",").Replace("。", ".").Replace("、", "/").Replace("‘", "'").Replace("’", "'");
-            if (v.Length == 1 && !CheckSRCode(v)) return;
-            string s = string.Empty;
+                v = v.Replace("；", ";").Replace("，", ",").Replace("。", ".").Replace("、", "/").Replace("‘", "'").Replace("’", "'").Replace("~","");
+                if (v.Length == 1 && !CheckSRCode(v)) return;
+                string s = string.Empty;
 
-            mapsortkeys.FindAll(f => v.IndexOf(f.ZM) >= 0).OrderBy(o => o.Pos).ToList().ForEach(f => s += f.ZM);
-            v = s;
-            s = string.Empty;
+                mapsortkeys.FindAll(f => v.IndexOf(f.ZM) >= 0).OrderBy(o => o.Pos).ToList().ForEach(f => s += f.ZM);
+                v = s;
+                s = string.Empty;
 
 
-        lbg:
-            bool have = false;
-            foreach (var m in mapkeys)
-            {
-                if (v.StartsWith(m.ZM))
+            lbg:
+                bool have = false;
+                foreach (var m in mapkeys)
                 {
-                    s += m.Map;
-                    v = v.Replace(m.ZM, string.Empty);
-                    have = true;
-                    hleft = SRLeft(m.ZM);
-                    hright = SRRight(m.ZM);
-                    break;
+                    if (v.StartsWith(m.ZM))
+                    {
+                        s += m.Map;
+                        v = v.Replace(m.ZM, string.Empty);
+                        have = true;
+                        hleft = SRLeft(m.ZM);
+                        hright = SRRight(m.ZM);
+                        break;
+                    }
+                    if (v.Length == 0) break;
                 }
-                if (v.Length == 0) break;
-            }
-            if (v.Length > 0 && have) goto lbg;
-
+                if (v.Length > 0 && have) goto lbg;
+            if (!hright) hleft = true;
 
         }
 
