@@ -349,14 +349,14 @@ namespace Core.Comm
                 if (Started == true)
                 {
 
-                    Run.SetValue("巧指速录宝-qzxxi.com Inc.", Application.ExecutablePath);
+                    Run.SetValue("速录宝-srkmm.ysepan.com", Application.ExecutablePath);
                     HKLM.Close();
 
                 }
                 else
                 {
 
-                    Run.DeleteValue("巧指速录宝-qzxxi.com Inc.");
+                    Run.DeleteValue("速录宝-srkmm.ysepan.com");
                     HKLM.Close();
                 }
             }
