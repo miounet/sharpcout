@@ -1,2 +1,2 @@
 srb_ver_info=1.6
-srb_down_info==http://ys-e.ysepan.com/618064340/217681397/h463735763KOHNTws5kjdb/srb1.6.zip
+srb_down_info=http://ys-e.ysepan.com/618064340/217681397/h463735763KOHNTws5kjdb/srb1.6.zip
