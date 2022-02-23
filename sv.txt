@@ -1,2 +1,2 @@
-srb_ver_info_s=1.6=srb_ver_info_e
+srb_ver_info_s=2.0=srb_ver_info_e
 srb_down_info_s=https://github.com/miounet/sharpcout/raw/master/updata/srb1.6.zip=srb_down_info_e
