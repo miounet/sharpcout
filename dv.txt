@@ -1,2 +1,2 @@
 srb_ver_info_s=20220223=srb_ver_info_e
-srb_down_info_s=http://ys-j.ysepan.com/618064318/217681619/i7328763I6LLIXTtv6jF28/srb_20220223.zip=srb_down_info_e
+srb_down_info_s=https://github.com/miounet/sharpcout/raw/master/updata/srb_20220223.zip=srb_down_info_e
