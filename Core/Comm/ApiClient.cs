@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +9,22 @@ using System.Runtime.Serialization.Json;
 
 namespace Core.Comm
 {
+    public class UpdateEnt
+    {
+        public string DictVersion { get; set; }
+        public string DictDownUrl { get; set; }
+ 
+
+    }
+
+ 
+    public class UpdateSoftEnt
+    {
+ 
+        public string ProductVer { get; set; }
+        public string DownUrl { get; set; }
+
+    }
 
     public class ApiClient
     {
@@ -42,6 +58,66 @@ namespace Core.Comm
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
+        public static UpdateEnt GetUpdateInfo(string url)
+        {
+            UpdateEnt c = new UpdateEnt();
+            try
+            {
+                c.DictVersion = Win.WinInput.DictVersion;
+
+                IAASResponse reponse = IAASRequest.Reauest(url, RequestMethod.GET, "", "", "");
+                if (reponse.StatusCode == HttpStatusCode.OK)
+                {
+                    if (reponse.Content.IndexOf("}") < 0)
+                        reponse.Content = "{" + reponse.Content + "}";
+              
+                    if (reponse.Content.IndexOf("srb_ver_info_s") > 0)
+                    {
+                        c.DictVersion= reponse.Content.Substring(reponse.Content.IndexOf("srb_ver_info_s"), reponse.Content.IndexOf("srb_ver_info_e") - reponse.Content.IndexOf("srb_ver_info_s")).Replace("=", "").Replace("srb_ver_info_s", "");
+                        c.DictDownUrl = reponse.Content.Substring(reponse.Content.IndexOf("srb_down_info_s"), reponse.Content.IndexOf("srb_down_info_e") - reponse.Content.IndexOf("srb_down_info_s")).Replace("=", "").Replace("srb_down_info_s", "");
+                    }
+                    else
+                        c = JsonToObj<UpdateEnt>(reponse.Content);
+                }
+            }
+            catch
+            {
+
+            }
+            return c;
+        }
+        public static UpdateSoftEnt GetEnt(string url)
+        {
+            UpdateSoftEnt c = new UpdateSoftEnt();
+
+            try
+            {
+                c.ProductVer = Program.ProductVer;
+                IAASResponse reponse = IAASRequest.Reauest(url, RequestMethod.GET, "", "", "");
+                if (reponse.StatusCode == HttpStatusCode.OK)
+                {
+                    if (reponse.Content.IndexOf("}") < 0)
+                        reponse.Content = "{" + reponse.Content + "}";
+                    if (reponse.Content.IndexOf("srb_ver_info_s") > 0)
+                    {
+                        c.ProductVer = reponse.Content.Substring(reponse.Content.IndexOf("srb_ver_info_s"), reponse.Content.IndexOf("srb_ver_info_e")- reponse.Content.IndexOf("srb_ver_info_s")).Replace("=","").Replace("srb_ver_info_s","");
+                        c.DownUrl = reponse.Content.Substring(reponse.Content.IndexOf("srb_down_info_s"), reponse.Content.IndexOf("srb_down_info_e") - reponse.Content.IndexOf("srb_down_info_s")).Replace("=", "").Replace("srb_down_info_s", "");
+                    }
+                    else
+                        c = JsonToObj<UpdateSoftEnt>(reponse.Content);
+                }
+            }
+            catch
+            {
+
+            }
+            return c;
+        }
+        /// <summary>
+        /// 获取dict更新地址
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public static UpdateDictEnt GetDictUpdate(string url)
         {
             UpdateDictEnt c = new UpdateDictEnt();
@@ -61,7 +137,7 @@ namespace Core.Comm
             }
             catch
             {
-                c.UpdateFalg = 0;
+                
             }
             return c;
         }
@@ -113,7 +189,7 @@ namespace Core.Comm
             }
             catch
             {
-                c.UpdateFalg = 0;
+                
             }
              
         }
@@ -135,7 +211,7 @@ namespace Core.Comm
             }
             catch
             {
-                c.UpdateFalg = 0;
+              
             }
 
         }
@@ -147,7 +223,7 @@ namespace Core.Comm
             c.LastMsgid=LastMsgid;
             try
             {
-            
+                c.HVID = Program.HVID;
                 c.ProVer = Program.ProductVer;
                 RequestEntity r = new RequestEntity();
                 r.OptCommand = OptCom.GetMyInfo.ToString();
@@ -184,7 +260,7 @@ namespace Core.Comm
             try
             {
                 c.DictList = pl;
-             
+                c.HVID = Program.HVID;
                 c.SearchKey = key;
                 RequestEntity r = new RequestEntity();
                 r.OptCommand = OptCom.GetProDict.ToString();
@@ -289,6 +365,8 @@ namespace Core.Comm
 
             try
             {
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; //加上这一句
+
                 request = (HttpWebRequest)WebRequest.Create(url);
 
                 request.Method = method.ToString();
@@ -298,7 +376,9 @@ namespace Core.Comm
                 request.UserAgent = DefaultUserAgent;
 
                 request.Proxy = SystemProxy;
- 
+
+              
+
                 request.Credentials = new NetworkCredential(user, password);
 
                 if (timeOut > 0)
