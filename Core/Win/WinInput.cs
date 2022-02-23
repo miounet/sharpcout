@@ -24,7 +24,8 @@ namespace Core.Win
         /// </summary>
         public static InputMode Input = new InputMode();
        
-        public static string ApiUrl = "http://srapi.ieimg.com/api/ZQRequest";
+        public static string ApiUrl = "https://github.com/miounet/sharpcout/blob/master/sv.txt";
+        public static string ApiDictUrl = "https://github.com/miounet/sharpcout/blob/master/dv.txt";
         public static string DictVersion = "1.0.1";
         public static IntPtr ForegroundWindow = IntPtr.Zero;
         private Label label1;
@@ -39,52 +40,52 @@ namespace Core.Win
         //int aA = 0;
         //int Aa = 0;
         //int AA = 0;
-
+ 
         public bool LoadMasterDict()
         {
-            
-   //         string[] fr = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "fr.txt")).OrderBy(o => o.Split(' ')[1].Length).ToArray();
-   //         List<string> frl = new List<string>();
-   //         foreach (var item in fr)
-   //         {
-   //             if (item.Trim().Length == 0) continue;
 
-   //             if (item.Split(' ')[1].StartsWith("i"))
-   //             {
-   //                 frl.Add(item);
-   //                 continue;
-   //             }
-   //             if (item.Split(' ')[0].Length == 1 && item.Split(' ')[1].Length == 3 && frl.Find(f => f.Split(' ')[1] == item.Split(' ')[1]) != null)
-   //             {
-   //                 continue;//重复单字3码不加
-   //             }
+            //         string[] fr = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "fr.txt")).OrderBy(o => o.Split(' ')[1].Length).ToArray();
+            //         List<string> frl = new List<string>();
+            //         foreach (var item in fr)
+            //         {
+            //             if (item.Trim().Length == 0) continue;
 
-   //             if (item.Split(' ')[0].Length == 1
-   //&& item.Split(' ')[1].Length == 4 
-   //&& frl.Find(f => f.Split(' ')[1].StartsWith(item.Split(' ')[1].Substring(0,2)) && f.Split(' ')[0] == item.Split(' ')[0]) != null)
-   //             {
-   //                 continue; //去单字4码
-   //             }
-   //             if (frl.Find(f => f == item) == null)
-   //             {
-   //                 if (item.Split(' ')[0].Length == 1
-   //                     && item.Split(' ')[1].Length == 4
-   //                     && frl.Find(f => f.Split(' ')[1] == item.Split(' ')[1].Substring(0, 3)) == null)
-   //                 {
-   //                     frl.Add(item.Split(' ')[0] + " " + item.Split(' ')[1].Substring(0, 3));
-   //                     continue;
-   //                 }
+            //             if (item.Split(' ')[1].StartsWith("i"))
+            //             {
+            //                 frl.Add(item);
+            //                 continue;
+            //             }
+            //             if (item.Split(' ')[0].Length == 1 && item.Split(' ')[1].Length == 3 && frl.Find(f => f.Split(' ')[1] == item.Split(' ')[1]) != null)
+            //             {
+            //                 continue;//重复单字3码不加
+            //             }
 
-   //                 frl.Add(item);
-   //             }
+            //             if (item.Split(' ')[0].Length == 1
+            //&& item.Split(' ')[1].Length == 4 
+            //&& frl.Find(f => f.Split(' ')[1].StartsWith(item.Split(' ')[1].Substring(0,2)) && f.Split(' ')[0] == item.Split(' ')[0]) != null)
+            //             {
+            //                 continue; //去单字4码
+            //             }
+            //             if (frl.Find(f => f == item) == null)
+            //             {
+            //                 if (item.Split(' ')[0].Length == 1
+            //                     && item.Split(' ')[1].Length == 4
+            //                     && frl.Find(f => f.Split(' ')[1] == item.Split(' ')[1].Substring(0, 3)) == null)
+            //                 {
+            //                     frl.Add(item.Split(' ')[0] + " " + item.Split(' ')[1].Substring(0, 3));
+            //                     continue;
+            //                 }
 
-   //         }
-   //         File.WriteAllLines(System.IO.Path.Combine(Input.AppPath, "dict", "fr_r.txt"), frl.ToArray());
+            //                 frl.Add(item);
+            //             }
 
+            //         }
+            //         File.WriteAllLines(System.IO.Path.Combine(Input.AppPath, "dict", "fr_r.txt"), frl.ToArray());
+
+ 
             Input.MasterDit = Function.Decrypt(Input.MasterDitPath);
             Input.MasterDit = Input.MasterDit.Where(w => w.Length > 0).OrderBy(o => o.Substring(0, 1)).ToArray();
 
-          
             //foreach(var item in Input.MasterDit)
             //{
             //    if (item.Split(' ')[1].Length == 1 && "南只放如没因依安花地东刻不关集片术开名吃两步音产事真士气飞任新城手就未失李笑议院计断由还指思应准支建法闻代为主治接阳段留四双告示红尔太容往制程系比了下数照整喜写越正第请场长石青或全门作所到给然紧记边百群影刚利眼决走候足九夫易叫在曾造称云光今十世方兴火消乎房服发子势声师先经精被随根并小员功都可情是入年空同热许变机解处文别的界保平调完离用直老反风它性令体三期行非林女虽连须总着流军除起立月要说响包坐内身张她海达明以他费会布头通题引来样跟这息多合极儿半格难究学周管据果设自运后义言马式及部生路时业加西打即己德分求化意志图况成现江车战华于武提又拉常各严待众二国黑乐大位对听元书实得去办命理点深语北道黄持却则再人山举何少向结特白最但日而象病之具交面爱金官显此公条认绝似统念无类每务切远客便取早力像本个好民改物装存罗过强王望我答见领转信司六至住怎与天品送口做落亲更美收视工死目量确已想备注五家当政很近钱若活干站千知动字快问原必上你观表受外和节才友七么展者等商且轻形中报始尽谈将推有故复高台父色神件清重进教什让觉识感单几前市呢其种那间约能万心带相满也些使算把低们次出看微话传八该共回首证定度底水找久从论里电一终英礼责族招笔宁升增列倒选般脱胡著默娘毛排谢杨科亦劳素帮免兵范油晚福限赶止停胜脑叶舞野托京迎异顺配午唐急摇楚厅馆忘啊伸哈祖藏游察试弟茶句阵仍划困富属脚广田区追朋跳智钟春曲卖线另价致充朱营否忙阴境哥担村恩读律角束征镇创苦质财威材窗梅继店组端喝纪皮检假承苏荣积益跑右围伯玩争顿买绿背标旧暗景惊拿嘴突州岁陈犯概独查危社缺敢压牛街份需付灵忽逐导妇拍击古孙架尚射希露莫仁占局玉盖摆监丁余居船派君源仅吧卷史供掉木龙项农纳登香技杂愿基归级既渐医烈索妻冲禁幸湖副奇善速挥宫害诗宗率凡策掌灯际球菜亮济临克错轮盘恶齐洋兄尼乱护冰雨耳浪欲投庄权借规园短翻替雷酒顾较超互松刀坏银按波斗男号饭沙怪坚佛党阿激味略遇词星诉够宝姓朝草移血伙警救艺板母夏室负妈迷网抱晓续竟休守孩散施毒歌养呼扬态靠防隐预庭牌获衣铁职食秘习欧助印班硬府哪夜简退户骨虚彩慢险秀封采土降屋料优抓攻器批遍贵冷参密左细验穿刘静软您堂树私例甚层织欢趣股雪初团握案讨某亚旁缓置楼释谁纸怕讲沉米熟育资败康罪状吗丝伤卫章普效练良巴脸肉环访姐药谓姑睛吸套虑省宣圣破执秋避座斯温模顶汉考恐戏换床睡研醒专河席怀丽疑烟块梦毫痛兰操判探差适队永校杀误维寻介吉演委肯乡勇画毕含修历雄联值".IndexOf(item.Split(' ')[1]) >=0)
@@ -120,7 +121,7 @@ namespace Core.Win
             //        }
             //    }
             //}
-            
+
             /*
             
              //去重复字词
@@ -231,7 +232,7 @@ namespace Core.Win
         {
             if (!File.Exists(Input.UserDitPath))
             {
-                File.WriteAllLines(Input.UserDitPath,new string[]{"qzZywSL 巧指中英文速录"}, Encoding.UTF8);
+                File.WriteAllLines(Input.UserDitPath,new string[]{"KomM 空明码"}, Encoding.UTF8);
             }
             Input.UserDit = File.ReadAllLines(Input.UserDitPath, Encoding.UTF8);//用户词库不用加解密
             Input.ClouddDit = File.ReadAllLines(Input.CloundDitPath, Encoding.UTF8).ToList<string>();//cloud词库不用加解密
@@ -255,13 +256,17 @@ namespace Core.Win
             InputMode.AutoRun = string.IsNullOrEmpty(SetInfo.GetValue("AutoRun", setting)) ? false : bool.Parse(SetInfo.GetValue("AutoRun", setting));
             curTrac = string.IsNullOrEmpty(SetInfo.GetValue("CurTrac", setting)) ? false : bool.Parse(SetInfo.GetValue("CurTrac", setting));
             InputMode.OpenLink = string.IsNullOrEmpty(SetInfo.GetValue("OpenLink", setting)) ? false : bool.Parse(SetInfo.GetValue("OpenLink", setting));
+            InputMode.OpenAltSelect = string.IsNullOrEmpty(SetInfo.GetValue("OpenAltSelect", setting)) ? false : bool.Parse(SetInfo.GetValue("OpenAltSelect", setting));
             InputMode.SkinHeith = string.IsNullOrEmpty(SetInfo.GetValue("SkinHeith", setting)) ? 46 : int.Parse(SetInfo.GetValue("SkinHeith", setting));
             InputMode.SkinFontSize = string.IsNullOrEmpty(SetInfo.GetValue("SkinFontSize", setting)) ? 13 : int.Parse(SetInfo.GetValue("SkinFontSize", setting));
             InputMode.Skinbstring = Color.FromArgb(int.Parse(SetInfo.GetValue("Skinbstring", setting)));
             InputMode.Skinbcstring = Color.FromArgb(int.Parse(SetInfo.GetValue("Skinbcstring", setting)));
             InputMode.Skinfbcstring = Color.FromArgb(int.Parse(SetInfo.GetValue("Skinfbcstring", setting)));
-            DictVersion = SetInfo.GetValue("DictVersion", setting);
-            ApiUrl = SetInfo.GetValue("ApiUrl", setting);
+            InputMode.CDPath = SetInfo.GetValue("CDPath", setting);
+            if (string.IsNullOrEmpty(InputMode.CDPath)) InputMode.CDPath = "空明码";
+
+            setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath,"dict", InputMode.CDPath, "ditver.shp"), Encoding.UTF8);//读配置
+            Win.WinInput.DictVersion = setting[0];
             return true;
         }
 
@@ -311,19 +316,28 @@ namespace Core.Win
             set.Add("AutoRun=" + InputMode.AutoRun.ToString());
             set.Add("CurTrac=" + curTrac.ToString());
             set.Add("OpenLink=" + InputMode.OpenLink.ToString());
+            set.Add("OpenAltSelect=" + InputMode.OpenAltSelect.ToString());
             set.Add("SkinHeith=" + InputMode.SkinHeith.ToString());
             set.Add("Skinbstring=" + InputMode.Skinbstring.ToArgb().ToString());
             set.Add("Skinbcstring=" + InputMode.Skinbcstring.ToArgb().ToString());
             set.Add("Skinfbcstring=" + InputMode.Skinfbcstring.ToArgb().ToString());
             set.Add("SkinFontName=" + InputMode.SkinFontName);
             set.Add("SkinFontSize=" + InputMode.SkinFontSize.ToString());
-            set.Add("DictVersion=" + DictVersion);
-            set.Add("ApiUrl=" + ApiUrl); 
+            set.Add("CDPath=" + InputMode.CDPath);
+
+         
             File.WriteAllLines(Input.SettingPath, set.ToArray(), Encoding.UTF8);//保存配置
             return true;
 
         }
+        public bool SaveDictSetting()
+        {
+            List<string> set = new List<string>();
+            set.Add(Win.WinInput.DictVersion);
+            File.WriteAllLines(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "ditver.shp"), set.ToArray(), Encoding.UTF8);//保存配置
+            return true;
 
+        }
         #region ui win api
         const int SW_SHOWNOACTIVATE = 4;
         const int SW_HIDE = 0;  
@@ -382,11 +396,16 @@ namespace Core.Win
 
             #region 读取路径
             Input.AppPath = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\\"));
-            Input.MasterDitPath = System.IO.Path.Combine(Input.AppPath, "dict", "MasterDit.shp");//兼容路径拼接方法就是这样实现
+            Input.SettingPath = System.IO.Path.Combine(Input.AppPath, "Setting.shp");
+            LoadSettting();
+
+
+            Input.MasterDitPath = System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "MasterDit.shp");//兼容路径拼接方法就是这样实现
+            Input.onedict = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "one.shp"));
+
+            Input.UserDitPath = System.IO.Path.Combine(Input.AppPath, "dict", "UserDit.shp");
             Input.ProDitPath = System.IO.Path.Combine(Input.AppPath, "prodict");
             Input.EnDitPath = System.IO.Path.Combine(Input.AppPath, "dict", "EnDit.shp");
-            Input.UserDitPath = System.IO.Path.Combine(Input.AppPath, "dict", "UserDit.shp");
-            Input.SettingPath = System.IO.Path.Combine(Input.AppPath, "Setting.shp");
             Input.CloundDitPath = System.IO.Path.Combine(Input.AppPath, "dict", "CloundDitPath.shp");
             #endregion
 
@@ -396,9 +415,9 @@ namespace Core.Win
             Input.bjzwdict = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "bjcn.shp"));
             Input.qjywdict = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "qjen.shp"));
             Input.bjywdict = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "bjen.shp"));
-            Input.onedict = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "one.shp"));
+           
             LoadLink();
-            LoadSettting();
+           
             LoadMasterDict();
             LoadEnDict();
             LoadUserDict();
@@ -407,7 +426,7 @@ namespace Core.Win
 
             #region 速录映射
             Input.mapsortkeys = new List<MapintKey>();
-            string mapstr = "~1qaz2wsx3edc4rfv5tgb6yhn7ujm8ik,9ol.0p;/-['=]，。、；";
+            string mapstr = "~1qaz2wsx3edc4rfv5tgb6yhn7ujm8ik,9ol.0p;/-['=]，。、；`@*_";
 
             for (short i = 0; i < mapstr.Length; i++)
             {
@@ -529,12 +548,14 @@ namespace Core.Win
  
         private int KeyboardHookProc(int nCode, Int32 wParam, IntPtr lParam)
          {
-             if (nCode < 0 || !Win.WinInput.Input.indexComplete) return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
-             if (Input.SelfOut) return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
+             if (nCode < 0 || !Win.WinInput.Input.indexComplete)
+                return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
+             if (Input.SelfOut) 
+                return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
             Core.Comm.KeyboardHookStruct MyKeyboardHookStruct = (Core.Comm.KeyboardHookStruct)Marshal.PtrToStructure(lParam, typeof(Core.Comm.KeyboardHookStruct));
             if (MyKeyboardHookStruct.vkCode == 231)
             {
-                return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
+               return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
             }
            
             Keys keyData = (Keys)MyKeyboardHookStruct.vkCode;
@@ -557,19 +578,19 @@ namespace Core.Win
                   
                     Input.IsPressCtrl = true;
                 }
-                //if (keyData == Keys.RMenu || keyData == Keys.LMenu)
-                //{
-                //    // Input.IsPressAlt = true;
-                //    if (keyData == Keys.RMenu) Input.IsPressRAlt = true;
-                //    else Input.IsPressLAlt = true;
-                //}
+       
                 if (keyData == Keys.RWin || keyData == Keys.LWin)
                 {
-                    
-                    Input.IsPressWin = true;
+                    if (!InputMode.OpenAltSelect && keyData != Keys.RWin)
+                        Input.IsPressWin = true;
+                }
+                if (keyData == Keys.LMenu || keyData == Keys.RMenu)
+                {
+                    if (!InputMode.OpenAltSelect && keyData != Keys.RMenu)
+                        Input.IsPressAlt = true;
                 }
                 #endregion
-                if (Input.IsPressAlt && Input.IsPressCtrl && keyData == Keys.Delete)
+                if (Input.IsPressCtrl && keyData == Keys.Delete)
                 {
                     Input.IsPressAlt = false;
                     Input.IsPressWin = false;
@@ -621,7 +642,10 @@ namespace Core.Win
                 keyques.MyKeyboardHookStruct = MyKeyboardHookStruct;
 
                 SendKeyToNex = UserOnKeyDown(keyData);
-                if (keyData == Keys.LMenu || keyData==Keys.RMenu) SendKeyToNex = 1;
+                if ((keyData == Keys.LMenu || keyData==Keys.RMenu
+                    || keyData == Keys.LWin || keyData == Keys.RWin
+                    ) && InputMode.OpenAltSelect) 
+                    SendKeyToNex = 1;
                 if (SendKeyToNex == 1)
                 {
                     lock (Comm.Cache.KeyQueue)
@@ -696,17 +720,25 @@ namespace Core.Win
                     openTSKey = true;
                     Input.IsPressCtrl = false;
                 }
-                if (keyData == Keys.RMenu || keyData == Keys.LMenu)
+                if ((keyData == Keys.RMenu || keyData == Keys.LMenu
+                    || keyData == Keys.LWin || keyData == Keys.RWin)
+                    && InputMode.OpenAltSelect)
                 {
                     //openTSKey = true;
                     openTSKey = false;
                     Input.IsPressAlt = false;
+                    Input.IsPressWin = false;
+
                 }
-                if (keyData == Keys.RWin || keyData == Keys.LWin)
+                else if ((keyData == Keys.RMenu || keyData == Keys.LMenu 
+                    || keyData == Keys.LWin || keyData == Keys.RWin) 
+                    && !InputMode.OpenAltSelect)
                 {
                     openTSKey = true;
+                    Input.IsPressAlt = false;
                     Input.IsPressWin = false;
                 }
+   
                 #endregion
  
             }
@@ -718,23 +750,23 @@ namespace Core.Win
             if (Input.IsPressCtrl && keyData == Keys.Space) return 1;
             else if ((Input.IsPressCtrl || Input.IsPressAlt || Input.IsPressWin || Input.IsPressShift))
             {
+
                 if (keystring.Length == 0 && keyData != Keys.LMenu)
                     return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
-                else
+                else if (Input.IsPressShift && !(Input.IsPressCtrl || Input.IsPressAlt || Input.IsPressWin))
                 {
-                    if (Input.IsPressShift && !(Input.IsPressCtrl || Input.IsPressAlt || Input.IsPressWin))
+                    if (InputStatus.inputstr.Length > 0)
                     {
-                        if (InputStatus.inputstr.Length > 0)
-                        {
-                            InputStatus.ShangPing(1);
-                        }
-                        InputStatusFrm.SendText(keystring);
-                        return 1;
+                        InputStatus.ShangPing(1);
                     }
-                    else if ((keyData == Keys.LMenu || keyData == Keys.RMenu) && Input.isActiveInput) return 1;
-                    else
-                        return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
+                    InputStatusFrm.SendText(keystring);
+                    return 1;
                 }
+                else if ((keyData == Keys.LMenu || keyData == Keys.RMenu
+                    || keyData == Keys.LWin || keyData == Keys.RWin) && InputMode.OpenAltSelect && Input.isActiveInput) return 1;
+                else
+                    return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
+
             }
             else if (openTSKey)
             {
@@ -744,7 +776,9 @@ namespace Core.Win
             else if (SendKeyToNex == 0)
             {
                 if (keyData == Keys.Back) InputStatusFrm.zdzjstr = string.Empty;
-                if ((keyData == Keys.LMenu || keyData == Keys.RMenu) && Input.isActiveInput) return 1;
+                if ((keyData == Keys.LMenu || keyData == Keys.RMenu
+                    || keyData == Keys.LWin || keyData == Keys.RWin) && InputMode.OpenAltSelect
+                    && Input.isActiveInput) return 1;
                 else
                     return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
             }
@@ -901,11 +935,12 @@ namespace Core.Win
                     _lkey = Comm.Cache.KeyQueue.Dequeue();
                     if (_lkey.KeyData == Keys.Space)
                     {
-                        srspace = true;
-                        if (queuecount > 1)
+                        if (!srspace && queuecount > 1)
                             srinput += "~";
+                        srspace = true;
                     }
-                    else if (_lkey.KeyData ==Keys.LMenu)
+                    else if (_lkey.KeyData ==Keys.LMenu || _lkey.KeyData == Keys.RMenu 
+                        || _lkey.KeyData==Keys.LWin || _lkey.KeyData == Keys.RWin)
                     {
                         Input.IsPressLAlt = true;
                     }
@@ -918,8 +953,8 @@ namespace Core.Win
                     Input.IsPressLAlt = false;
                     Input.IsPressRAlt = true;
                 }
-             
-               
+
+         
             }
             if (InputStatusFrm.LSView)
             {
@@ -964,12 +999,18 @@ namespace Core.Win
             bool allNum = false;
             int trynum = 0;
             allNum = int.TryParse(srinput, out trynum);
-
+         
             Input.CheckLetRight(srinput, out hleft, out hright);//获取左右按键
+            if (trynum > 50)
+            {
+                allNum = false;
+                hright = false;
+            }
+            
             string nostr = string.Empty;
             if (InputStatus.inputstr.Length == Input.MaxLen && psrinput.Length > 0)
                 InputStatus.ShangPing(1);
-
+            //if (",./;，。、；，．／；＇‘’　".IndexOf(srinput) >= 0 && InputStatus.inputstr.Length < 4) hright = true;
             if (Input.IsChinese==1 && psrinput.Length == 1 && srinput.Length == 1
                 && (InputStatus.inputstr.Length == 0
                 || ((InputStatus.inputstr.Length == 2 || InputStatus.inputstr.Length == 3) && hright))
@@ -987,7 +1028,9 @@ namespace Core.Win
             }
             else if (srinput.Length > 0)
             {
+               
                 srinput = Input.CovertStr(srinput.Replace("~", ""));
+                //if (",./;，。、；，．／；＇‘’　".IndexOf(srinput) >= 0 && InputStatus.inputstr.Length < 4) hright = true;
                 if (srinput.IndexOf(">") == 0)
                 {
                     InputStatus.ShangPing(int.Parse(srinput.Substring(1,1)), InputStatusFrm.Dream ? InputStatusFrm.LastLinkString.Length : 0);
@@ -1393,7 +1436,17 @@ namespace Core.Win
                     }
                     else
                     {
-                        if (InputStatus.inputstr.Length == 4 && psrinput.IndexOf("~") >= 0)
+                        if(Input.IsPressLAlt && InputStatus.inputstr.Length == 4)
+                        {
+                            InputStatus.ShowInput(false, false, 0, false);
+                            InputStatus.ShangPing(2);
+                        }
+                        else if (Input.IsPressRAlt && InputStatus.inputstr.Length == 4)
+                        {
+                            InputStatus.ShowInput(false, false, 0, false);
+                            InputStatus.ShangPing(3);
+                        }
+                        else if (InputStatus.inputstr.Length == 4 && psrinput.IndexOf("~") >= 0)
                             InputStatus.ShowInput(srspace, InputStatus.inputstr.Length > 3 ? false : true, 0, true);
                         else
                         {
@@ -1803,29 +1856,49 @@ namespace Core.Win
                 return;
             }
 
-            TrayIcon.Text = "速录宝1.01";//鼠标移至托盘的提示文本
+            TrayIcon.Text = "速录宝2.0";//鼠标移至托盘的提示文本
             TrayIcon.Visible = true;
 
             //定义一个MenuItem数组，并把此数组同时赋值给ContextMenu对象 
-            mnuItms = new MenuItem[9];
+            mnuItms = new MenuItem[11];
            
-            mnuItms[mnuItms.Length - 9] = new MenuItem();
-            mnuItms[mnuItms.Length - 9].Text = "关于速录宝1.2";
-            mnuItms[mnuItms.Length - 9].Visible = true;
-            mnuItms[mnuItms.Length - 9].Click += new System.EventHandler(this.AboutInfo);
-            mnuItms[mnuItms.Length - 8] = new MenuItem();
-            mnuItms[mnuItms.Length - 8].Text = "更新到最新版本";
-            mnuItms[mnuItms.Length - 8].Visible = true;
-            mnuItms[mnuItms.Length - 8].Click += new System.EventHandler(this.OpenHelp);
+            mnuItms[mnuItms.Length - 11] = new MenuItem();
+            mnuItms[mnuItms.Length - 11].Text = "关于速录宝2.0";
+            mnuItms[mnuItms.Length - 11].Visible = true;
+            mnuItms[mnuItms.Length - 11].Click += new System.EventHandler(this.AboutInfo);
+            mnuItms[mnuItms.Length - 10] = new MenuItem();
+            mnuItms[mnuItms.Length - 10].Text = "更新到最新版本";
+            mnuItms[mnuItms.Length - 10].Visible = true;
+            mnuItms[mnuItms.Length - 10].Click += new System.EventHandler(this.UpdataSoft);
   
-            mnuItms[mnuItms.Length - 7] = new MenuItem();
-            mnuItms[mnuItms.Length - 7].Text = "设置";
-            mnuItms[mnuItms.Length - 7].Visible = true;
-            mnuItms[mnuItms.Length - 7].Click += new System.EventHandler(this.label1_Click);
+            mnuItms[mnuItms.Length - 9] = new MenuItem();
+            mnuItms[mnuItms.Length - 9].Text = "设置";
+            mnuItms[mnuItms.Length - 9].Visible = true;
+            mnuItms[mnuItms.Length - 9].Click += new System.EventHandler(this.label1_Click);
 
-          
+            mnuItms[mnuItms.Length - 8] = new MenuItem();
+            mnuItms[mnuItms.Length - 8].Text = "指法练习";
+            mnuItms[mnuItms.Length - 8].Visible = true;
+            mnuItms[mnuItms.Length - 8].Click += new System.EventHandler(this.OpenBJLearn);
+
+            mnuItms[mnuItms.Length - 7] = new MenuItem();
+            mnuItms[mnuItms.Length - 7].Text = "并击方案";
+            mnuItms[mnuItms.Length - 7].Visible = true;
+
+            List<string> dirs = new List<string>(Directory.GetDirectories(System.IO.Path.Combine(Input.AppPath, "dict"), "*", System.IO.SearchOption.AllDirectories));
+            foreach (var dir in dirs)
+            {
+                MenuItem ttools = new MenuItem();
+                string inputname= dir.Substring(dir.LastIndexOf("\\") + 1); ;
+                if (InputMode.CDPath == inputname)
+                    ttools.Checked = true;
+                ttools.Text = inputname;
+                ttools.Click += new System.EventHandler(this.OpenInput);
+                mnuItms[mnuItms.Length - 7].MenuItems.Add(ttools);
+            }
+
             mnuItms[mnuItms.Length - 6] = new MenuItem();
-            mnuItms[mnuItms.Length - 6].Text = "常用工具";
+            mnuItms[mnuItms.Length - 6].Text = "工具";
             MenuItem itmetools = new MenuItem();
             itmetools.Text = "记事本";
             itmetools.Click += new System.EventHandler(this.OpenJSB);
@@ -1841,10 +1914,15 @@ namespace Core.Win
             itmetools2.Click += new System.EventHandler(this.ReStart);
             mnuItms[mnuItms.Length - 6].MenuItems.Add(itmetools2);
 
+            MenuItem itmetools3 = new MenuItem();
+            itmetools3.Text = "词库信息";
+            itmetools3.Click += new System.EventHandler(this.CurDictInfo);
+            mnuItms[mnuItms.Length - 6].MenuItems.Add(itmetools3);
+
             mnuItms[mnuItms.Length - 5] = new MenuItem();
-            mnuItms[mnuItms.Length - 5].Text = "专业词库";
+            mnuItms[mnuItms.Length - 5].Text = "帮助说明";
             mnuItms[mnuItms.Length - 5].Visible = true;
-            mnuItms[mnuItms.Length - 5].Click += new System.EventHandler(this.ProDictM);
+            mnuItms[mnuItms.Length - 5].Click += new System.EventHandler(this.OpenHelp);
 
             mnuItms[mnuItms.Length - 4] = new MenuItem();
             mnuItms[mnuItms.Length - 4].Text = "用户词库";
@@ -1874,6 +1952,26 @@ namespace Core.Win
             hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardHookProcedure, GetModuleHandle(ModuleName), 0);
             LoadLink();
           
+        }
+
+        private void CurDictInfo(object sender, System.EventArgs e)
+        {
+            InfoFrm frm = new InfoFrm(File.ReadAllText(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "ditinfo.shp"), Encoding.UTF8));
+            frm.Show();
+        }
+        private void OpenInput(object sender, System.EventArgs e)
+        {
+            MenuItem mt=(MenuItem)sender;
+            if (mt.Checked) return;
+            foreach(var me in  mt.Parent.MenuItems)
+            {
+                MenuItem st = (MenuItem)me;
+                st.Checked = false;
+            }
+            mt.Checked = true;
+            InputMode.CDPath = mt.Text;
+            this.SaveSetting();
+            this.InputIni();
         }
 
         /// <summary>
@@ -1920,42 +2018,67 @@ namespace Core.Win
             }
             #endregion
         }
-        private void OpenHelp(object sender, System.EventArgs e)
+        private void UpdataSoft(object sender, System.EventArgs e)
         {
             PlanThread.UpdataSoft(true);
-            return;
+            
+        }
+        private void OpenHelp(object sender, System.EventArgs e)
+        {
+
             try
             {
                 System.Diagnostics.Process Proc = new System.Diagnostics.Process();
                 System.Diagnostics.ProcessStartInfo Info = new System.Diagnostics.ProcessStartInfo();
-                Info.WorkingDirectory = Application.StartupPath + "\\";
+                Info.WorkingDirectory = System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath);
                 Info.FileName = "help.chm";
-                if (File.Exists(Application.StartupPath + "\\help.chm"))
+                if (File.Exists(System.IO.Path.Combine(Info.WorkingDirectory, "help.chm")))
                 {
                     Info.FileName = "help.chm";
                 }
-                else if (File.Exists(Application.StartupPath + "\\help.pdf"))
+                else if (File.Exists(System.IO.Path.Combine(Info.WorkingDirectory, "help.pdf")))
                 {
                     Info.FileName = "help.pdf";
                 }
-                else if (File.Exists(Application.StartupPath + "\\help.doc"))
+                else if (File.Exists(System.IO.Path.Combine(Info.WorkingDirectory, "help.doc")))
                 {
                     Info.FileName = "help.doc";
                 }
-                else if (File.Exists(Application.StartupPath + "\\help.docx"))
+                else if (File.Exists(System.IO.Path.Combine(Info.WorkingDirectory, "help.docx")))
                 {
                     Info.FileName = "help.docx";
                 }
-                else if (File.Exists(Application.StartupPath + "\\readme.txt"))
+                else if (File.Exists(System.IO.Path.Combine(Info.WorkingDirectory, "help.txt")))
                 {
-                    Info.FileName = "readme.txt";
+                    Info.FileName = "help.txt";
                 }
+
                 Proc = System.Diagnostics.Process.Start(Info);
             }
             catch
             {
 
-                MessageBox.Show("未找到速录教程文档!","巧指速录");
+                MessageBox.Show("未找到帮助文档(help.pdf/help.doc/help.chm)!", "速录宝");
+
+            }
+        }
+
+        private void OpenBJLearn(object sender, System.EventArgs e)
+        {
+
+            try
+            {
+                System.Diagnostics.Process Proc = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo Info = new System.Diagnostics.ProcessStartInfo();
+                Info.WorkingDirectory = System.IO.Path.Combine(Input.AppPath, "速录练习软件");
+                Info.FileName = "并击练习.exe";
+           
+                Proc = System.Diagnostics.Process.Start(Info);
+            }
+            catch
+            {
+
+                MessageBox.Show("未找到程序!", "速录宝");
 
             }
         }
@@ -1964,11 +2087,11 @@ namespace Core.Win
             
 #if DEBUG
             MessageBox.Show("试用版不能使用此功能!");
-            return;
+           // return;
 #endif
             if (!Program.CheckAppOK)
             {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "巧指速录");
+                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
                 return;
             }
             bool ok = false;
@@ -2034,7 +2157,7 @@ namespace Core.Win
 #endif
             if (!Program.CheckAppOK)
             {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "巧指速录");
+                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
                 return;
             }
             Win.UserDict frm = new UserDict(Input,this);
@@ -2054,7 +2177,7 @@ namespace Core.Win
 #endif
             if (!Program.CheckAppOK)
             {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "巧指速录");
+                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
                 return;
             }
             Win.QueryFrm frm = new QueryFrm();
@@ -2074,7 +2197,7 @@ namespace Core.Win
 #endif
             if (!Program.CheckAppOK)
             {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "巧指速录");
+                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
                 return;
             }
             Win.ProDictFrm frm = new ProDictFrm(Input, this);

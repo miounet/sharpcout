@@ -32,6 +32,7 @@ namespace Core.Win
             InputMode.AutoRun = this.chkAutoRun.Checked;
             InputMode.AutoUpdate = this.ckAutoUpdate.Checked;
             InputMode.OpenLink = this.ckLink.Checked;
+            InputMode.OpenAltSelect = this.ckalt.Checked;
             winput.curTrac = this.tracchk.Checked;
             winput.SaveSetting();
             Comm.Function.RunWhenStart(InputMode.AutoRun);
@@ -51,7 +52,7 @@ namespace Core.Win
             this.btnSkinfbcstring.ForeColor = InputMode.Skinfbcstring;
             this.btnSkinFontName.Font = new System.Drawing.Font(InputMode.SkinFontName, InputMode.SkinFontSize);
             this.tracchk.Checked = winput.curTrac;
-
+            this.ckalt.Checked = InputMode.OpenAltSelect;
         }
  
         private void numSkinHeight_ValueChanged(object sender, EventArgs e)

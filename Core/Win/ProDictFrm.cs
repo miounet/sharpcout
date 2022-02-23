@@ -156,7 +156,7 @@ namespace Core.Win
         {
             if (!Program.CheckAppOK)
             {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "巧指速录");
+                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
                 return;
             }
 

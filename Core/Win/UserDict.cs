@@ -83,7 +83,7 @@ namespace Core.Win
         {
             if (!Program.CheckAppOK)
             {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "巧指速录");
+                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
                 return;
             }
             if (this.txtCode.Text.Trim().Length > 0 && this.txtValue.Text.Trim().Length > 0)
@@ -103,7 +103,7 @@ namespace Core.Win
         {
             if (!Program.CheckAppOK)
             {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "巧指速录");
+                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
                 return;
             }
             if (this.dataGridView1.SelectedRows.Count <= 0)
