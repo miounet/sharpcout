@@ -1,1 +1,2 @@
-{"DictVersion":"20220223","DictDownUrl":"http://ys-e.ysepan.com/618064340/217681397/h463735763KOHNTws5kjdb/srb1.6.zip"}
+srb_ver_info=20220223
+srb_down_info==http://ys-j.ysepan.com/618064318/217681619/i7328763I6LLIXTtv6jF28/srb_20220223.zip
