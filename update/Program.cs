@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -29,7 +29,7 @@ namespace update
             {
             tryLb:
                 tn++;
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(1000);
                 if (UnZip(file, filepath, string.Empty))
                 {
                     System.Threading.Thread.Sleep(300);
@@ -37,8 +37,8 @@ namespace update
 
                     //关闭速录软件，打开升级解压程序
 
-                    System.Diagnostics.Process.Start(System.IO.Path.Combine(filepath, "SharpOut.exe"));
-
+                    System.Diagnostics.Process.Start(System.IO.Path.Combine(filepath, "速录宝.exe"));
+                    System.Threading.Thread.Sleep(2000);
                     Application.Exit();
                 }
                 else if (tn <= 3)
