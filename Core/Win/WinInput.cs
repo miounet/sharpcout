@@ -267,6 +267,8 @@ namespace Core.Win
 
             setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath,"dict", InputMode.CDPath, "ditver.shp"), Encoding.UTF8);//读配置
             Win.WinInput.DictVersion = setting[0];
+            setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "dicturl.shp"), Encoding.UTF8);//读配置
+            Win.WinInput.ApiDictUrl = setting[0];
             return true;
         }
 
