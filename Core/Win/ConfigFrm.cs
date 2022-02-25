@@ -33,7 +33,9 @@ namespace Core.Win
             InputMode.AutoUpdate = this.ckAutoUpdate.Checked;
             InputMode.OpenLink = this.ckLink.Checked;
             InputMode.OpenAltSelect = this.ckalt.Checked;
+            InputMode.SingleInput = this.SingleInput.Checked;
             winput.curTrac = this.tracchk.Checked;
+            InputMode.PageSize = (int)this.selectnum.Value;
             winput.SaveSetting();
             Comm.Function.RunWhenStart(InputMode.AutoRun);
             this.DialogResult = DialogResult.OK;
@@ -47,12 +49,14 @@ namespace Core.Win
             this.chkAutoRun.Checked = InputMode.AutoRun;
             this.ckLink.Checked = InputMode.OpenLink;
             this.numSkinHeight.Value = InputMode.SkinHeith;
+            this.selectnum.Value = InputMode.PageSize;
             this.btnSkinbstring.ForeColor = InputMode.Skinbstring;
             this.btnSkinbcstring.ForeColor = InputMode.Skinbcstring;
             this.btnSkinfbcstring.ForeColor = InputMode.Skinfbcstring;
             this.btnSkinFontName.Font = new System.Drawing.Font(InputMode.SkinFontName, InputMode.SkinFontSize);
             this.tracchk.Checked = winput.curTrac;
             this.ckalt.Checked = InputMode.OpenAltSelect;
+            this.SingleInput.Checked = InputMode.SingleInput;
         }
  
         private void numSkinHeight_ValueChanged(object sender, EventArgs e)

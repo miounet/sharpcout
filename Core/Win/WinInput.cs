@@ -258,11 +258,13 @@ namespace Core.Win
             InputMode.OpenLink = string.IsNullOrEmpty(SetInfo.GetValue("OpenLink", setting)) ? false : bool.Parse(SetInfo.GetValue("OpenLink", setting));
             InputMode.OpenAltSelect = string.IsNullOrEmpty(SetInfo.GetValue("OpenAltSelect", setting)) ? false : bool.Parse(SetInfo.GetValue("OpenAltSelect", setting));
             InputMode.SkinHeith = string.IsNullOrEmpty(SetInfo.GetValue("SkinHeith", setting)) ? 46 : int.Parse(SetInfo.GetValue("SkinHeith", setting));
+            InputMode.PageSize = string.IsNullOrEmpty(SetInfo.GetValue("PageSize", setting)) ? 6 : int.Parse(SetInfo.GetValue("PageSize", setting));
             InputMode.SkinFontSize = string.IsNullOrEmpty(SetInfo.GetValue("SkinFontSize", setting)) ? 13 : int.Parse(SetInfo.GetValue("SkinFontSize", setting));
             InputMode.Skinbstring = Color.FromArgb(int.Parse(SetInfo.GetValue("Skinbstring", setting)));
             InputMode.Skinbcstring = Color.FromArgb(int.Parse(SetInfo.GetValue("Skinbcstring", setting)));
             InputMode.Skinfbcstring = Color.FromArgb(int.Parse(SetInfo.GetValue("Skinfbcstring", setting)));
             InputMode.CDPath = SetInfo.GetValue("CDPath", setting);
+            InputMode.SingleInput = string.IsNullOrEmpty(SetInfo.GetValue("SingleInput", setting)) ? false : bool.Parse(SetInfo.GetValue("SingleInput", setting));
             if (string.IsNullOrEmpty(InputMode.CDPath)) InputMode.CDPath = "空明码";
 
             setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath,"dict", InputMode.CDPath, "ditver.shp"), Encoding.UTF8);//读配置
@@ -320,14 +322,15 @@ namespace Core.Win
             set.Add("OpenLink=" + InputMode.OpenLink.ToString());
             set.Add("OpenAltSelect=" + InputMode.OpenAltSelect.ToString());
             set.Add("SkinHeith=" + InputMode.SkinHeith.ToString());
+            set.Add("PageSize=" + InputMode.PageSize.ToString());
             set.Add("Skinbstring=" + InputMode.Skinbstring.ToArgb().ToString());
             set.Add("Skinbcstring=" + InputMode.Skinbcstring.ToArgb().ToString());
             set.Add("Skinfbcstring=" + InputMode.Skinfbcstring.ToArgb().ToString());
             set.Add("SkinFontName=" + InputMode.SkinFontName);
             set.Add("SkinFontSize=" + InputMode.SkinFontSize.ToString());
             set.Add("CDPath=" + InputMode.CDPath);
+            set.Add("SingleInput=" + InputMode.SingleInput.ToString());
 
-         
             File.WriteAllLines(Input.SettingPath, set.ToArray(), Encoding.UTF8);//保存配置
             return true;
 
@@ -1858,7 +1861,7 @@ namespace Core.Win
                 return;
             }
 
-            TrayIcon.Text = "速录宝2.0";//鼠标移至托盘的提示文本
+            TrayIcon.Text = "速录宝2.0.2";//鼠标移至托盘的提示文本
             TrayIcon.Visible = true;
 
             //定义一个MenuItem数组，并把此数组同时赋值给ContextMenu对象 
@@ -1921,6 +1924,11 @@ namespace Core.Win
             itmetools3.Click += new System.EventHandler(this.CurDictInfo);
             mnuItms[mnuItms.Length - 6].MenuItems.Add(itmetools3);
 
+            MenuItem itmetools4 = new MenuItem();
+            itmetools4.Text = "词库生成";
+            itmetools4.Click += new System.EventHandler(this.CreateDictInfo);
+            mnuItms[mnuItms.Length - 6].MenuItems.Add(itmetools4);
+
             mnuItms[mnuItms.Length - 5] = new MenuItem();
             mnuItms[mnuItms.Length - 5].Text = "帮助说明";
             mnuItms[mnuItms.Length - 5].Visible = true;
@@ -1959,6 +1967,12 @@ namespace Core.Win
         private void CurDictInfo(object sender, System.EventArgs e)
         {
             InfoFrm frm = new InfoFrm(File.ReadAllText(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "ditinfo.shp"), Encoding.UTF8));
+            frm.Show();
+        }
+
+        private void CreateDictInfo(object sender, System.EventArgs e)
+        {
+            DictTool frm = new DictTool();
             frm.Show();
         }
         private void OpenInput(object sender, System.EventArgs e)

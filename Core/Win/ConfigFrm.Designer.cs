@@ -47,13 +47,20 @@
             this.btnClose = new System.Windows.Forms.Button();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.selectnum = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.SingleInput = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSkinHeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.selectnum)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.SingleInput);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.selectnum);
             this.groupBox1.Controls.Add(this.ckalt);
             this.groupBox1.Controls.Add(this.tracchk);
             this.groupBox1.Controls.Add(this.chkAutoRun);
@@ -128,7 +135,7 @@
             // 
             this.ckOpenCould.AutoSize = true;
             this.ckOpenCould.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ckOpenCould.Location = new System.Drawing.Point(256, 53);
+            this.ckOpenCould.Location = new System.Drawing.Point(341, 53);
             this.ckOpenCould.Name = "ckOpenCould";
             this.ckOpenCould.Size = new System.Drawing.Size(103, 20);
             this.ckOpenCould.TabIndex = 0;
@@ -258,6 +265,48 @@
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
+            // selectnum
+            // 
+            this.selectnum.Location = new System.Drawing.Point(341, 21);
+            this.selectnum.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.selectnum.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.selectnum.Name = "selectnum";
+            this.selectnum.Size = new System.Drawing.Size(55, 26);
+            this.selectnum.TabIndex = 20;
+            this.selectnum.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(264, 27);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(71, 16);
+            this.label1.TabIndex = 21;
+            this.label1.Text = "候选数：";
+            // 
+            // SingleInput
+            // 
+            this.SingleInput.AutoSize = true;
+            this.SingleInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SingleInput.Location = new System.Drawing.Point(248, 53);
+            this.SingleInput.Name = "SingleInput";
+            this.SingleInput.Size = new System.Drawing.Size(87, 20);
+            this.SingleInput.TabIndex = 22;
+            this.SingleInput.Text = "单字模式";
+            this.SingleInput.UseVisualStyleBackColor = true;
+            // 
             // ConfigFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -280,6 +329,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSkinHeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.selectnum)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -304,5 +354,8 @@
         private System.Windows.Forms.CheckBox chkAutoRun;
         private System.Windows.Forms.CheckBox tracchk;
         private System.Windows.Forms.CheckBox ckalt;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown selectnum;
+        private System.Windows.Forms.CheckBox SingleInput;
     }
 }
