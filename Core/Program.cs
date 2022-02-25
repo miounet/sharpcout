@@ -16,7 +16,7 @@ namespace Core
     {
         public static Win.WinInput MIme = null;
         public static string HVID = "";//硬件id
-        public static string ProductVer = "2.0";//软件版本
+        public static string ProductVer = "2.0.2";//软件版本
         public static Win.InfoFrm InfoFrm = null;
         public static bool CheckAppOK = true;
         public static System.Threading.Thread CheckTh = null;
