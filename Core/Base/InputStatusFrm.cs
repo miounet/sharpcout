@@ -26,7 +26,10 @@ namespace Core.Base
         /// <summary>
         /// 每页显示数量
         /// </summary>
-        public int PageSize = 6;
+        public int PageSize
+        {
+            get { return InputMode.PageSize; }
+        }
         /// <summary>
         /// 当前页
         /// </summary>

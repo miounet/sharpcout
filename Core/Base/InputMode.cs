@@ -47,7 +47,7 @@ namespace Core.Base
         /// 0英文状态
         /// </summary>
         public ushort IsChinese = 1;
-
+      
         /// <summary>
         /// 0为sendinput 发送
         /// 1为剪贴板方式发送
@@ -139,6 +139,7 @@ namespace Core.Base
         public static Color Skinbstring = Color.White;//字体颜色
         public static Color Skinbcstring = Color.Orange;//提示补码颜色
         public static Color Skinfbcstring = Color.Yellow;//第一候选框字体颜色
+        public static int PageSize = 6; //候选框数量
         public IndexManger DictIndex = new IndexManger ();
         #endregion
 
@@ -448,6 +449,19 @@ namespace Core.Base
                     vv = Microsoft.VisualBasic.Strings.StrConv(vv, Microsoft.VisualBasic.VbStrConv.TraditionalChinese, 0);
                 }
                 catch { }
+            }
+            if (string.IsNullOrEmpty(vv))
+            {
+                //取词库本身的一级简码
+                var v= GetInputValue(code,false,1);
+                if(v!=null && v.Length > 0)
+                {
+                    vv = v[0].Split('|')[1];
+                    if (left==false && v.Length >1 && v[1].Length>0 && v[1].Split('|')[2].Length==0)
+                    {
+                        vv = v[1].Split('|')[1];
+                    }
+                }
             }
             return vv;
         }
