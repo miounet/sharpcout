@@ -1,2 +1,2 @@
-srb_ver_info_s=2.0.2=srb_ver_info_e
-srb_down_info_s=https://gitee.com/miounet/sharpcout/raw/master/updata/srb2.0.2.zip=srb_down_info_e
+srb_ver_info_s=2.0.3=srb_ver_info_e
+srb_down_info_s=https://gitee.com/miounet/sharpcout/raw/master/updata/srb2.0.3.zip=srb_down_info_e
