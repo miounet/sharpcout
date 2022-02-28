@@ -1,2 +1,2 @@
-srb_ver_info_s=20220227=srb_ver_info_e
-srb_down_info_s=https://gitee.com/miounet/sharpcout/raw/master/updata/kmm20220227.zip=srb_down_info_e
+srb_ver_info_s=20220228=srb_ver_info_e
+srb_down_info_s=https://github.com/miounet/sharpcout/raw/master/updata/kmm20220228.zip=srb_down_info_e
