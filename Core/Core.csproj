@@ -133,8 +133,9 @@
     <Reference Include="Microsoft.VisualBasic">
       <Private>True</Private>
     </Reference>
-    <Reference Include="qzxxiEntity">
-      <HintPath>D:\Documents\Visual Studio 2012\Projects\巧指\qzxxiEntity\bin\Release\qzxxiEntity.dll</HintPath>
+    <Reference Include="qzxxiEntity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\qzxxiEntity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
