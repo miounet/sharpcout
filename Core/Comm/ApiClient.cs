@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -216,35 +216,7 @@ namespace Core.Comm
 
         }
 
-        public static long LastMsgid=0;
-        public static InfoEntity GetMyInfo(string url)
-        {
-            InfoEntity c = new InfoEntity();
-            c.LastMsgid=LastMsgid;
-            try
-            {
-                c.HVID = Program.HVID;
-                c.ProVer = Program.ProductVer;
-                RequestEntity r = new RequestEntity();
-                r.OptCommand = OptCom.GetMyInfo.ToString();
-                r.Content = ToJson(c);
-                r.Content = Security.EncryptCommon(r.Content);
-                IAASResponse reponse = IAASRequest.Reauest(url, RequestMethod.POST, "", "", ToJson(r));
-                if (reponse.StatusCode == HttpStatusCode.OK)
-                {
-                    c = JsonToObj<InfoEntity>(reponse.Content);
-                    LastMsgid=c.LastMsgid;
-                }
-                else
-                    c.InfoStr = string.Empty;
-            }
-            catch
-            {
-                c.InfoStr = string.Empty;
-
-            }
-            return c;
-        }
+ 
 
         /// <summary>
         /// 
@@ -260,7 +232,6 @@ namespace Core.Comm
             try
             {
                 c.DictList = pl;
-                c.HVID = Program.HVID;
                 c.SearchKey = key;
                 RequestEntity r = new RequestEntity();
                 r.OptCommand = OptCom.GetProDict.ToString();

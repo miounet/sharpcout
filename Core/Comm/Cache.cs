@@ -14,9 +14,11 @@ namespace Core.Comm
         /// key按键队列
         /// </summary>
         public static Queue<KeysQueue> KeyQueue = new Queue<KeysQueue>();
-        
-    }
 
+        public static KeyboardHookStruct VDown = new KeyboardHookStruct();
+        public static KeyboardHookStruct VUp = new KeyboardHookStruct();
+    }
+ 
     //声明键盘钩子的封送结构类型 
     [StructLayout(LayoutKind.Sequential)]
     public class KeyboardHookStruct

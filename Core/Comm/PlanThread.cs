@@ -1,4 +1,4 @@
-using Core.Base;
+﻿using Core.Base;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -74,18 +74,23 @@ namespace Core.Comm
             while (running)
             {
                 Thread.Sleep(10000);
-
-                if (!Win.WinInput.Input.indexComplete)
-                    continue;
-                if (!InputMode.AutoUpdate)
+                try
                 {
-                    Thread.Sleep(1000 * 60 * 30);
-                    continue;
-                }
-                UpdataSoft();
+                    if (!Win.WinInput.Input.indexComplete)
+                        continue;
+                    if (!InputMode.AutoUpdate)
+                    {
+                        Thread.Sleep(1000 * 60);
+                        continue;
+                    }
+                    UpdataSoft();
 
-                UpdataDict();
-                Thread.Sleep(1000 * 60 * 60 );
+                    UpdataDict();
+
+                    Thread.Sleep(1000 * 60 * 60);
+                }
+                catch { }
+                
             }
         }
 
@@ -167,6 +172,7 @@ namespace Core.Comm
 
                             WebClient client = new WebClient();
                             string filename = System.IO.Path.Combine(Win.WinInput.Input.AppPath, DateTime.Now.Ticks.ToString() + ".zip");
+                       
                             client.DownloadFile(du, filename);
                             Thread.Sleep(200);
 
@@ -174,19 +180,18 @@ namespace Core.Comm
                             {
                                 //下载完成解压
                                 updataok = ZipClass.UnZip(filename, System.IO.Path.Combine(Win.WinInput.Input.AppPath, "dict", InputMode.CDPath),"");
-                                Thread.Sleep(500);
+                                Thread.Sleep(200);
                                 File.Delete(filename);//解压完成，删除下载的文件
                                 updataok = true;
-
-                                Win.WinInput.DictVersion = data.DictVersion;
-                                Program.MIme.SaveDictSetting();
+                                info.Close();
 
                                 Program.MIme.InputIni();
-                                info.Close();
+                               
                             }
                         }
                         catch
                         {
+                            info.Close();
                             updataok = false;
                         }
                         
@@ -194,6 +199,11 @@ namespace Core.Comm
 
                   
                     #endregion
+                    return;
+                }
+                else if (flag)
+                {
+                    MessageBox.Show("没有检测到要更新的词库!");
                     return;
                 }
 
