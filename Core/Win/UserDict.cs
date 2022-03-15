@@ -21,7 +21,14 @@ namespace Core.Win
             this.winput = nwinput;
             InitializeComponent();
         }
-       
+        public UserDict(InputMode ninput, WinInput nwinput,string code,string va)
+        {
+            this.input = ninput;
+            this.winput = nwinput;
+            InitializeComponent();
+            this.txtCode.Text = code.Trim();
+            this.txtValue.Text = va.Trim();
+        }
         private void UserDict_Load(object sender, EventArgs e)
         {
             dt.Columns.Add("词库");
@@ -81,11 +88,7 @@ namespace Core.Win
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (!Program.CheckAppOK)
-            {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
-                return;
-            }
+ 
             if (this.txtCode.Text.Trim().Length > 0 && this.txtValue.Text.Trim().Length > 0)
             {
                 AddDict(this.txtCode.Text.Trim(), this.txtValue.Text.Trim());
@@ -101,11 +104,7 @@ namespace Core.Win
 
         private void btnDel_Click(object sender, EventArgs e)
         {
-            if (!Program.CheckAppOK)
-            {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
-                return;
-            }
+ 
             if (this.dataGridView1.SelectedRows.Count <= 0)
             {
                 MessageBox.Show("未选中要删除的词条!");

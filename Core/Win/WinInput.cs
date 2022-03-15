@@ -24,8 +24,8 @@ namespace Core.Win
         /// </summary>
         public static InputMode Input = new InputMode();
        
-        public static string ApiUrl = "https://github.com/miounet/sharpcout/blob/master/sv.txt";
-        public static string ApiDictUrl = "https://github.com/miounet/sharpcout/blob/master/dv.txt";
+        public static string ApiUrl = "https://gitee.com/miounet/sharpcout/blob/master/sv.txt";
+        public static string ApiDictUrl = "https://gitee.com/miounet/sharpcout/blob/master/dv.txt";
         public static string DictVersion = "1.0.1";
         public static IntPtr ForegroundWindow = IntPtr.Zero;
         private Label label1;
@@ -44,123 +44,11 @@ namespace Core.Win
         public bool LoadMasterDict()
         {
 
-            //         string[] fr = Function.Decrypt(System.IO.Path.Combine(Input.AppPath, "dict", "fr.txt")).OrderBy(o => o.Split(' ')[1].Length).ToArray();
-            //         List<string> frl = new List<string>();
-            //         foreach (var item in fr)
-            //         {
-            //             if (item.Trim().Length == 0) continue;
-
-            //             if (item.Split(' ')[1].StartsWith("i"))
-            //             {
-            //                 frl.Add(item);
-            //                 continue;
-            //             }
-            //             if (item.Split(' ')[0].Length == 1 && item.Split(' ')[1].Length == 3 && frl.Find(f => f.Split(' ')[1] == item.Split(' ')[1]) != null)
-            //             {
-            //                 continue;//重复单字3码不加
-            //             }
-
-            //             if (item.Split(' ')[0].Length == 1
-            //&& item.Split(' ')[1].Length == 4 
-            //&& frl.Find(f => f.Split(' ')[1].StartsWith(item.Split(' ')[1].Substring(0,2)) && f.Split(' ')[0] == item.Split(' ')[0]) != null)
-            //             {
-            //                 continue; //去单字4码
-            //             }
-            //             if (frl.Find(f => f == item) == null)
-            //             {
-            //                 if (item.Split(' ')[0].Length == 1
-            //                     && item.Split(' ')[1].Length == 4
-            //                     && frl.Find(f => f.Split(' ')[1] == item.Split(' ')[1].Substring(0, 3)) == null)
-            //                 {
-            //                     frl.Add(item.Split(' ')[0] + " " + item.Split(' ')[1].Substring(0, 3));
-            //                     continue;
-            //                 }
-
-            //                 frl.Add(item);
-            //             }
-
-            //         }
-            //         File.WriteAllLines(System.IO.Path.Combine(Input.AppPath, "dict", "fr_r.txt"), frl.ToArray());
-
  
             Input.MasterDit = Function.Decrypt(Input.MasterDitPath);
             Input.MasterDit = Input.MasterDit.Where(w => w.Length > 0).OrderBy(o => o.Substring(0, 1)).ToArray();
 
-            //foreach(var item in Input.MasterDit)
-            //{
-            //    if (item.Split(' ')[1].Length == 1 && "南只放如没因依安花地东刻不关集片术开名吃两步音产事真士气飞任新城手就未失李笑议院计断由还指思应准支建法闻代为主治接阳段留四双告示红尔太容往制程系比了下数照整喜写越正第请场长石青或全门作所到给然紧记边百群影刚利眼决走候足九夫易叫在曾造称云光今十世方兴火消乎房服发子势声师先经精被随根并小员功都可情是入年空同热许变机解处文别的界保平调完离用直老反风它性令体三期行非林女虽连须总着流军除起立月要说响包坐内身张她海达明以他费会布头通题引来样跟这息多合极儿半格难究学周管据果设自运后义言马式及部生路时业加西打即己德分求化意志图况成现江车战华于武提又拉常各严待众二国黑乐大位对听元书实得去办命理点深语北道黄持却则再人山举何少向结特白最但日而象病之具交面爱金官显此公条认绝似统念无类每务切远客便取早力像本个好民改物装存罗过强王望我答见领转信司六至住怎与天品送口做落亲更美收视工死目量确已想备注五家当政很近钱若活干站千知动字快问原必上你观表受外和节才友七么展者等商且轻形中报始尽谈将推有故复高台父色神件清重进教什让觉识感单几前市呢其种那间约能万心带相满也些使算把低们次出看微话传八该共回首证定度底水找久从论里电一终英礼责族招笔宁升增列倒选般脱胡著默娘毛排谢杨科亦劳素帮免兵范油晚福限赶止停胜脑叶舞野托京迎异顺配午唐急摇楚厅馆忘啊伸哈祖藏游察试弟茶句阵仍划困富属脚广田区追朋跳智钟春曲卖线另价致充朱营否忙阴境哥担村恩读律角束征镇创苦质财威材窗梅继店组端喝纪皮检假承苏荣积益跑右围伯玩争顿买绿背标旧暗景惊拿嘴突州岁陈犯概独查危社缺敢压牛街份需付灵忽逐导妇拍击古孙架尚射希露莫仁占局玉盖摆监丁余居船派君源仅吧卷史供掉木龙项农纳登香技杂愿基归级既渐医烈索妻冲禁幸湖副奇善速挥宫害诗宗率凡策掌灯际球菜亮济临克错轮盘恶齐洋兄尼乱护冰雨耳浪欲投庄权借规园短翻替雷酒顾较超互松刀坏银按波斗男号饭沙怪坚佛党阿激味略遇词星诉够宝姓朝草移血伙警救艺板母夏室负妈迷网抱晓续竟休守孩散施毒歌养呼扬态靠防隐预庭牌获衣铁职食秘习欧助印班硬府哪夜简退户骨虚彩慢险秀封采土降屋料优抓攻器批遍贵冷参密左细验穿刘静软您堂树私例甚层织欢趣股雪初团握案讨某亚旁缓置楼释谁纸怕讲沉米熟育资败康罪状吗丝伤卫章普效练良巴脸肉环访姐药谓姑睛吸套虑省宣圣破执秋避座斯温模顶汉考恐戏换床睡研醒专河席怀丽疑烟块梦毫痛兰操判探差适队永校杀误维寻介吉演委肯乡勇画毕含修历雄联值".IndexOf(item.Split(' ')[1]) >=0)
-            //    {
-            //        string ditem = item.Split(' ')[0];
-            //        if (ditem.StartsWith("i", true, System.Globalization.CultureInfo.CurrentCulture)
-            //            || ditem.StartsWith("u", true, System.Globalization.CultureInfo.CurrentCulture)
-            //            || ditem.StartsWith("v", true, System.Globalization.CultureInfo.CurrentCulture)
-            //            || ditem.IndexOf("'") > 0)
-            //            continue;
-
-            //        if (ditem.Length > 1)
-            //        {
-            //            string d1 = ditem.Substring(0, 1);
-            //            string d2 = ditem.Substring(1, 1);
-
-            //            if(InputStatusFrm.IsLowerLetter(d1) && InputStatusFrm.IsLowerLetter(d2))
-            //            {
-            //                aa++;
-            //            }
-            //            else if (InputStatusFrm.IsUpperLetter(d1) && InputStatusFrm.IsLowerLetter(d2))
-            //            {
-            //                Aa++;
-            //            }
-            //            else if (InputStatusFrm.IsLowerLetter(d1) && InputStatusFrm.IsUpperLetter(d2))
-            //            {
-            //                aA++;
-            //            }
-            //            else if (InputStatusFrm.IsUpperLetter(d1) && InputStatusFrm.IsUpperLetter(d2))
-            //            {
-            //                AA++;
-            //            }
-            //        }
-            //    }
-            //}
-
-            /*
-            
-             //去重复字词
-            Dictionary<string, List<string>> dict = new Dictionary<string, List<string>>();
-            List<string> dl = new List<string>();
-            List<string> keys = new List<string>();
-            foreach (string item in Input.MasterDit)
-            {
-                string key=item.Split(' ')[0].Trim();
-                if (key.Trim().Length == 0) continue;
-                if (item.Trim().Length > 0 && !dict.ContainsKey(key))
-                {
-                    if (item.Substring(key.Length).Trim().Length > 0)
-                    {
-                        dict.Add(key, item.Substring(key.Length).Trim().Split(' ').ToList());
-                        keys.Add(key);
-                    }
-                }
-                else
-                {
-                    List<string> ll = dict[key];
-                    List<string> nl = item.Substring(key.Length).Trim().Split(' ').ToList();
-                    foreach (string data in nl)
-                    {
-                        if (ll.Find(l => l == data.Trim()) == null)
-                        {
-                            ll.Add(data.Trim());
-                        }
-                    }
-                }
-            }
-            for (int i = 0; i < keys.Count; i++)
-            {
-                string vk = keys[i]+" ";
-                vk+=" "+string.Join(" ", dict[keys[i]]);
-                dl.Add(vk);
-            }
-            File.WriteAllLines(Input.MasterDitPath, dl.ToArray());
-            */
+ 
 
             //初始化索引
             Input.CreateIndex(Input.MasterDit, ref Input.DictIndex.IndexList, 1, 0, Input.MasterDit.Length);
@@ -251,7 +139,6 @@ namespace Core.Win
             var setting = File.ReadAllLines(Input.SettingPath, Encoding.UTF8);//读配置
 
             InputMode.OpenCould = string.IsNullOrEmpty(SetInfo.GetValue("OpenCould", setting)) ? false : bool.Parse(SetInfo.GetValue("OpenCould", setting));
-
             InputMode.AutoUpdate = string.IsNullOrEmpty(SetInfo.GetValue("AutoUpdate", setting)) ? false : bool.Parse(SetInfo.GetValue("AutoUpdate", setting));
             InputMode.AutoRun = string.IsNullOrEmpty(SetInfo.GetValue("AutoRun", setting)) ? false : bool.Parse(SetInfo.GetValue("AutoRun", setting));
             curTrac = string.IsNullOrEmpty(SetInfo.GetValue("CurTrac", setting)) ? false : bool.Parse(SetInfo.GetValue("CurTrac", setting));
@@ -265,12 +152,19 @@ namespace Core.Win
             InputMode.Skinfbcstring = Color.FromArgb(int.Parse(SetInfo.GetValue("Skinfbcstring", setting)));
             InputMode.CDPath = SetInfo.GetValue("CDPath", setting);
             InputMode.SingleInput = string.IsNullOrEmpty(SetInfo.GetValue("SingleInput", setting)) ? false : bool.Parse(SetInfo.GetValue("SingleInput", setting));
+            InputMode.txtla = string.IsNullOrEmpty(SetInfo.GetValue("txtla", setting)) ? "2" : SetInfo.GetValue("txtla", setting);
+            InputMode.txtlas = string.IsNullOrEmpty(SetInfo.GetValue("txtlas", setting)) ? "3" : SetInfo.GetValue("txtlas", setting);
+            InputMode.txtra = string.IsNullOrEmpty(SetInfo.GetValue("txtra", setting)) ? "4" : SetInfo.GetValue("txtra", setting);
+            InputMode.txtras = string.IsNullOrEmpty(SetInfo.GetValue("txtras", setting)) ? "5" : SetInfo.GetValue("txtras", setting);
+            InputMode.txtlra = string.IsNullOrEmpty(SetInfo.GetValue("txtlra", setting)) ? "_" : SetInfo.GetValue("txtlra", setting);
+            InputMode.txtlras = string.IsNullOrEmpty(SetInfo.GetValue("txtlras", setting)) ? "@" : SetInfo.GetValue("txtlras", setting);
+            InputMode.right3_out = string.IsNullOrEmpty(SetInfo.GetValue("right3_out", setting)) ? true : bool.Parse(SetInfo.GetValue("right3_out", setting));
             if (string.IsNullOrEmpty(InputMode.CDPath)) InputMode.CDPath = "空明码";
 
             setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath,"dict", InputMode.CDPath, "ditver.shp"), Encoding.UTF8);//读配置
-            Win.WinInput.DictVersion = setting[0];
+            Win.WinInput.DictVersion = setting.Length > 0 ? setting[0] : "";
             setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "dicturl.shp"), Encoding.UTF8);//读配置
-            Win.WinInput.ApiDictUrl = setting[0];
+            Win.WinInput.ApiDictUrl = setting.Length > 0 ? setting[0] : "";
             return true;
         }
 
@@ -330,7 +224,13 @@ namespace Core.Win
             set.Add("SkinFontSize=" + InputMode.SkinFontSize.ToString());
             set.Add("CDPath=" + InputMode.CDPath);
             set.Add("SingleInput=" + InputMode.SingleInput.ToString());
-
+            set.Add("txtla=" + InputMode.txtla.ToString());
+            set.Add("txtlas=" + InputMode.txtlas.ToString());
+            set.Add("txtlra=" + InputMode.txtlra.ToString());
+            set.Add("txtlras=" + InputMode.txtlras.ToString());
+            set.Add("txtra=" + InputMode.txtra.ToString());
+            set.Add("txtras=" + InputMode.txtras.ToString());
+            set.Add("right3_out=" + InputMode.right3_out.ToString());
             File.WriteAllLines(Input.SettingPath, set.ToArray(), Encoding.UTF8);//保存配置
             return true;
 
@@ -516,6 +416,10 @@ namespace Core.Win
         /// </summary>
         public void InstallKeyHook()
         {
+            Cache.VDown.scanCode = 46;
+            Cache.VDown.vkCode = 174;
+            Cache.VUp.scanCode = 0;
+            Cache.VUp.vkCode = 175;
             //安装键盘钩子   
             if (hKeyboardHook == 0)
             {
@@ -550,40 +454,50 @@ namespace Core.Win
 
 
         }
- 
+
         private int KeyboardHookProc(int nCode, Int32 wParam, IntPtr lParam)
-         {
-             if (nCode < 0 || !Win.WinInput.Input.indexComplete)
+        {
+            if (nCode < 0 || !Win.WinInput.Input.indexComplete)
                 return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
-             if (Input.SelfOut) 
+            if (Input.SelfOut)
                 return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
             Core.Comm.KeyboardHookStruct MyKeyboardHookStruct = (Core.Comm.KeyboardHookStruct)Marshal.PtrToStructure(lParam, typeof(Core.Comm.KeyboardHookStruct));
             if (MyKeyboardHookStruct.vkCode == 231)
             {
-               return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
+                return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
             }
-           
+
             Keys keyData = (Keys)MyKeyboardHookStruct.vkCode;
+
+            if (keyData == Keys.Apps)
+            {
+                //屏敝menu键，改键
+                Cache.VDown.dwExtraInfo = MyKeyboardHookStruct.dwExtraInfo;
+                Cache.VDown.flags = MyKeyboardHookStruct.flags;
+                Cache.VDown.time = MyKeyboardHookStruct.time;
+                keyData = (Keys)Cache.VDown.vkCode;
+            }
             string keystring = string.Empty;
-    
+
             #region 处理键盘事件
             bool openTSKey = false;
+ 
             #region 键盘按下事件
             if ((wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN))
             {
- 
+
                 #region 按下特殊键
                 if (keyData == Keys.RShiftKey || keyData == Keys.LShiftKey)
                 {
-                    
+
                     Input.IsPressShift = true;
                 }
                 if (keyData == Keys.RControlKey || keyData == Keys.LControlKey)
                 {
-                  
+
                     Input.IsPressCtrl = true;
                 }
-       
+
                 if (keyData == Keys.RWin || keyData == Keys.LWin)
                 {
                     if (!InputMode.OpenAltSelect && keyData != Keys.RWin)
@@ -604,12 +518,15 @@ namespace Core.Win
                     Input.isActiveInput = false;
                     Input.IsPressLAlt = false;
                     Input.IsPressRAlt = false;
+                    Input.IsPresAltPos = 0;
                     InputStatus.Clear();
+                    
                     //inputFrm.EnterDown(false);
                     //TrayIcon.Icon = new Icon(Application.StartupPath + @"\ico\logh32.ico");
                 }
                 if (Input.IsPressCtrl && keyData == Keys.Space)
                 {
+                    
                     //激活、关闭输入法
                     TrayIcon_MouseDoubleClick(null, null);
                 }
@@ -621,21 +538,24 @@ namespace Core.Win
                     Input.IsPressShift = false;
                     Input.IsPressLAlt = false;
                     Input.IsPressRAlt = false;
+                    Input.IsPresAltPos = 0;
                     goto lastGO;
                 }
-                keystring=Input.CheckKeysString(keyData);
+                keystring = Input.CheckKeysString(keyData);
                 if (Input.IsPressShift)
                 {
                     if (InputStatus.inputstr.Length > 0 && Input.CheckCode(keystring))
                     {
                         InputStatus.ShangPing(1);
+                        
                     }
-                   goto lastGO;
+                    goto lastGO;
                 }
-                else if (Input.IsPressCtrl || Input.IsPressAlt || Input.IsPressWin )
+                else if (Input.IsPressCtrl || Input.IsPressAlt || Input.IsPressWin)
                 {
                     if (InputStatus.inputstr.Length > 0 && Input.CheckCode(keystring))
                     {
+                        
                         InputStatus.Clear();
                     }
                     goto lastGO;
@@ -647,9 +567,10 @@ namespace Core.Win
                 keyques.MyKeyboardHookStruct = MyKeyboardHookStruct;
 
                 SendKeyToNex = UserOnKeyDown(keyData);
-                if ((keyData == Keys.LMenu || keyData==Keys.RMenu
+                if ((keyData == Keys.LMenu || keyData == Keys.RMenu
                     || keyData == Keys.LWin || keyData == Keys.RWin
-                    ) && InputMode.OpenAltSelect) 
+                    || keyData == Keys.VolumeDown || keyData == Keys.VolumeUp
+                    ) && InputMode.OpenAltSelect)
                     SendKeyToNex = 1;
                 if (SendKeyToNex == 1)
                 {
@@ -669,10 +590,10 @@ namespace Core.Win
             #region 键盘放开事件
             if ((wParam == WM_KEYUP || wParam == WM_SYSKEYUP))
             {
-   
+
                 if (!Input.isActiveInput)
                 {
-                    
+
                     SendKeyToNex = 0;
                     Input.IsPressAlt = false;
                     Input.IsPressWin = false;
@@ -680,42 +601,44 @@ namespace Core.Win
                     Input.IsPressShift = false;
                     Input.IsPressLAlt = false;
                     Input.IsPressRAlt = false;
+                    Input.IsPresAltPos = 0;
                     goto lastGO;
                 }
+
                 UserOnKeyUp();
- 
+
                 #region 按下特殊键
-                if (keyData == Keys.RShiftKey || keyData == Keys.LShiftKey 
+                if (keyData == Keys.RShiftKey || keyData == Keys.LShiftKey
                     || keyData == Keys.LControlKey || keyData == Keys.RControlKey)
                 {
                     openTSKey = true;
                     Input.IsPressShift = false;
-                
+
                     if (InputStatus.inputstr.Length > 0 || InputStatusFrm.Dream)
                     {
                         if (keyData == Keys.LShiftKey)
                         {
                             //左shift ,选2上屏
                             InputStatus.ShangPing(2, InputStatusFrm.Dream ? InputStatusFrm.LastLinkString.Length : 0);
-
+                            
                         }
                         else if (keyData == Keys.RShiftKey)
                         {
                             //左shift ,选3上屏
-                            InputStatus.ShangPing(3, InputStatusFrm.Dream ? InputStatusFrm.LastLinkString.Length : 0); 
-
+                            InputStatus.ShangPing(3, InputStatusFrm.Dream ? InputStatusFrm.LastLinkString.Length : 0);
+                            
                         }
                         else if (keyData == Keys.LControlKey)
                         {
                             //左control ,选6上屏
                             InputStatus.ShangPing(6, InputStatusFrm.Dream ? InputStatusFrm.LastLinkString.Length : 0);
-
+                            
                         }
                         else if (keyData == Keys.RControlKey)
                         {
                             //右左control ,选7上屏
                             InputStatus.ShangPing(7, InputStatusFrm.Dream ? InputStatusFrm.LastLinkString.Length : 0);
-
+                            
                         }
                     }
 
@@ -726,7 +649,8 @@ namespace Core.Win
                     Input.IsPressCtrl = false;
                 }
                 if ((keyData == Keys.RMenu || keyData == Keys.LMenu
-                    || keyData == Keys.LWin || keyData == Keys.RWin)
+                    || keyData == Keys.LWin || keyData == Keys.RWin
+                    || keyData == Keys.VolumeDown || keyData == Keys.VolumeUp)
                     && InputMode.OpenAltSelect)
                 {
                     //openTSKey = true;
@@ -736,7 +660,8 @@ namespace Core.Win
 
                 }
                 else if ((keyData == Keys.RMenu || keyData == Keys.LMenu 
-                    || keyData == Keys.LWin || keyData == Keys.RWin) 
+                    || keyData == Keys.LWin || keyData == Keys.RWin 
+                    || keyData == Keys.VolumeDown || keyData == Keys.VolumeUp) 
                     && !InputMode.OpenAltSelect)
                 {
                     openTSKey = true;
@@ -764,11 +689,12 @@ namespace Core.Win
                     {
                         InputStatus.ShangPing(1);
                     }
-                    InputStatusFrm.SendText(keystring);
+                    InputStatusFrm.SendText(keystring, "");
                     return 1;
                 }
                 else if ((keyData == Keys.LMenu || keyData == Keys.RMenu
-                    || keyData == Keys.LWin || keyData == Keys.RWin) && InputMode.OpenAltSelect && Input.isActiveInput) return 1;
+                    || keyData == Keys.LWin || keyData == Keys.RWin 
+                    || keyData == Keys.VolumeDown || keyData == Keys.VolumeUp) && InputMode.OpenAltSelect && Input.isActiveInput) return 1;
                 else
                     return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
 
@@ -782,7 +708,8 @@ namespace Core.Win
             {
                 if (keyData == Keys.Back) InputStatusFrm.zdzjstr = string.Empty;
                 if ((keyData == Keys.LMenu || keyData == Keys.RMenu
-                    || keyData == Keys.LWin || keyData == Keys.RWin) && InputMode.OpenAltSelect
+                    || keyData == Keys.LWin || keyData == Keys.RWin 
+                    || keyData == Keys.VolumeDown || keyData == Keys.VolumeUp) && InputMode.OpenAltSelect
                     && Input.isActiveInput) return 1;
                 else
                     return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
@@ -928,6 +855,7 @@ namespace Core.Win
             KeysQueue _lkey = null;
             bool srspace = false;
             int queuecount = 0;
+ 
             lock (Comm.Cache.KeyQueue)
             {
                 queuecount = Comm.Cache.KeyQueue.Count;
@@ -943,24 +871,73 @@ namespace Core.Win
                         if (!srspace && queuecount > 1)
                             srinput += "~";
                         srspace = true;
+           
                     }
-                    else if (_lkey.KeyData ==Keys.LMenu || _lkey.KeyData == Keys.RMenu 
-                        || _lkey.KeyData==Keys.LWin || _lkey.KeyData == Keys.RWin)
+                    else if (_lkey.KeyData == Keys.LMenu || _lkey.KeyData == Keys.LWin  || _lkey.KeyData == Keys.RMenu || _lkey.KeyData == Keys.RWin
+                        || _lkey.KeyData == Keys.VolumeDown || _lkey.KeyData == Keys.VolumeUp)
                     {
-                        Input.IsPressLAlt = true;
+                        if (!Input.IsPressLAlt)
+                            Input.IsPressLAlt = (_lkey.KeyData == Keys.LMenu || _lkey.KeyData == Keys.LWin || _lkey.KeyData == Keys.VolumeDown);
+                        else if(_lkey.KeyData == Keys.VolumeDown)
+                        {
+                            Input.IsPressRAlt = true;
+                            srspace = true;
+                        }
+                        if (!Input.IsPressRAlt)
+                            Input.IsPressRAlt = (_lkey.KeyData == Keys.RMenu || _lkey.KeyData == Keys.RWin ||  _lkey.KeyData == Keys.VolumeUp);
+                        else if (_lkey.KeyData == Keys.VolumeUp)
+                        {
+                            Input.IsPressLAlt = true;
+                            srspace = true;
+                        }
                     }
+
                     else
                         srinput += Input.CheckKeysString(_lkey.KeyData);
 
                 }
-                if (Input.IsPressLAlt && srspace)
-                {
-                    Input.IsPressLAlt = false;
-                    Input.IsPressRAlt = true;
-                }
-
-         
             }
+
+ 
+            if (Input.IsPressLAlt && Input.IsPressRAlt && srspace)
+            {
+                short.TryParse(InputMode.txtlras, out Input.IsPresAltPos);
+                if (Input.IsPresAltPos == 0 && !string.IsNullOrEmpty(InputMode.txtlras))
+                    srinput += InputMode.txtlras.Trim();
+            }
+            else if (Input.IsPressLAlt && Input.IsPressRAlt)
+            {
+                short.TryParse(InputMode.txtlra, out Input.IsPresAltPos);
+                if (Input.IsPresAltPos == 0 && !string.IsNullOrEmpty(InputMode.txtlra))
+                    srinput += InputMode.txtlra.Trim();
+            }
+            else if (Input.IsPressLAlt && srspace == false)
+            {
+                short.TryParse(InputMode.txtla, out Input.IsPresAltPos);
+                if (Input.IsPresAltPos == 0 && !string.IsNullOrEmpty(InputMode.txtla))
+                    srinput += InputMode.txtla.Trim();
+            }
+            else if (Input.IsPressLAlt && srspace == true)
+            {
+                short.TryParse(InputMode.txtlas, out Input.IsPresAltPos);
+                if (Input.IsPresAltPos == 0 && !string.IsNullOrEmpty(InputMode.txtlas))
+                    srinput += InputMode.txtlas.Trim();
+            }
+            else if (Input.IsPressRAlt && srspace == false)
+            {
+                short.TryParse(InputMode.txtra, out Input.IsPresAltPos);
+                if (Input.IsPresAltPos == 0 && !string.IsNullOrEmpty(InputMode.txtra))
+                    srinput += InputMode.txtra.Trim();
+            }
+            else if (Input.IsPressRAlt && srspace == true)
+            {
+                short.TryParse(InputMode.txtras, out Input.IsPresAltPos);
+                if (Input.IsPresAltPos == 0 && !string.IsNullOrEmpty(InputMode.txtras))
+                    srinput += InputMode.txtras.Trim();
+            }
+         
+
+
             if (InputStatusFrm.LSView)
             {
                 InputStatus.Clear();
@@ -972,23 +949,18 @@ namespace Core.Win
 
                 try
                 {
-                    if (Input.IsPressLAlt)
+                    if (Input.IsPresAltPos > 0)
                     {
                         //完成字母上屏后选2位置上屏
-                        InputStatusFrm.SendText(psrinput.Replace("~", "") + "2", true);
+                        InputStatusFrm.SendText(psrinput.Replace("~", "") + Input.IsPresAltPos, psrinput,true);
                         //InputStatusFrm.SendText("2", true);
-                    }
-                    else if (Input.IsPressRAlt)
-                    {
-                        //完成字母上屏后选3位置上屏
-                        InputStatusFrm.SendText(psrinput.Replace("~", "") + "3", true);
                     }
                     else
                     {
                         if (psrinput.Replace("~", "").Length == 1)
-                            InputStatusFrm.SendText(psrinput.Replace("~", ""), true);
+                            InputStatusFrm.SendText(psrinput.Replace("~", ""), "", true);
                         if (srspace)
-                            InputStatusFrm.SendText(" ", true);
+                            InputStatusFrm.SendText(" ", "", true);
                     }
                     InputStatus.ClearOnly();
                    
@@ -1023,22 +995,34 @@ namespace Core.Win
             {
                 //标点一键输出
                 if (InputStatus.inputstr.Length == 0)
-                    InputStatusFrm.SendText(psrinput);
+                    InputStatusFrm.SendText(psrinput, "");
                 else
                 {
                     InputStatus.ShangPing(1);
-                    InputStatusFrm.SendText(psrinput);
+                    InputStatusFrm.SendText(psrinput,"");
                 }
+                
                 return;
             }
             else if (srinput.Length > 0)
             {
                
                 srinput = Input.CovertStr(srinput.Replace("~", ""));
-                //if (",./;，。、；，．／；＇‘’　".IndexOf(srinput) >= 0 && InputStatus.inputstr.Length < 4) hright = true;
+                if (Input.IsPresAltPos > 0)
+                {
+                    //优先码表找对应编码字词
+                    var odic = Input.GetInputValue(InputStatus.inputstr + srinput + Input.IsPresAltPos, false, 9);
+                    if (odic != null && odic[0].Length > 0 && odic[0].Length > 0)
+                    {
+                        srinput += Input.IsPresAltPos;
+                        Input.IsPresAltPos = 0;
+                    }
+                }
+ 
                 if (srinput.IndexOf(">") == 0)
                 {
                     InputStatus.ShangPing(int.Parse(srinput.Substring(1,1)), InputStatusFrm.Dream ? InputStatusFrm.LastLinkString.Length : 0);
+                    
                     return;
                 }
                 if (allNum || (InputStatusFrm.LastLinkNum .Length>0 && srinput == "."))
@@ -1047,14 +1031,16 @@ namespace Core.Win
 
                 if (allNum && InputStatus.inputstr.Length == 0)
                 {
-                    InputStatusFrm.SendText(srinput);
+                    InputStatusFrm.SendText(srinput, "");
+                    
                     return;
                 }
                 else if (allNum && srinput.Length > 1)
                 {
                     InputStatus.ShangPing(1);
                     InputStatus.Clear();
-                    InputStatusFrm.SendText(srinput);
+                    InputStatusFrm.SendText(srinput, "");
+                    
                     return;
                 }
                 else if (allNum && (srinput.Length == 1 || InputStatusFrm.Dream))
@@ -1062,6 +1048,7 @@ namespace Core.Win
                     //数字选重
                     InputStatus.ShangPing(trynum, InputStatusFrm.Dream?InputStatusFrm.LastLinkString.Length:0);
                     InputStatus.Clear();
+                    
                     return;
                 }
                 else if (InputStatusFrm.LastLinkNum.Length > 0 || srinput.IndexOf("$")>0)
@@ -1082,9 +1069,10 @@ namespace Core.Win
                             InputStatus.DelLastInput(InputStatusFrm.LastLinkNum.Length);
                         if (!string.IsNullOrEmpty(cv))
                         {
-                            InputStatusFrm.SendText(cv);
+                            InputStatusFrm.SendText(cv, "");
                         }
                         InputStatusFrm.LastLinkNum = string.Empty;
+                        
                         return;
                     }
                     else if (srinput == "M$")
@@ -1094,9 +1082,10 @@ namespace Core.Win
                             InputStatus.DelLastInput(InputStatusFrm.LastLinkNum.Length);
                         if (!string.IsNullOrEmpty(cv))
                         {
-                            InputStatusFrm.SendText(cv);
+                            InputStatusFrm.SendText(cv, "");
                         }
                         InputStatusFrm.LastLinkNum = string.Empty;
+                        
                         return;
                     }
                     else if (srinput == "D$")
@@ -1106,9 +1095,10 @@ namespace Core.Win
                             InputStatus.DelLastInput(InputStatusFrm.LastLinkNum.Length);
                         if (!string.IsNullOrEmpty(cv))
                         {
-                            InputStatusFrm.SendText(cv);
+                            InputStatusFrm.SendText(cv, "");
                         }
                         InputStatusFrm.LastLinkNum = string.Empty;
+                        
                         return;
                     }
                     else if (srinput == "J$")
@@ -1118,9 +1108,10 @@ namespace Core.Win
                             InputStatus.DelLastInput(InputStatusFrm.LastLinkNum.Length);
                         if (!string.IsNullOrEmpty(cv))
                         {
-                            InputStatusFrm.SendText(cv);
+                            InputStatusFrm.SendText(cv, "");
                         }
                         InputStatusFrm.LastLinkNum = string.Empty;
+                        
                         return;
                     }
                     else if (srinput == "W$")
@@ -1130,19 +1121,41 @@ namespace Core.Win
                             InputStatus.DelLastInput(InputStatusFrm.LastLinkNum.Length);
                         if (!string.IsNullOrEmpty(cv))
                         {
-                            InputStatusFrm.SendText(cv);
+                            InputStatusFrm.SendText(cv, "");
                         }
+                        
                         InputStatusFrm.LastLinkNum = string.Empty;
                         return;
                     }
-                }
+                    else if (srinput == "Z$")
+                    {
+                        //造词
 
-              if (!allNum && srinput != ".")
+                        UserDict frm = new UserDict(Input, this, InputStatusFrm.LastLinkCodeString, InputStatusFrm.LastLinkString);
+                        frm.TopMost = true;
+                        frm.Show();
+
+                        return;
+                    }
+                    else if (srinput == "F$")
+                    {
+                        //查找
+                        QueryFrm frm = new QueryFrm(InputStatusFrm.LastSPValue);
+                        frm.TopMost = true;
+                        frm.Show();
+ 
+                        return;
+                    }
+                }
+          
+
+                if (!allNum && srinput != ".")
                     InputStatusFrm.LastLinkNum = string.Empty;
             }
             else if (InputStatus.inputstr.Length == 0 && _lkey.KeyData == Keys.Space)
             {
-                InputStatusFrm.SendText(" ");
+                
+                InputStatusFrm.SendText(" ", "");
                 return;
             }
             #region 内置快捷方式
@@ -1176,6 +1189,7 @@ namespace Core.Win
                             Input.IsCnBd = true;
                         }
                         LoadSkin();
+                        
                         return;
                     }
                 case "$2":
@@ -1194,6 +1208,7 @@ namespace Core.Win
                             }
                             LoadSkin();
                         }
+                        
                         return;
                     }
                 case "$3":
@@ -1210,6 +1225,7 @@ namespace Core.Win
                             Input.IsJT = true;
                         }
                         LoadSkin();
+                        
                         return;
                     }
                 case "$4":
@@ -1232,6 +1248,7 @@ namespace Core.Win
                                 InputStatus.PrePage(); //上一页翻页
 
                         }
+                        
                         return;
                     }
                 case "$5":
@@ -1239,7 +1256,7 @@ namespace Core.Win
                         if (InputStatus.inputstr.Length == 0)
                         {
                             //删除
-                            InputStatusFrm.SendText("{BACKSPACE}", true);
+                            InputStatusFrm.SendText("{BACKSPACE}", "",true);
                             InputStatusFrm.zdzjstr = string.Empty;
                         }
                         else
@@ -1247,7 +1264,7 @@ namespace Core.Win
                             //下一页翻页
                             InputStatus.NextPage();
                             if (InputStatus.PageNum == 1)
-                                InputStatusFrm.SendText("{BACKSPACE}", true);
+                                InputStatusFrm.SendText("{BACKSPACE}","", true);
                         }
                         return;
                     }
@@ -1313,7 +1330,7 @@ namespace Core.Win
                             {
                                 string lastv = InputStatusFrm.LastSPValue;
                                 InputStatus.DelLastInput();
-                                InputStatusFrm.SendText(lastv.Substring(0, lastv.Length - delcount));
+                                InputStatusFrm.SendText(lastv.Substring(0, lastv.Length - delcount), "");
                             }
                         }
                         else if (Input.IsChinese == 1 && srinput.Length == 2 && "1d~2d~3d~4d~5d".IndexOf(srinput) >= 0)
@@ -1325,7 +1342,7 @@ namespace Core.Win
                             {
                                 string lastv = InputStatusFrm.LastSPValue;
                                 InputStatus.DelLastInput();
-                                InputStatusFrm.SendText(lastv.Substring(delcount));
+                                InputStatusFrm.SendText(lastv.Substring(delcount), "");
                             }
                         }
                         break;
@@ -1359,11 +1376,12 @@ namespace Core.Win
                         else
                             nostr += srinput.Substring(i, 1);
                     }
-                    if (Input.IsChinese == 1 && InputStatus.inputstr.Length == 2
+                    if (Input.IsChinese == 1 && InputMode.right3_out && InputStatus.inputstr.Length == 2
                         && inputss.Length == 1 && hright)
                     {
                         //第3码是右手顶字上屏
                         InputStatus.ShangPing(1);
+                        
                     }
 
                     if (Input.IsChinese == 0 && inputss.Length == 0 && nostr == " ")
@@ -1376,14 +1394,14 @@ namespace Core.Win
                         && inputss.Length == 1)
                     {
                         if (srspace) inputss += "~";
-                        InputStatusFrm.SendText(Input.GetLROne(inputss, hleft));
+                        InputStatusFrm.SendText(Input.GetLROne(inputss, hleft), "");
                         if (InputStatusFrm.LastLinkString.Length > 2 || (Input.IsChinese == 0 && InputStatusFrm.LastLinkString.Length > 0))
                             InputStatus.GetDreamValue(InputStatusFrm.LastLinkString);
                         return;
                     }
                     else if (Input.IsChinese == 1 && InputStatus.inputstr.Length == 0 && nostr == "~" && inputss.Length == 1)
                     {
-                        InputStatusFrm.SendText(Input.GetLROne(nostr + inputss, hleft));
+                        InputStatusFrm.SendText(Input.GetLROne(nostr + inputss, hleft), "");
                         if (InputStatusFrm.LastLinkString.Length > 2 || (Input.IsChinese == 0 && InputStatusFrm.LastLinkString.Length > 0))
                             InputStatus.GetDreamValue(InputStatusFrm.LastLinkString);
                         return;
@@ -1393,7 +1411,7 @@ namespace Core.Win
                         InputStatus.inputstr += inputss;
                         InputStatus.input = inputss;
                     }
-                    if (Input.IsChinese == 1 && InputStatus.inputstr.Length >= 3 && !InputStatus.inputstr.StartsWith("i"))
+                    if (Input.IsChinese == 1 && InputStatus.inputstr.Length >= 3)
                     {
                         if (!srspace) srspace = true;
                         else srspace = false;
@@ -1405,32 +1423,31 @@ namespace Core.Win
                         {
                             if (inputss.Length > 0)
                             {
-                                if (Input.IsPressLAlt)
+                                if (Input.IsPresAltPos > 0)
                                 {
                                     //完成字母上屏后选2位置上屏
-                                    InputStatusFrm.SendText(inputss.Replace("~", "")+"2", true);
+                                    InputStatusFrm.SendText(inputss.Replace("~", "") + Input.IsPresAltPos, psrinput, true);
+                                    
                                     //InputStatusFrm.SendText("2", true);
-                                }
-                                else if (Input.IsPressRAlt)
-                                {
-                                    //完成字母上屏后选3位置上屏
-                                    InputStatusFrm.SendText(inputss.Replace("~", "")+"3", true);
                                 }
                                 else if (srspace)
                                 {
                                     //完成字母上屏后有空格按键则补空格
-                                    InputStatusFrm.SendText(inputss.Replace("~", ""), true);
-                                    InputStatusFrm.SendText(" ", true);
+                                    InputStatusFrm.SendText(inputss.Replace("~", ""), psrinput, true);
+                                    InputStatusFrm.SendText(" ", "", true);
+                                    
 
                                 }
                                 else
                                 {
-                                    InputStatusFrm.SendText(inputss.Replace("~", ""), true);
+                                    InputStatusFrm.SendText(inputss.Replace("~", ""), "", true);
+                                    
                                 }
                             }
                             else if (srspace)
                             {
-                                InputStatusFrm.SendText(" ", true);
+                                InputStatusFrm.SendText(" ", "", true);
+                                
                             }
                             InputStatus.ClearOnly();
                         }
@@ -1441,46 +1458,45 @@ namespace Core.Win
                     }
                     else
                     {
-                        if(Input.IsPressLAlt && InputStatus.inputstr.Length == 4)
+                        if (Input.IsPressLAlt && InputStatus.inputstr.Length == 4)
                         {
-                            InputStatus.ShowInput(false, false, 0, false);
-                            InputStatus.ShangPing(2);
-                        }
-                        else if (Input.IsPressRAlt && InputStatus.inputstr.Length == 4)
-                        {
-                            InputStatus.ShowInput(false, false, 0, false);
-                            InputStatus.ShangPing(3);
+                            InputStatus.ShowInput(false, false, 0, false, Input.IsPresAltPos > 0);
+                            InputStatus.ShangPing(Input.IsPresAltPos);
+                            
                         }
                         else if (InputStatus.inputstr.Length == 4 && psrinput.IndexOf("~") >= 0)
                             InputStatus.ShowInput(srspace, InputStatus.inputstr.Length > 3 ? false : true, 0, true);
                         else
                         {
                             bool smspace = psrinput.IndexOf("~") > 0;
-                            if (Input.IsPressLAlt || Input.IsPressRAlt) { srspace = false; smspace = false; }
+                            if (Input.IsPresAltPos > 0) { srspace = false; smspace = false; }
 
-                            InputStatus.ShowInput(srspace, InputStatus.inputstr.Length > 3 ? false : true, 0, smspace);
+
+                            InputStatus.ShowInput(srspace, InputStatus.inputstr.Length > 3 ? false : true, 0, smspace
+                                , Input.IsPresAltPos > 0);
+ 
                         }
-                        if (InputStatus.inputstr.Length > 0 && InputStatus.inputstr.Length <= 2 && psrinput.IndexOf("~") >= 0
-                             && !Input.IsPressLAlt && !Input.IsPressRAlt)
+                        if (InputStatus.inputstr.Length > 0 && InputStatus.inputstr.Length < 2 && psrinput.IndexOf("~") >= 0
+                             && Input.IsPresAltPos < 2)
+                        {
                             InputStatus.ShangPing(1);
-                        else if (InputStatus.inputstr.Length > 0 && InputStatus.inputstr.Length == 2 && Input.IsPressLAlt)
+                            
+                        }
+                        else if (InputStatus.inputstr.Length > 0 && Input.IsPresAltPos > 0)
                         {
                             Input.IsPressLAlt = false;
                             Input.IsPressRAlt = false;
-                            InputStatus.ShangPing(2);
-                        }
-                        else if (InputStatus.inputstr.Length > 0 && InputStatus.inputstr.Length == 2 && Input.IsPressRAlt)
-                        {
-                            Input.IsPressLAlt = false;
-                            Input.IsPressRAlt = false;
-                            InputStatus.ShangPing(3);
-                        }
 
+                            InputStatus.ShangPing(Input.IsPresAltPos);
+                            Input.IsPresAltPos = 0;
+                            
+                        }
+                
                         if (Input.IsChinese == 0 && inputss.Length > 0 && srspace)
                         {
                             //英文速录下起作用
                             //完成字母上屏后有空格按键则补空格
-                            InputStatusFrm.SendText(" ");
+                            InputStatusFrm.SendText(" ", "");
                         }
                         else if (Input.IsChinese == 0 && InputStatusFrm.LastLinkString.Length > 2)
                             InputStatus.GetDreamValue(InputStatusFrm.LastLinkString);
@@ -1490,22 +1506,22 @@ namespace Core.Win
                 catch { }
                 Input.IsPressLAlt = false;
                 Input.IsPressRAlt = false;
+                Input.IsPresAltPos = 0;
             }
             else
             {
                 if (InputStatus.inputstr.Length > 0)
                 {
-                    if(Input.IsPressLAlt)
+                    if (Input.IsPresAltPos > 0)
                     {
-                        InputStatus.ShangPing(2);
+                        InputStatus.ShangPing(Input.IsPresAltPos);
+                        
                     }
-                    else if (Input.IsPressRAlt)
-                    {
-                        InputStatus.ShangPing(3);
-                    }
+                   
                 }
                 Input.IsPressLAlt = false;
                 Input.IsPressRAlt = false;
+                Input.IsPresAltPos = 0;
             }
 
         }
@@ -1861,18 +1877,21 @@ namespace Core.Win
                 return;
             }
 
-            TrayIcon.Text = "速录宝2.0.2";//鼠标移至托盘的提示文本
+            TrayIcon.Text = "速录宝2.0.8";//鼠标移至托盘的提示文本
             TrayIcon.Visible = true;
 
             //定义一个MenuItem数组，并把此数组同时赋值给ContextMenu对象 
-            mnuItms = new MenuItem[11];
-           
+            mnuItms = new MenuItem[12];
+            mnuItms[mnuItms.Length - 12] = new MenuItem();
+            mnuItms[mnuItms.Length - 12].Text = "关于速录宝2.0.8";
+            mnuItms[mnuItms.Length - 12].Visible = true;
+            mnuItms[mnuItms.Length - 12].Click += new System.EventHandler(this.AboutInfo);
             mnuItms[mnuItms.Length - 11] = new MenuItem();
-            mnuItms[mnuItms.Length - 11].Text = "关于速录宝2.0";
+            mnuItms[mnuItms.Length - 11].Text = "打开官网";
             mnuItms[mnuItms.Length - 11].Visible = true;
-            mnuItms[mnuItms.Length - 11].Click += new System.EventHandler(this.AboutInfo);
+            mnuItms[mnuItms.Length - 11].Click += new System.EventHandler(this.OpenKmmUrl);
             mnuItms[mnuItms.Length - 10] = new MenuItem();
-            mnuItms[mnuItms.Length - 10].Text = "更新到最新版本";
+            mnuItms[mnuItms.Length - 10].Text = "更新最新版本";
             mnuItms[mnuItms.Length - 10].Visible = true;
             mnuItms[mnuItms.Length - 10].Click += new System.EventHandler(this.UpdataSoft);
   
@@ -2037,7 +2056,7 @@ namespace Core.Win
         private void UpdataSoft(object sender, System.EventArgs e)
         {
             PlanThread.UpdataSoft(true);
-            
+            PlanThread.UpdataDict(true);
         }
         private void OpenHelp(object sender, System.EventArgs e)
         {
@@ -2101,15 +2120,7 @@ namespace Core.Win
         private void label1_Click(object sender, EventArgs e)
         {
             
-#if DEBUG
-            MessageBox.Show("试用版不能使用此功能!");
-           // return;
-#endif
-            if (!Program.CheckAppOK)
-            {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
-                return;
-            }
+ 
             bool ok = false;
             if (e == null) ok = true;
             else
@@ -2137,6 +2148,11 @@ namespace Core.Win
         {
             Win.Login info = new Login(false,Input);
             info.Show();
+        }
+        private void OpenKmmUrl(object sender, System.EventArgs e)
+        {
+            //调用系统默认的浏览器
+            System.Diagnostics.Process.Start("iexplore.exe", "http://srkmm.ysepan.com/");
         }
         //通过托盘的'退出'按钮关闭程序
         public void ExitSelect(object sender, System.EventArgs e)
@@ -2167,15 +2183,7 @@ namespace Core.Win
         /// <param name="e"></param>
         private void UserDictM(object sender, System.EventArgs e)
         {
-#if DEBUG
-            MessageBox.Show("试用版不能使用此功能!");
-            return;
-#endif
-            if (!Program.CheckAppOK)
-            {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
-                return;
-            }
+ 
             Win.UserDict frm = new UserDict(Input,this);
             frm.ShowDialog();
         }
@@ -2187,15 +2195,7 @@ namespace Core.Win
         /// <param name="e"></param>
         private void QueryCode(object sender, System.EventArgs e)
         {
-#if DEBUG
-            MessageBox.Show("试用版不能使用此功能!");
-            return;
-#endif
-            if (!Program.CheckAppOK)
-            {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
-                return;
-            }
+ 
             Win.QueryFrm frm = new QueryFrm();
             frm.Show();
         }
@@ -2207,15 +2207,7 @@ namespace Core.Win
         /// <param name="e"></param>
         private void ProDictM(object sender, System.EventArgs e)
         {
-#if DEBUG
-            MessageBox.Show("试用版不能使用此功能!");
-            return;
-#endif
-            if (!Program.CheckAppOK)
-            {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
-                return;
-            }
+ 
             Win.ProDictFrm frm = new ProDictFrm(Input, this);
             frm.ShowDialog();
         }

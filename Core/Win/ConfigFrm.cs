@@ -34,8 +34,15 @@ namespace Core.Win
             InputMode.OpenLink = this.ckLink.Checked;
             InputMode.OpenAltSelect = this.ckalt.Checked;
             InputMode.SingleInput = this.SingleInput.Checked;
+            InputMode.right3_out = this.ckright3out.Checked;
             winput.curTrac = this.tracchk.Checked;
             InputMode.PageSize = (int)this.selectnum.Value;
+            InputMode.txtla = this.txtla.Text.Trim();
+            InputMode.txtra = this.txtra.Text.Trim();
+            InputMode.txtlas = this.txtlas.Text.Trim();
+            InputMode.txtras = this.txtras.Text.Trim();
+            InputMode.txtlra = this.txtlra.Text.Trim();
+            InputMode.txtlras = this.txtlras.Text.Trim();
             winput.SaveSetting();
             Comm.Function.RunWhenStart(InputMode.AutoRun);
             this.DialogResult = DialogResult.OK;
@@ -57,6 +64,13 @@ namespace Core.Win
             this.tracchk.Checked = winput.curTrac;
             this.ckalt.Checked = InputMode.OpenAltSelect;
             this.SingleInput.Checked = InputMode.SingleInput;
+            this.txtla.Text = InputMode.txtla;
+            this.txtra.Text = InputMode.txtra;
+            this.txtlas.Text = InputMode.txtlas;
+            this.txtras.Text = InputMode.txtras;
+            this.txtlra.Text = InputMode.txtlra;
+            this.txtlras.Text = InputMode.txtlras;
+            this.ckright3out.Checked = InputMode.right3_out;
         }
  
         private void numSkinHeight_ValueChanged(object sender, EventArgs e)

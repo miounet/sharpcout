@@ -154,12 +154,7 @@ namespace Core.Win
 
         private void bntSave_Click(object sender, EventArgs e)
         {
-            if (!Program.CheckAppOK)
-            {
-                MessageBox.Show("加密狗不对,请插入正确的加密狗!", "速录宝");
-                return;
-            }
-
+ 
             string cof = File.ReadAllText(System.IO.Path.Combine(Win.WinInput.Input.ProDitPath, "load.config"), Encoding.UTF8);
             List<UpdateDictEnt> pl = new List<UpdateDictEnt>();
             if (!string.IsNullOrEmpty(cof))

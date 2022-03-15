@@ -15,7 +15,15 @@ namespace Core.Win
         {
             InitializeComponent();
         }
-
+        public QueryFrm(string str)
+        {
+            InitializeComponent();
+            if (str.Length > 0)
+            {
+                textBox2.Text = str;
+                textBox2_TextChanged(null, null);
+            }
+        }
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
             if (textBox2.Text.Trim().Length > 0)
