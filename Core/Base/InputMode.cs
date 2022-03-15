@@ -110,7 +110,7 @@ namespace Core.Base
         public bool IsPressRAlt = false;
         public  bool IsPressCtrl = false;
         public  bool IsPressWin = false;
-
+        public short IsPresAltPos = 0;
         public static string[] srleftdict;//速录左手一简
         public static string[] srrightdict;//速录右手一简
         /// <summary>
@@ -121,7 +121,7 @@ namespace Core.Base
         #endregion
 
         #region static
-        public static string ApiUrl = "http://api.qzxxi.com/";
+      
         public static string CDPath = string.Empty;//当前词库目录
         public static bool OpenCould=true;//云词库
         public static bool AutoUpdate = true;//自动升级 
@@ -140,6 +140,13 @@ namespace Core.Base
         public static Color Skinbcstring = Color.Orange;//提示补码颜色
         public static Color Skinfbcstring = Color.Yellow;//第一候选框字体颜色
         public static int PageSize = 6; //候选框数量
+        public static string txtla = string.Empty;//拇指左键输出
+        public static string txtra = string.Empty;//拇指右键输出
+        public static string txtlas = string.Empty;//拇指左右＋空格输出
+        public static string txtras = string.Empty;//拇指右键＋空格输出
+        public static string txtlra = string.Empty;//拇指左右键输出
+        public static string txtlras = string.Empty;//拇指左右键＋空格输出
+        public static bool right3_out = true;//开启右手第3码顶字
         public IndexManger DictIndex = new IndexManger ();
         #endregion
 
@@ -158,7 +165,7 @@ namespace Core.Base
                 if (inputstr.Length == 0) return null;
                 int count = 0;
                 int first = 0, last = MasterDit.Length - 1;
-                int pcount = SingleInput == true ? 50 : 70;
+                int pcount = 30;// SingleInput == true ? 50 : 70;
                 if (ncount > 0) pcount = ncount;
                 #region 取字
                 if (indexComplete)
@@ -184,7 +191,7 @@ namespace Core.Base
                             fvalue = hzvalue;
                             if (SingleInput)
                             {
-                                if (fvalue.Length != 1)
+                                if ( fvalue.Length > 1 && fcode.Length > 2)
                                 {
                                     //单字
                                     continue;
@@ -208,7 +215,7 @@ namespace Core.Base
 
                 if (count < 28)
                 {
-                    string prostr = GetProInputValue(inputstr, 50);
+                    string prostr = GetProInputValue(inputstr, 20);
                     valuestr += prostr;
                 }
                 if (count < 28)
@@ -254,7 +261,7 @@ namespace Core.Base
         /// <param name="inputstr"></param>
         /// <param name="dream"></param>
         /// <returns></returns>
-        public virtual string GetProInputValue(string inputstr, int ncount = 50)
+        public virtual string GetProInputValue(string inputstr, int ncount = 30)
         {
             string valuestr = "";
             if (IsChinese == 1)
@@ -264,7 +271,7 @@ namespace Core.Base
                 if (ProDit == null) return valuestr;
                 int count = 0;
                 int first = 0, last = ProDit.Length - 1;
-                int pcount = SingleInput == true ? 50 : 70;
+                int pcount = 30;// SingleInput == true ? 50 : 70;
                 if (ncount > 0) pcount = ncount;
                 #region 取字
                 if (indexComplete)
@@ -290,7 +297,7 @@ namespace Core.Base
                             fvalue = hzvalue;
                             if (SingleInput)
                             {
-                                if (fvalue.Length != 1)
+                                if (fvalue.Length > 1 && fcode.Length > 2)
                                 {
                                     //单字
                                     continue;

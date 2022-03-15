@@ -35,11 +35,7 @@ namespace Core.Base
         /// </summary>
         public int PageNum = 1;
 
-        /// <summary>
-        /// 0为初级模式
-        /// 1为高级模式
-        /// </summary>
-        public int LevelTop = 1;
+   
         /// <summary>
         /// 最近汉字数组
         /// </summary>
@@ -60,12 +56,13 @@ namespace Core.Base
         /// </summary>
         /// <param name="message"></param>
         /// <param name="keysend"></param>
-        public static void SendText(string message, bool keysend = false)
+        public static void SendText(string message, string mcode,bool keysend = false)
         {
  
             if (string.IsNullOrEmpty(message)) return;
             Input.IsPressLAlt = false;
             Input.IsPressRAlt = false;
+            Input.IsPresAltPos =0;
             if (keysend || message.StartsWith("sendkey"))
             {
                 SendKeys.Send(message.StartsWith("sendkey") ? message.Split(':')[1] : message);
@@ -113,6 +110,7 @@ namespace Core.Base
             
             LastSPValue = message;
             LastLinkString += message;
+            LastLinkCodeString += mcode;
             if (Input.IsChinese == 1 && !CheckChinese(message,true))
             {
                 LastLinkString = string.Empty;
@@ -133,6 +131,7 @@ namespace Core.Base
                 }
             }
             if (Input.IsChinese == 1 && LastLinkString.Length > 4) LastLinkString = LastLinkString.Substring(LastLinkString.Length-4);
+            if (Input.IsChinese == 1 && LastLinkCodeString.Length > 4) LastLinkCodeString = LastLinkCodeString.Substring(LastLinkCodeString.Length - 4);
 
         }
 
@@ -220,9 +219,9 @@ namespace Core.Base
                         if (LSView)
                         {
                             for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
-                                InputStatusFrm.SendText("{BACKSPACE}", true);
+                                InputStatusFrm.SendText("{BACKSPACE}", "",true);
                         }
-                        SendText(InputStatusFrm.cachearry[i - 1].Split('|')[1].Substring(index));
+                        SendText(InputStatusFrm.cachearry[i - 1].Split('|')[1].Substring(index), input);
                         break;
                     }
                     else if (i == PageSize - 1)
@@ -230,9 +229,9 @@ namespace Core.Base
                         if (LSView)
                         {
                             for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
-                                InputStatusFrm.SendText("{BACKSPACE}", true);
+                                InputStatusFrm.SendText("{BACKSPACE}", "", true);
                         }
-                        SendText(InputStatusFrm.cachearry[i].Split('|')[1].Substring(index));
+                        SendText(InputStatusFrm.cachearry[i].Split('|')[1].Substring(index), input);
                         break;
                     }
                 }
@@ -243,9 +242,9 @@ namespace Core.Base
                         if (LSView)
                         {
                             for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
-                                InputStatusFrm.SendText("{BACKSPACE}", true);
+                                InputStatusFrm.SendText("{BACKSPACE}", "",true);
                         }
-                        SendText(InputStatusFrm.cachearry[PageSize - 1 - i].Split('|')[1].Substring(index));
+                        SendText(InputStatusFrm.cachearry[PageSize - 1 - i].Split('|')[1].Substring(index), input);
                         break;
                     }
                 }
@@ -256,9 +255,9 @@ namespace Core.Base
                         if (LSView)
                         {
                             for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
-                                InputStatusFrm.SendText("{BACKSPACE}", true);
+                                InputStatusFrm.SendText("{BACKSPACE}","", true);
                         }
-                        SendText(InputStatusFrm.cachearry[tpos].Split('|')[1].Substring(index));
+                        SendText(InputStatusFrm.cachearry[tpos].Split('|')[1].Substring(index), input);
                         break;
                     }
                     else if (!string.IsNullOrEmpty(InputStatusFrm.cachearry[PageSize - 1 - i]))
@@ -266,9 +265,9 @@ namespace Core.Base
                         if (LSView)
                         {
                             for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
-                                InputStatusFrm.SendText("{BACKSPACE}", true);
+                                InputStatusFrm.SendText("{BACKSPACE}", "",true);
                         }
-                        SendText(InputStatusFrm.cachearry[PageSize - 1 - i].Split('|')[1].Substring(index));
+                        SendText(InputStatusFrm.cachearry[PageSize - 1 - i].Split('|')[1].Substring(index), input);
                         break;
                     }
                 }
@@ -349,9 +348,9 @@ namespace Core.Base
         {
             if (LastSPValue.Length > 0)
                 for (int j = 0; j < LastSPValue.Length; j++)
-                    SendText("{BACKSPACE}", true);
+                    SendText("{BACKSPACE}", "",true);
             else
-                SendText("{BACKSPACE}", true);
+                SendText("{BACKSPACE}", "",true);
 
             LastSPValue = string.Empty;
             LastLinkString = string.Empty;
@@ -362,7 +361,7 @@ namespace Core.Base
         public void DelLastInput(int num)
         {
             for (int j = 0; j < num; j++)
-                SendText("{BACKSPACE}", true);
+                SendText("{BACKSPACE}","", true);
         }
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
         private static extern int ShowWindow(IntPtr hWnd, short cmdShow);
@@ -422,14 +421,17 @@ namespace Core.Base
         /// 最后上屏的四个字
         /// </summary>
         public static string LastLinkString = string.Empty;
-
+        /// <summary>
+        /// 最后上屏的四个编码
+        /// </summary>
+        public static string LastLinkCodeString = string.Empty;
         public static string LastLinkNum = string.Empty;
         public static bool LSView = false;
         /// <summary>
         /// 显示候选框的汉字
         /// smspace  
         /// </summary>
-        public void ShowInput(bool sp,bool clear=true,int ncount=0,bool smspace=false)//可上屏
+        public void ShowInput(bool sp,bool clear=true,int ncount=0,bool smspace=false,bool alt=false)//可上屏
         {
             if (LSView)
             {
@@ -454,30 +456,23 @@ namespace Core.Base
                     //无重码直接上屏
                     ShangPing(1);
                 }
-                else if(smspace && valuearry.Length == 2)
+                else if (valuearry.Length == 2 && !alt && this.inputstr.Length > 2)
                 {
-                    //3码时，带空格，只有1重码，输出第2位字词。
-                    ShangPing(2,0,false);
-                    //this.ShowWindow(true);
+                    if (smspace)
+                    {
+                        ShangPing(2, 0, false);
+                    }
+                    else
+                    {
+                        ShangPing(1, 0, false);
+                        this.ShowWindow(true);
+                    }
+                  
                 }
-                //else if (smspace && valuearry.Length > 2 
-                //    && valuearry[0].Split('|')[1].Length== 1 && valuearry[1].Split('|')[1].Length == 1
-                //    &&  valuearry[2].Split('|')[1].Length >1)
-                //{
-                //    //3码时，带空格，只有1重码，输出第2位字词。
-                //    ShangPing(2, 0, false);
-                //    //this.ShowWindow(true);
-                //}
-                //else if(this.inputstr.Length==3 && smspace)
-                //{
-                //    ShangPing(1, 0, false);
-                //}
-                else if (smspace && count == 2)
-                {
-                    ShangPing(2);
-                }
+           
                 else
                 {
+                    if (sp && count > 1) clear = false;
                     if (sp)
                         ShangPing(1, 0, clear);
                     else
@@ -491,13 +486,25 @@ namespace Core.Base
                     if (!string.IsNullOrEmpty(cachearry[0])) PreFirstValue = cachearry[0].Split('|')[1];
                 }
                 if (cachearry == null) cachearry = new string[PageSize];
-                if (PreFirstValue.Length > 0 && this.inputstr != this.input &&  this.inputstr.Length>=4)
+                if (PreFirstValue.Length > 0 && this.inputstr != this.input &&  this.inputstr.Length>=2)
                 {
                     //错码上屏
-                    SendText(PreFirstValue);
+                    SendText(PreFirstValue, this.inputstr.Length>2 ? this.inputstr.Substring(0,2): this.inputstr);
                     this.inputstr = this.input;
-                    if (this.inputstr.Length > 0)
-                        ShowInput(false);
+                    if (smspace)
+                    {
+                        if (this.inputstr.Length > 0)
+                        {
+                            ShowInput(true);
+                            Clear();
+                        }
+                 
+                    }
+                    else
+                    {
+                        if (this.inputstr.Length > 0)
+                            ShowInput(false);
+                    }
                 }
                 else
                 {
@@ -773,11 +780,7 @@ namespace Core.Base
                             grafx.Graphics.DrawString(pos + v, tfont, bstring, new Point(wx, inputy));
                         if (InputMode.lbinputv == null || InputMode.lbinputv[i] == null) return;
                         InputMode.lbinputv[i].Text = pos + v;
-                        //if (InputMode.lbinputv[i].Text.Length > 3)
-                        //    wx += InputMode.lbinputv[i].PreferredWidth - 10;
-                        //else
-                        //    wx += InputMode.lbinputv[i].PreferredWidth - 10;
-
+                     
                         wx += InputMode.lbinputv[i].PreferredWidth - 10;
                         grafx.Graphics.DrawString(cachearry[i].Split('|')[2], new Font("宋体", fontsize - 1), bcstring, new Point(wx, inputy));
                         if (string.IsNullOrEmpty(InputMode.lbinputc[i].Text))
