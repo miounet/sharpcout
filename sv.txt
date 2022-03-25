@@ -1,2 +1,2 @@
-srb_ver_info_s=2.0.9=srb_ver_info_e
-srb_down_info_s=http://ys-g.ysepan.com/618064333/217721646/U6jItks46382J7K3IO5M3d/srb2.0.9_%E6%89%8B%E5%8A%A8%E5%8D%87%E7%BA%A7%E5%8C%85.zip=srb_down_info_e
+srb_ver_info_s=2.2=srb_ver_info_e
+srb_down_info_s=http://miounet.vicp.cc/srb/srb2.2.zip=srb_down_info_e
