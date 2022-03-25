@@ -19,7 +19,7 @@ namespace Core.Base
         public string[] EnDit = null;
         public List<string> ClouddDit = new List<string>();
         public string AppPath = string.Empty;
-       
+        public Dictionary<string,string> PinYi = new Dictionary<string, string>();
         public string MasterDitPath = string.Empty;
         public string ProDitPath = string.Empty;
         public string UserDitPath = string.Empty;
@@ -45,6 +45,7 @@ namespace Core.Base
         /// <summary>
         /// 1表示中文状态
         /// 0英文状态
+        /// 2并击助手状态
         /// </summary>
         public ushort IsChinese = 1;
       
@@ -147,6 +148,8 @@ namespace Core.Base
         public static string txtlra = string.Empty;//拇指左右键输出
         public static string txtlras = string.Empty;//拇指左右键＋空格输出
         public static bool right3_out = true;//开启右手第3码顶字
+        public static bool pinyin = false;//显示拼音提示
+
         public IndexManger DictIndex = new IndexManger ();
         #endregion
 
@@ -163,68 +166,79 @@ namespace Core.Base
             {
                 #region 中文处理
                 if (inputstr.Length == 0) return null;
-                int count = 0;
-                int first = 0, last = MasterDit.Length - 1;
-                int pcount = 30;// SingleInput == true ? 50 : 70;
-                if (ncount > 0) pcount = ncount;
-                #region 取字
-                if (indexComplete)
+                if (!inputstr.StartsWith("'"))
                 {
-                    PosIndex poi = DictIndex.GetPos(inputstr);
-                    if (poi == null) return null;
-                    first = poi.Start;
-                    last = poi.End;
-                }
-                else return null;
+                    int count = 0;
+                    int first = 0, last = MasterDit.Length - 1;
+                    int pcount = 30;// SingleInput == true ? 50 : 70;
+                    if (ncount > 0) pcount = ncount;
 
-                for (int i = first; i <= last; i++)
-                {
-                    if (MasterDit[i].StartsWith(inputstr))
+
+                    #region 取字
+                    if (indexComplete)
                     {
-                        string strarr = MasterDit[i];
-                        string fcode = strarr.Split(' ')[0];
-                        string fvalue = strarr.Substring(strarr.Split(' ')[0].Length).Trim();//获取汉字
-                        int startint = fcode.IndexOf(inputstr) + inputstr.Length;
-                        foreach (var hzvalue in fvalue.Split(' '))
+                        PosIndex poi = DictIndex.GetPos(inputstr);
+                        if (poi == null) return null;
+                        first = poi.Start;
+                        last = poi.End;
+                    }
+                    else return null;
+
+                    for (int i = first; i <= last; i++)
+                    {
+                        if (MasterDit[i].StartsWith(inputstr))
                         {
-                            if (string.IsNullOrEmpty(hzvalue)) continue;
-                            fvalue = hzvalue;
-                            if (SingleInput)
+                            string strarr = MasterDit[i];
+                            string fcode = strarr.Split(' ')[0];
+                            string fvalue = strarr.Substring(strarr.Split(' ')[0].Length).Trim();//获取汉字
+                            int startint = fcode.IndexOf(inputstr) + inputstr.Length;
+                            foreach (var hzvalue in fvalue.Split(' '))
                             {
-                                if ( fvalue.Length > 1 && fcode.Length > 2)
+                                if (string.IsNullOrEmpty(hzvalue)) continue;
+                                fvalue = hzvalue;
+                                if (SingleInput)
                                 {
-                                    //单字
-                                    continue;
+                                    if (fvalue.Length > 1 && fcode.Length > 2)
+                                    {
+                                        //单字
+                                        continue;
+                                    }
+                                }
+                                if (valuestr.IndexOf("|" + fvalue + "|") < 0)
+                                {
+                                    //去重
+                                    valuestr += i + "z|" + fvalue + "|" + (startint < fcode.Length ? fcode.Substring(startint, fcode.Length - inputstr.Length) : "") + "\n";
+                                    count++;
                                 }
                             }
-                            if (valuestr.IndexOf("|" + fvalue + "|") < 0)
-                            {
-                                //去重
-                                valuestr += i + "z|" + fvalue + "|" + (startint < fcode.Length ? fcode.Substring(startint, fcode.Length - inputstr.Length) : "") + "\n";
-                                count++;
-                            }
+
+
                         }
 
-
+                        if (count > pcount) break;
                     }
 
-                    if (count > pcount) break;
+                    #endregion
+
+                    if (count < 28)
+                    {
+                        string prostr = GetProInputValue(inputstr, 20);
+                        valuestr += prostr;
+                    }
+                    if (count < 28)
+                        GetUserDict(inputstr, ref valuestr);
+
                 }
-
-                #endregion
-
-                if (count < 28)
+                else
                 {
-                    string prostr = GetProInputValue(inputstr, 20);
-                    valuestr += prostr;
-                }
-                if (count < 28)
-                    GetUserDict(inputstr, ref valuestr);
-                if (count < 28)
                     GetCloudDict(inputstr, ref valuestr);
-
+                }
                 #endregion
 
+            }
+            else if(IsChinese == 2)
+            {
+                GetUserDict(inputstr, ref valuestr);
             }
             else
             {
@@ -349,27 +363,37 @@ namespace Core.Base
 
 
         /// <summary>
-        /// 获取Cloud词组
+        /// 获取Cloud词组/临时拼音
         /// </summary>
         /// <param name="inputstr"></param>
         /// <param name="valuestr"></param>
         private void GetCloudDict(string inputstr, ref string valuestr)
         {
-            int count = 0;
-            foreach (var s in ClouddDit)
+            if (inputstr.StartsWith("'"))
             {
-                if (s.StartsWith(inputstr))
-                {
-                    if (valuestr.IndexOf("|" + s.Split(' ')[1] + "|") < 0)
-                    {
-                        //去重
-                        valuestr += 200 + count + "z|" + s.Split(' ')[1] + "|" + s.Split(' ')[0].Replace(inputstr, "") + "\n";
 
-                        count++;
+                valuestr = "";
+                int count = 0;
+                if (inputstr.Length == 1) inputstr = "a";
+                else inputstr = inputstr.Substring(1);
+
+
+                foreach (var s in ClouddDit.FindAll(f => f.StartsWith(inputstr)))
+                {
+                    for (int i = 1; i < s.Split(' ').Length; i++)
+                    {
+                        if (valuestr.IndexOf("|" + s.Split(' ')[i] + "|") < 0)
+                        {
+                            valuestr += "|" + s.Split(' ')[i] + "|" + s.Split(' ')[0].Replace(inputstr, "") + "\n";
+
+                            count++;
+                        }
+                        if (count >= 300) break;
                     }
-                    if (count >= 10) break;
+                    if (count >= 300) break;
                 }
             }
+
         }
         /// <summary>
         /// 按输入获取字词
@@ -538,16 +562,18 @@ namespace Core.Base
                             }
                             else if (keys == Keys.Oem7)
                             {
-                                if (firstdh == 1)
-                                {
-                                    str = "‘";
-                                    firstdh++;
-                                }
-                                else
-                                {
-                                    str = "’";
-                                    firstdh = 1;
-                                }
+                                //if (firstdh == 1)
+                                //{
+                                //    str = "‘";
+                                //    firstdh++;
+                                //}
+                                //else
+                                //{
+                                //    str = "’";
+                                //    firstdh = 1;
+                                //}
+
+                                str = "'";
                             }
                         }
                     }
@@ -612,16 +638,17 @@ namespace Core.Base
                             }
                             else if (keys == Keys.Oem7)
                             {
-                                if (firstdh == 1)
-                                {
-                                    str = "‘";
-                                    firstdh++;
-                                }
-                                else
-                                {
-                                    str = "’";
-                                    firstdh = 1;
-                                }
+                                //if (firstdh == 1)
+                                //{
+                                //    str = "‘";
+                                //    firstdh++;
+                                //}
+                                //else
+                                //{
+                                //    str = "’";
+                                //    firstdh = 1;
+                                //}
+                                str = "'";
                             }
                         }
                     }
@@ -690,16 +717,17 @@ namespace Core.Base
                             }
                             else if (keys == Keys.Oem7)
                             {
-                                if (firstdh == 1)
-                                {
-                                    str = "‘";
-                                    firstdh++;
-                                }
-                                else
-                                {
-                                    str = "’";
-                                    firstdh = 1;
-                                }
+                                //if (firstdh == 1)
+                                //{
+                                //    str = "‘";
+                                //    firstdh++;
+                                //}
+                                //else
+                                //{
+                                //    str = "’";
+                                //    firstdh = 1;
+                                //}
+                                str = "'";
                             }
                         }
                     }
@@ -763,16 +791,17 @@ namespace Core.Base
                             }
                             else if (keys == Keys.Oem7)
                             {
-                                if (firstdh == 1)
-                                {
-                                    str = "'";
-                                    firstdh++;
-                                }
-                                else
-                                {
-                                    str = "'";
-                                    firstdh = 1;
-                                }
+                                //if (firstdh == 1)
+                                //{
+                                //    str = "'";
+                                //    firstdh++;
+                                //}
+                                //else
+                                //{
+                                //    str = "'";
+                                //    firstdh = 1;
+                                //}
+                                str = "'";
                             }
                         }
                     }
@@ -1081,8 +1110,8 @@ namespace Core.Base
                     }
                     else
                     {
-                        Win.WinInput.InputStatus.Height = Height = 133;// MaxHeight() + SkinFontJG + 4;
-                        Win.WinInput.InputStatus.Width = Width = 175;// MaxWidth();
+                        Win.WinInput.InputStatus.Height = Height = 166;// MaxHeight() + SkinFontJG + 4;
+                        Win.WinInput.InputStatus.Width = Width = 200;// MaxWidth();
                     }
                     if (!this.Metor)
                     {
@@ -1139,10 +1168,8 @@ namespace Core.Base
                 vw += lbinputv[i].PreferredWidth -6 + lbinputc[i].PreferredWidth;
               
             }
-            if (vw < 150) vw = 150;
+            if (vw < 240) vw = 240;
             else if (rcount > 6 && vw < 300) vw = 300;
-            else if (rcount > 4 && vw < 240) vw = 240;
-            else if (rcount > 3 && vw < 200) vw = 200;
             return vw;
         }
         public static int MaxHeight()

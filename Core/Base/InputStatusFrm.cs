@@ -203,6 +203,7 @@ namespace Core.Base
         /// <param name="pos"></param>
         public void ShangPing(int pos,int index=0,bool clear=true)
         {
+            pinyipos = 0;
             int tpos = pos != 0 ? pos - 1 : pos;
             if (InputStatusFrm.cachearry==null ||
                 (InputStatusFrm.cachearry.Length > 0 && string.IsNullOrEmpty(InputStatusFrm.cachearry[0])))
@@ -456,7 +457,8 @@ namespace Core.Base
                     //无重码直接上屏
                     ShangPing(1);
                 }
-                else if (valuearry.Length == 2 && !alt && this.inputstr.Length > 2)
+                else if (valuearry.Length == 2 && !alt && this.inputstr.Length > 2
+                    && !this.inputstr.StartsWith("'"))
                 {
                     if (smspace)
                     {
@@ -727,7 +729,8 @@ namespace Core.Base
 
             return v;
         }
-
+        public int pinyipos = 0;
+        string pys = "";
         /// <summary>
         /// 绘制候选框
         /// </summary>
@@ -742,23 +745,36 @@ namespace Core.Base
             try
             {
                 if (this.inputstr.Length==0 && !Dream) return;
+           
                 if (ViewType == 0)
                     grafx.Graphics.DrawImage(Win.WinInput.HBackImg, new Rectangle(0, 0, Width, Height));
                 else
                     grafx.Graphics.DrawImage(Win.WinInput.BackImg, new Rectangle(0, 0, Width, Height));
+
+                if (InputMode.pinyin)
+                {
+                    if (valuearry != null && valuearry.Length <= pinyipos || PageSize <= pinyipos) pinyipos = 0;
+                    if (valuearry != null && valuearry.Length > pinyipos
+                        && cachearry[pinyipos].Split('|').Length > 1
+                        && Input.PinYi.ContainsKey(cachearry[pinyipos].Split('|')[1].Substring(0, 1)))
+                    {
+                        pys = Input.PinYi[cachearry[pinyipos].Split('|')[1].Substring(0, 1)];
+                    }
+                }
+
                 Pen bordpen = new Pen(InputMode.Skinbordpen);
                 SolidBrush bstring = new SolidBrush(InputMode.Skinbstring);
                 SolidBrush bcstring = new SolidBrush(InputMode.Skinbcstring);
                 SolidBrush fbcstring = new SolidBrush(InputMode.Skinfbcstring);
-                Rectangle hzrec = new Rectangle(0, 0, Width - 1, Height - 1);
+                Rectangle hzrec = new Rectangle(0, 0, Width - 1, Height  - 1);
                 grafx.Graphics.DrawRectangle(bordpen, hzrec);
                 int inputy = InputMode.SkinFontJG;
-                string ins = InputStatusFrm.Dream ? "智能联想" : this.inputstr;
+                string ins = InputStatusFrm.Dream ? "智能联想" : this.inputstr + (pys.Length > 0 ? "  " + (pinyipos + 1) + "." + pys : "");
                 int fontsize = InputMode.SkinFontSize;
  
                 grafx.Graphics.DrawString(ins, new Font(InputMode.SkinFontName, fontsize, FontStyle.Bold), bstring, new Point(0 + 3, 0 + 4));
-                if (valuearry != null && valuearry.Length > 0 && !InputStatusFrm.Dream) //分页数显示
-                    grafx.Graphics.DrawString(string.Format("{0}/{1}", PageNum, (valuearry.Length % PageSize == 0 ? valuearry.Length / PageSize : valuearry.Length / PageSize + 1)), new Font("", 10F), bstring, new Point(Width - 44, 0 + 4));
+                if (valuearry != null && valuearry.Length > 0 && !InputStatusFrm.Dream && valuearry.Length > PageSize) //分页数显示
+                    grafx.Graphics.DrawString(string.Format("{0}/{1}", PageNum, valuearry.Length / PageSize + 1), new Font("", 10F), bstring, new Point(Width - 44, 0 + 4));
                 if (ViewType == 0)
                 {
                     //横排显示
@@ -771,15 +787,16 @@ namespace Core.Base
                         string v = GetCutStr(cachearry[i].Split('|')[1]);
 
                         string pos = i == 9 ? "0." : (i + 1).ToString() + ".";
-                        
-
+                      
+                       
                         Font tfont = new Font(InputMode.SkinFontName, fontsize);
                         if (i == 0)
                             grafx.Graphics.DrawString(pos + v, tfont, fbcstring, new Point(wx, inputy));
                         else
                             grafx.Graphics.DrawString(pos + v, tfont, bstring, new Point(wx, inputy));
+
                         if (InputMode.lbinputv == null || InputMode.lbinputv[i] == null) return;
-                        InputMode.lbinputv[i].Text = pos + v;
+                        InputMode.lbinputv[i].Text = pos + v ;
                      
                         wx += InputMode.lbinputv[i].PreferredWidth - 10;
                         grafx.Graphics.DrawString(cachearry[i].Split('|')[2], new Font("宋体", fontsize - 1), bcstring, new Point(wx, inputy));
