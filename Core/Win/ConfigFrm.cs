@@ -43,6 +43,7 @@ namespace Core.Win
             InputMode.txtras = this.txtras.Text.Trim();
             InputMode.txtlra = this.txtlra.Text.Trim();
             InputMode.txtlras = this.txtlras.Text.Trim();
+            InputMode.pinyin = this.ckpinyin.Checked;
             winput.SaveSetting();
             Comm.Function.RunWhenStart(InputMode.AutoRun);
             this.DialogResult = DialogResult.OK;
@@ -71,6 +72,7 @@ namespace Core.Win
             this.txtlra.Text = InputMode.txtlra;
             this.txtlras.Text = InputMode.txtlras;
             this.ckright3out.Checked = InputMode.right3_out;
+            this.ckpinyin.Checked = InputMode.pinyin;
         }
  
         private void numSkinHeight_ValueChanged(object sender, EventArgs e)

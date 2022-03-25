@@ -64,6 +64,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtlra = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.ckpinyin = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectnum)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -72,6 +73,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ckpinyin);
             this.groupBox1.Controls.Add(this.ckright3out);
             this.groupBox1.Controls.Add(this.SingleInput);
             this.groupBox1.Controls.Add(this.label1);
@@ -493,6 +495,18 @@
             this.label8.TabIndex = 15;
             this.label8.Text = "左右同按输出：";
             // 
+            // ckpinyin
+            // 
+            this.ckpinyin.AutoSize = true;
+            this.ckpinyin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ckpinyin.Location = new System.Drawing.Point(238, 86);
+            this.ckpinyin.Margin = new System.Windows.Forms.Padding(4);
+            this.ckpinyin.Name = "ckpinyin";
+            this.ckpinyin.Size = new System.Drawing.Size(119, 20);
+            this.ckpinyin.TabIndex = 24;
+            this.ckpinyin.Text = "显示首字拼音";
+            this.ckpinyin.UseVisualStyleBackColor = true;
+            // 
             // ConfigFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -574,5 +588,6 @@
         private System.Windows.Forms.TextBox txtlra;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox ckright3out;
+        private System.Windows.Forms.CheckBox ckpinyin;
     }
 }
