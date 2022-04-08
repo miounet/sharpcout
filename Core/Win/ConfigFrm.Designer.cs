@@ -30,6 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigFrm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ckautopos = new System.Windows.Forms.CheckBox();
+            this.chclosebj = new System.Windows.Forms.CheckBox();
+            this.ckpinyin = new System.Windows.Forms.CheckBox();
             this.ckright3out = new System.Windows.Forms.CheckBox();
             this.SingleInput = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,7 +67,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtlra = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.ckpinyin = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectnum)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -73,6 +75,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.ckautopos);
+            this.groupBox1.Controls.Add(this.chclosebj);
             this.groupBox1.Controls.Add(this.ckpinyin);
             this.groupBox1.Controls.Add(this.ckright3out);
             this.groupBox1.Controls.Add(this.SingleInput);
@@ -94,6 +98,42 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "基本设置";
             // 
+            // ckautopos
+            // 
+            this.ckautopos.AutoSize = true;
+            this.ckautopos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ckautopos.Location = new System.Drawing.Point(339, 87);
+            this.ckautopos.Margin = new System.Windows.Forms.Padding(4);
+            this.ckautopos.Name = "ckautopos";
+            this.ckautopos.Size = new System.Drawing.Size(151, 20);
+            this.ckautopos.TabIndex = 25;
+            this.ckautopos.Text = "数字选码自动调频";
+            this.ckautopos.UseVisualStyleBackColor = true;
+            // 
+            // chclosebj
+            // 
+            this.chclosebj.AutoSize = true;
+            this.chclosebj.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chclosebj.Location = new System.Drawing.Point(339, 59);
+            this.chclosebj.Margin = new System.Windows.Forms.Padding(4);
+            this.chclosebj.Name = "chclosebj";
+            this.chclosebj.Size = new System.Drawing.Size(159, 20);
+            this.chclosebj.TabIndex = 25;
+            this.chclosebj.Text = "单击模式,并击辅助";
+            this.chclosebj.UseVisualStyleBackColor = true;
+            // 
+            // ckpinyin
+            // 
+            this.ckpinyin.AutoSize = true;
+            this.ckpinyin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ckpinyin.Location = new System.Drawing.Point(204, 87);
+            this.ckpinyin.Margin = new System.Windows.Forms.Padding(4);
+            this.ckpinyin.Name = "ckpinyin";
+            this.ckpinyin.Size = new System.Drawing.Size(119, 20);
+            this.ckpinyin.TabIndex = 24;
+            this.ckpinyin.Text = "显示首字拼音";
+            this.ckpinyin.UseVisualStyleBackColor = true;
+            // 
             // ckright3out
             // 
             this.ckright3out.AutoSize = true;
@@ -110,7 +150,7 @@
             // 
             this.SingleInput.AutoSize = true;
             this.SingleInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SingleInput.Location = new System.Drawing.Point(238, 58);
+            this.SingleInput.Location = new System.Drawing.Point(236, 58);
             this.SingleInput.Margin = new System.Windows.Forms.Padding(4);
             this.SingleInput.Name = "SingleInput";
             this.SingleInput.Size = new System.Drawing.Size(87, 20);
@@ -203,7 +243,7 @@
             // 
             this.ckOpenCould.AutoSize = true;
             this.ckOpenCould.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ckOpenCould.Location = new System.Drawing.Point(345, 58);
+            this.ckOpenCould.Location = new System.Drawing.Point(425, 28);
             this.ckOpenCould.Margin = new System.Windows.Forms.Padding(4);
             this.ckOpenCould.Name = "ckOpenCould";
             this.ckOpenCould.Size = new System.Drawing.Size(103, 20);
@@ -495,18 +535,6 @@
             this.label8.TabIndex = 15;
             this.label8.Text = "左右同按输出：";
             // 
-            // ckpinyin
-            // 
-            this.ckpinyin.AutoSize = true;
-            this.ckpinyin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ckpinyin.Location = new System.Drawing.Point(238, 86);
-            this.ckpinyin.Margin = new System.Windows.Forms.Padding(4);
-            this.ckpinyin.Name = "ckpinyin";
-            this.ckpinyin.Size = new System.Drawing.Size(119, 20);
-            this.ckpinyin.TabIndex = 24;
-            this.ckpinyin.Text = "显示首字拼音";
-            this.ckpinyin.UseVisualStyleBackColor = true;
-            // 
             // ConfigFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -589,5 +617,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox ckright3out;
         private System.Windows.Forms.CheckBox ckpinyin;
+        private System.Windows.Forms.CheckBox chclosebj;
+        private System.Windows.Forms.CheckBox ckautopos;
     }
 }

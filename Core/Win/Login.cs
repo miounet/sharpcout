@@ -49,7 +49,7 @@ namespace Core.Win
                 Task tk = new Task(() =>
                 {
                     while (Wait) { System.Threading.Thread.Sleep(200); }
-                    System.Threading.Thread.Sleep(5000);
+                    System.Threading.Thread.Sleep(3000);
                     this.Close();
                 });
                 tk.Start();
@@ -63,6 +63,12 @@ namespace Core.Win
         {
             if (!autoclose)
                 this.Close();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            //调用系统默认的浏览器
+            System.Diagnostics.Process.Start("iexplore.exe", this.linkLabel1.Text);
         }
     }
 }
