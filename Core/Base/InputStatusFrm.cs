@@ -119,7 +119,7 @@ namespace Core.Base
                     Input.Show = false;
                     Dream = false;
                 }
-                AutoZJ();
+                //AutoZJ();
             }
             else if (Input.IsChinese == 0 && !IsLowerLetter(message) && !IsUpperLetter(message))
             {
@@ -204,6 +204,7 @@ namespace Core.Base
         public void ShangPing(int pos,int index=0,bool clear=true)
         {
             pinyipos = 0;
+ 
             int tpos = pos != 0 ? pos - 1 : pos;
             if (InputStatusFrm.cachearry==null ||
                 (InputStatusFrm.cachearry.Length > 0 && string.IsNullOrEmpty(InputStatusFrm.cachearry[0])))
@@ -258,6 +259,8 @@ namespace Core.Base
                             for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
                                 InputStatusFrm.SendText("{BACKSPACE}","", true);
                         }
+                        if (InputStatusFrm.Dream)
+                            index = 0;
                         SendText(InputStatusFrm.cachearry[tpos].Split('|')[1].Substring(index), input);
                         break;
                     }
@@ -289,7 +292,7 @@ namespace Core.Base
                 Dream = false;
                 LastLinkString = string.Empty;
             }
-            else if ((LastLinkString.Length > 2 || (Input.IsChinese == 0 && LastLinkString.Length > 0)) && !LSView)
+            else if ((LastLinkString.Length > 2 || (Input.IsChinese == 0 && LastLinkString.Length > 0)))
                 GetDreamValue(LastLinkString);
         }
 
@@ -452,13 +455,13 @@ namespace Core.Base
                     count++;
                     cachearry[i] = valuearry[i];
                 }
-                if (count == 1)
+                if (count == 1 && !alt)
                 {
                     //无重码直接上屏
                     ShangPing(1);
                 }
                 else if (valuearry.Length == 2 && !alt && this.inputstr.Length > 2
-                    && !this.inputstr.StartsWith("'"))
+                    && !this.inputstr.StartsWith("'") && !InputMode.closebj)
                 {
                     if (smspace)
                     {
@@ -491,8 +494,41 @@ namespace Core.Base
                 if (PreFirstValue.Length > 0 && this.inputstr != this.input &&  this.inputstr.Length>=2)
                 {
                     //错码上屏
-                    SendText(PreFirstValue, this.inputstr.Length>2 ? this.inputstr.Substring(0,2): this.inputstr);
-                    this.inputstr = this.input;
+                    if (InputMode.closebj)
+                    {
+                        if (this.input.Length > 1)
+                        {
+                            this.inputstr = this.inputstr.Substring(0, this.inputstr.Length - 1);
+                            cachearry = Input.GetInputValue(this.inputstr);
+                            string oPreFirstValue = PreFirstValue;
+                            PreFirstValue = string.Empty;
+                            if (cachearry != null && cachearry.Length > 0)
+                            {
+                                if (!string.IsNullOrEmpty(cachearry[0]))
+                                {
+                                    PreFirstValue = cachearry[0].Split('|')[1];
+                                    SendText(PreFirstValue, this.inputstr);
+                                    this.inputstr = this.input.Substring(this.input.Length - 1, 1);
+                                }
+                            }
+                            else
+                            {
+                                SendText(oPreFirstValue, this.inputstr);
+                                this.inputstr = this.input;
+                        
+                            }
+                        }
+                        else
+                        {
+                            SendText(PreFirstValue, this.inputstr);
+                            this.inputstr = this.input;
+                        }
+                    }
+                    else
+                    {
+                        SendText(PreFirstValue, this.inputstr.Length > 2 ? this.inputstr.Substring(0, 2) : this.inputstr);
+                        this.inputstr = this.input;
+                    }
                     if (smspace)
                     {
                         if (this.inputstr.Length > 0)
@@ -505,7 +541,17 @@ namespace Core.Base
                     else
                     {
                         if (this.inputstr.Length > 0)
-                            ShowInput(false);
+                        {
+                            if (this.inputstr.Length == 1 && InputMode.closebj 
+                                && ",./;，。、；，．／；＇‘’　".IndexOf(this.inputstr)>=0)
+                            {
+                                SendText(this.inputstr.Replace(",", "，").Replace(".", "。").Replace("/", "、").Replace(";", "；"), "");
+                                this.Clear();
+                            }
+                            else
+                                ShowInput(false);
+
+                        }
                     }
                 }
                 else
@@ -516,9 +562,7 @@ namespace Core.Base
         }
         public  void GetDreamValue(string v)
         {
-#if DEBUG
-            return  ;
-#endif
+ 
 
             if (!InputMode.OpenLink) return;
 
@@ -760,6 +804,11 @@ namespace Core.Base
                     {
                         pys = Input.PinYi[cachearry[pinyipos].Split('|')[1].Substring(0, 1)];
                     }
+                }
+                else
+                {
+                    pys = String.Empty;
+                    pinyipos = 0;
                 }
 
                 Pen bordpen = new Pen(InputMode.Skinbordpen);

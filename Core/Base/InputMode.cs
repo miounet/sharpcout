@@ -149,7 +149,8 @@ namespace Core.Base
         public static string txtlras = string.Empty;//拇指左右键＋空格输出
         public static bool right3_out = true;//开启右手第3码顶字
         public static bool pinyin = false;//显示拼音提示
-
+        public static bool closebj = false;//关闭并击模式，只使用串击/连击
+        public static bool autopos = false;//数字选码自动调频
         public IndexManger DictIndex = new IndexManger ();
         #endregion
 
@@ -178,11 +179,17 @@ namespace Core.Base
                     if (indexComplete)
                     {
                         PosIndex poi = DictIndex.GetPos(inputstr);
-                        if (poi == null) return null;
-                        first = poi.Start;
-                        last = poi.End;
+                        if (poi != null)
+                        {
+                            first = poi.Start;
+                            last = poi.End;
+                        }
+                        else
+                        {
+                            last = 0;
+                        }
                     }
-                    else return null;
+                    else last = 0;
 
                     for (int i = first; i <= last; i++)
                     {
@@ -198,7 +205,7 @@ namespace Core.Base
                                 fvalue = hzvalue;
                                 if (SingleInput)
                                 {
-                                    if (fvalue.Length > 1 && fcode.Length > 2)
+                                    if (fvalue.Length > 1 && fcode.Length > 3)
                                     {
                                         //单字
                                         continue;
@@ -269,6 +276,64 @@ namespace Core.Base
         }
 
 
+        public bool UpdatePos(string inputstr, int pos)
+        {
+            try
+            {
+                if (IsChinese == 1)
+                {
+                    #region 中文处理
+                    if (inputstr.Length == 0) return false;
+                    if (!inputstr.StartsWith("'"))
+                    {
+
+                        int first = 0, last = MasterDit.Length - 1;
+
+                        #region 自动调频
+                        if (indexComplete)
+                        {
+                            PosIndex poi = DictIndex.GetPos(inputstr);
+                            if (poi == null) return false;
+                            first = poi.Start;
+                            last = poi.End;
+                        }
+                        else return false;
+
+                        for (int i = first; i <= last; i++)
+                        {
+                            if (MasterDit[i].StartsWith(inputstr))
+                            {
+                                string strarr = MasterDit[i];
+                                string fcode = strarr.Split(' ')[0];
+                                string fvalue = strarr.Substring(strarr.Split(' ')[0].Length).Trim();//获取汉字
+                                if (fvalue.Split(' ').Length < 2) return false;
+                                if (fvalue.Split(' ').Length < pos - 1) pos = fvalue.Split(' ').Length;
+                                string zdit = fvalue.Split(' ')[pos - 1];
+                                MasterDit[i] = fcode + " " + zdit + " ";
+                                foreach (var item in fvalue.Split(' '))
+                                {
+                                    if (item.Length == 0) continue;
+                                    if (item == zdit) continue;
+                                    MasterDit[i] += "" + item + " ";
+                                }
+                                MasterDit[i] = MasterDit[i].TrimEnd();
+                            }
+
+
+                        }
+
+                        #endregion
+
+                    }
+
+                    #endregion
+
+                }
+            }
+            catch { return false; }
+            return true;
+        }
+
         /// <summary>
         /// 按输入获取专业词库字词
         /// </summary>
@@ -311,7 +376,7 @@ namespace Core.Base
                             fvalue = hzvalue;
                             if (SingleInput)
                             {
-                                if (fvalue.Length > 1 && fcode.Length > 2)
+                                if (fvalue.Length > 1 && fcode.Length > 3)
                                 {
                                     //单字
                                     continue;
@@ -845,6 +910,10 @@ namespace Core.Base
                 }
 
             }
+            if (InputMode.closebj)
+            {
+                str = str.Replace("，", ",").Replace("。", ".").Replace("、", "/").Replace("；", ";");
+            }
             return str;
         }
         /// <summary>
@@ -908,14 +977,8 @@ namespace Core.Base
         {
             hleft = false;
             hright = false;
-
-            //if (v.Replace("~", "").Length ==1)
-            //{
-            //    hleft = SRLeft(v.Replace("~", ""));
-            //    hright = SRRight(v.Replace("~", ""));
-            //    return;
-            //}
-
+            if (InputMode.closebj) return;
+ 
             string oldv = v;
                 v = v.Replace("；", ";").Replace("，", ",").Replace("。", ".").Replace("、", "/").Replace("‘", "'").Replace("’", "'").Replace("~","");
                 if (v.Length == 1 && !CheckSRCode(v)) return;
@@ -979,6 +1042,7 @@ namespace Core.Base
         /// <returns></returns>
         public string CovertStr(string v, bool px = true)
         {
+            if (InputMode.closebj && v.Length<3) return v;
             bool hleft = false;
             bool hright = false;
             string oldv = v;
