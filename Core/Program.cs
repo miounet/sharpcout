@@ -16,7 +16,7 @@ namespace Core
     {
         public static Win.WinInput MIme = null;
  
-        public static string ProductVer = "2.3.4";//软件版本
+        public static string ProductVer = "2.3.7";//软件版本
  
   
         /// <summary>
