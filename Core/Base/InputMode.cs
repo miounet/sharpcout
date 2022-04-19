@@ -151,6 +151,7 @@ namespace Core.Base
         public static bool pinyin = false;//显示拼音提示
         public static bool closebj = false;//关闭并击模式，只使用串击/连击
         public static bool autopos = false;//数字选码自动调频
+        public static short autoup = 3;//几码强制上屏
         public IndexManger DictIndex = new IndexManger ();
         #endregion
 
