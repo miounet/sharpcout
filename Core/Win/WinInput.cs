@@ -191,11 +191,22 @@ namespace Core.Win
             InputMode.closebj = string.IsNullOrEmpty(SetInfo.GetValue("closebj", setting)) ? false : bool.Parse(SetInfo.GetValue("closebj", setting));
             InputMode.autopos = string.IsNullOrEmpty(SetInfo.GetValue("autopos", setting)) ? false : bool.Parse(SetInfo.GetValue("autopos", setting));
             if (string.IsNullOrEmpty(InputMode.CDPath)) InputMode.CDPath = "空明码";
+            try
+            {
+                setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "ditver.shp"), Encoding.UTF8);//读配置
+                Win.WinInput.DictVersion = setting.Length > 0 ? setting[0] : "";
+                setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "dicturl.shp"), Encoding.UTF8);//读配置
+                Win.WinInput.ApiDictUrl = setting.Length > 0 ? setting[0] : "";
+                if (File.Exists(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "Setting.shp")))
+                {
+                    setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "Setting.shp"), Encoding.UTF8);//读配置
 
-            setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath,"dict", InputMode.CDPath, "ditver.shp"), Encoding.UTF8);//读配置
-            Win.WinInput.DictVersion = setting.Length > 0 ? setting[0] : "";
-            setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "dicturl.shp"), Encoding.UTF8);//读配置
-            Win.WinInput.ApiDictUrl = setting.Length > 0 ? setting[0] : "";
+                    InputMode.autoup = string.IsNullOrEmpty(SetInfo.GetValue("autoup", setting)) ? (short)3 : short.Parse(SetInfo.GetValue("autoup", setting));
+                }
+                else
+                    InputMode.autoup = 3;
+            }
+            catch { }
             return true;
         }
 
@@ -525,6 +536,19 @@ namespace Core.Win
             #region 键盘按下事件
             if ((wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN))
             {
+                #region 按下分页键-+
+                if (InputStatus.inputstr.Length > 0 && (keyData == Keys.OemMinus || keyData == Keys.Oemplus))
+                {
+                    InputStatus.pinyipos = 0;
+
+                    if (keyData == Keys.Oemplus)
+                        InputStatus.NextPage();
+                    else
+                        InputStatus.PrePage();
+
+                    return 1;
+                }
+                #endregion
                 if (keyData == Keys.Right)
                 {
                     InputStatus.pinyipos++;
@@ -552,6 +576,7 @@ namespace Core.Win
                         Input.IsPressAlt = true;
                 }
                 #endregion
+
                 if (Input.IsPressCtrl && keyData == Keys.Delete)
                 {
                     Input.IsPressAlt = false;
@@ -563,7 +588,7 @@ namespace Core.Win
                     Input.IsPressRAlt = false;
                     Input.IsPresAltPos = 0;
                     InputStatus.Clear();
-                    
+
                     //inputFrm.EnterDown(false);
                     //TrayIcon.Icon = new Icon(Application.StartupPath + @"\ico\logh32.ico");
                 }
@@ -1031,10 +1056,12 @@ namespace Core.Win
                 catch { }
 
                 Input.isActiveInput = true;
-                this.Show();
+
+                this.ShowWindow();
+                //this.Show();
                 return;
             }
-            bool hleft = false;
+            bool hleft = false; this.ShowWindow();
             bool hright = false;
             bool allNum = false;
             int trynum = 0;
@@ -1442,7 +1469,7 @@ namespace Core.Win
                         InputStatus.inputstr += inputss;
                         InputStatus.input = inputss;
                     }
-                    if (Input.IsChinese == 1 && InputStatus.inputstr.Length >= 3 && !InputStatus.inputstr.StartsWith("'")  && !InputMode.closebj)
+                    if (Input.IsChinese == 1 && InputStatus.inputstr.Length >= InputMode.autoup && !InputStatus.inputstr.StartsWith("'")  && !InputMode.closebj)
                     {
                         if (!srspace) srspace = true;
                         else srspace = false;
@@ -1510,7 +1537,8 @@ namespace Core.Win
                         catch { }
 
                         Input.isActiveInput = true;
-                        this.Show();
+                        this.ShowWindow();
+                        // this.Show();
                     }
                     else
                     {
@@ -2042,7 +2070,7 @@ namespace Core.Win
                 return;
             }
 
-            TrayIcon.Text = "速录宝2.3.4";//鼠标移至托盘的提示文本
+            TrayIcon.Text = "速录宝2.3.7";//鼠标移至托盘的提示文本
             TrayIcon.Visible = true;
 
             //定义一个MenuItem数组，并把此数组同时赋值给ContextMenu对象 
