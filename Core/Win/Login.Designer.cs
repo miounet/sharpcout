@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lbID = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // lbID
@@ -52,10 +54,10 @@
             this.label1.ForeColor = System.Drawing.Color.Black;
             this.label1.Location = new System.Drawing.Point(34, 165);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(423, 64);
+            this.label1.Size = new System.Drawing.Size(407, 64);
             this.label1.TabIndex = 1;
-            this.label1.Text = "免费绿色并击平台，支持大小写，标点，数字等70以上码元\r\n支持第三方输入法普通键盘并击，指法无冲突，支持串击\r\n\r\n                       " +
-    "               作者：黄贤飞";
+            this.label1.Text = "免费并击平台，字母标点数字都可作编码，可自定义方案\r\n支持第三方输入法键盘并击，  感谢州州对速录助手测试\r\n\r\n                        " +
+    "              作者：黄贤飞";
             // 
             // linkLabel1
             // 
@@ -69,6 +71,11 @@
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "http://srkmm.ysepan.com/";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 3000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Login
             // 
@@ -99,5 +106,6 @@
         private System.Windows.Forms.Label lbID;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.Timer timer1;
     }
 }

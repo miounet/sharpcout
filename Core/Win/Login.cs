@@ -42,20 +42,12 @@ namespace Core.Win
         }
         private void Login_Load(object sender, EventArgs e)
         {
-            
+            this.lbID.Text = Program.ProductVer + " QQ群:374971723"; 
             if (autoclose)
             {
-               
-                Task tk = new Task(() =>
-                {
-                    while (Wait) { System.Threading.Thread.Sleep(200); }
-                    System.Threading.Thread.Sleep(3000);
-                    this.Close();
-                });
-                tk.Start();
+                timer1.Enabled = true;
             }
-            else
-                this.lbID.Text = " 内置空明码速录";// "ID:" + Program.HVID;
+        
             
         }
 
@@ -69,6 +61,16 @@ namespace Core.Win
         {
             //调用系统默认的浏览器
             System.Diagnostics.Process.Start("iexplore.exe", this.linkLabel1.Text);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (autoclose)
+            {
+                while (Wait) { System.Threading.Thread.Sleep(10); }
+                timer1.Enabled = false;
+                this.Close();
+            }
         }
     }
 }

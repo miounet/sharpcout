@@ -12,6 +12,8 @@ using System.Drawing;
 using Core.Comm;
 using Core.Config;
 using qzxxiEntity;
+using System.Drawing.Drawing2D;
+
 namespace Core.Win
 {
     /// <summary>
@@ -38,13 +40,16 @@ namespace Core.Win
         /// 输入法汉字候选框
         /// </summary>
         public static InputStatusFrm InputStatus = new InputStatusFrm(Input);
-        
+        private ToolTip toolTip1;
+        private System.ComponentModel.IContainer components;
+        private Timer timer1;
+        public static ImageInput ImageInput = new ImageInput();
         ////统计
         //int aa = 0;
         //int aA = 0;
         //int Aa = 0;
         //int AA = 0;
- 
+
         public bool LoadMasterDict()
         {
 
@@ -62,6 +67,7 @@ namespace Core.Win
             //装载拼音字库
             if (File.Exists(System.IO.Path.Combine(Input.AppPath, "dict", "pinyi.shp")))
             {
+                Input.PinYi = new Dictionary<string, string>();
                 var sdic = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath, "dict", "pinyi.shp")).Select(line => line.Split(' '));
                 foreach (var item in sdic)
                 {
@@ -76,6 +82,26 @@ namespace Core.Win
                     }
                 }
                
+            }
+
+            Input.CfDict = new Dictionary<string, string>();
+            //装载拆分表数据
+            if (File.Exists(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "cf.txt")))
+            {
+                var sdic = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "cf.txt")).Select(line => line.Split('\t'));
+                foreach (var item in sdic)
+                {
+                    if (string.IsNullOrEmpty(item[0]) || string.IsNullOrEmpty(item[1])) continue;
+                    if (!Input.CfDict.ContainsKey(item[0]))
+                    {
+                        Input.CfDict.Add(item[0], item[1]);
+                    }
+                    else
+                    {
+                        Input.CfDict[item[0]] = Input.CfDict[item[0]] + " " + item[1];
+                    }
+                }
+
             }
             return true;
         }
@@ -123,13 +149,11 @@ namespace Core.Win
         }
 
         public static Image Bkimg = null;
-        public static Image BackImg = null;
-        public static Image HBackImg = null;
+ 
         public bool LoadSkin()
         {
             Bkimg = Image.FromFile(System.IO.Path.Combine(Input.AppPath, "skin", Input.GetSkinBKImg()));
-            BackImg = Image.FromFile(System.IO.Path.Combine(Input.AppPath, "skin", Input.GetSkinBackImg()));
-            HBackImg = Image.FromFile(System.IO.Path.Combine(Input.AppPath, "skin", Input.GetSkinHBackImg()));
+    
             this.BackgroundImage = Bkimg;
             return true;
         }
@@ -170,6 +194,7 @@ namespace Core.Win
             InputMode.AutoUpdate = string.IsNullOrEmpty(SetInfo.GetValue("AutoUpdate", setting)) ? false : bool.Parse(SetInfo.GetValue("AutoUpdate", setting));
             InputMode.AutoRun = string.IsNullOrEmpty(SetInfo.GetValue("AutoRun", setting)) ? false : bool.Parse(SetInfo.GetValue("AutoRun", setting));
             curTrac = string.IsNullOrEmpty(SetInfo.GetValue("CurTrac", setting)) ? false : bool.Parse(SetInfo.GetValue("CurTrac", setting));
+            curMouseTrac = string.IsNullOrEmpty(SetInfo.GetValue("curMouseTrac", setting)) ? false : bool.Parse(SetInfo.GetValue("curMouseTrac", setting));
             InputMode.OpenLink = string.IsNullOrEmpty(SetInfo.GetValue("OpenLink", setting)) ? false : bool.Parse(SetInfo.GetValue("OpenLink", setting));
             InputMode.OpenAltSelect = string.IsNullOrEmpty(SetInfo.GetValue("OpenAltSelect", setting)) ? false : bool.Parse(SetInfo.GetValue("OpenAltSelect", setting));
             InputMode.SkinHeith = string.IsNullOrEmpty(SetInfo.GetValue("SkinHeith", setting)) ? 46 : int.Parse(SetInfo.GetValue("SkinHeith", setting));
@@ -178,6 +203,9 @@ namespace Core.Win
             InputMode.Skinbstring = Color.FromArgb(int.Parse(SetInfo.GetValue("Skinbstring", setting)));
             InputMode.Skinbcstring = Color.FromArgb(int.Parse(SetInfo.GetValue("Skinbcstring", setting)));
             InputMode.Skinfbcstring = Color.FromArgb(int.Parse(SetInfo.GetValue("Skinfbcstring", setting)));
+            InputMode.SkinBack = string.IsNullOrEmpty(SetInfo.GetValue("SkinIndex", setting)) ? Color.FromArgb(22, 79, 141) : Color.FromArgb(int.Parse(SetInfo.GetValue("SkinBack", setting)));
+            InputMode.SkinIndex = string.IsNullOrEmpty(SetInfo.GetValue("SkinIndex", setting)) ? 0 : int.Parse(SetInfo.GetValue("SkinIndex", setting));
+            InputMode.SkinFontName = string.IsNullOrEmpty(SetInfo.GetValue("SkinFontName", setting)) ? "宋体" : SetInfo.GetValue("SkinFontName", setting);
             InputMode.CDPath = SetInfo.GetValue("CDPath", setting);
             InputMode.SingleInput = string.IsNullOrEmpty(SetInfo.GetValue("SingleInput", setting)) ? false : bool.Parse(SetInfo.GetValue("SingleInput", setting));
             InputMode.txtla = string.IsNullOrEmpty(SetInfo.GetValue("txtla", setting)) ? "2" : SetInfo.GetValue("txtla", setting);
@@ -190,7 +218,28 @@ namespace Core.Win
             InputMode.pinyin = string.IsNullOrEmpty(SetInfo.GetValue("pinyin", setting)) ? false : bool.Parse(SetInfo.GetValue("pinyin", setting));
             InputMode.closebj = string.IsNullOrEmpty(SetInfo.GetValue("closebj", setting)) ? false : bool.Parse(SetInfo.GetValue("closebj", setting));
             InputMode.autopos = string.IsNullOrEmpty(SetInfo.GetValue("autopos", setting)) ? false : bool.Parse(SetInfo.GetValue("autopos", setting));
+            InputMode.bjzckgsp = string.IsNullOrEmpty(SetInfo.GetValue("bjzckgsp", setting)) ? false : bool.Parse(SetInfo.GetValue("bjzckgsp", setting));
+            InputMode.omeno = string.IsNullOrEmpty(SetInfo.GetValue("omeno", setting)) ? false : bool.Parse(SetInfo.GetValue("omeno", setting));
+            InputMode.zsallmap = string.IsNullOrEmpty(SetInfo.GetValue("zsallmap", setting)) ? false : bool.Parse(SetInfo.GetValue("zsallmap", setting));
+            InputMode.zsmode1 = string.IsNullOrEmpty(SetInfo.GetValue("zsmode1", setting)) ? 0 : int.Parse(SetInfo.GetValue("zsmode1", setting));
+            Input.IsChinese = string.IsNullOrEmpty(SetInfo.GetValue("IsChinese", setting)) ? (ushort)1 : ushort.Parse(SetInfo.GetValue("IsChinese", setting));
+            InputMode.datacf = string.IsNullOrEmpty(SetInfo.GetValue("datacf", setting)) ? false : bool.Parse(SetInfo.GetValue("datacf", setting));
+            try
+            {
+                InputMode.outtype = string.IsNullOrEmpty(SetInfo.GetValue("outtype", setting)) ? 0 : int.Parse(SetInfo.GetValue("outtype", setting));
+            }
+            catch
+            {
+                InputMode.outtype = 0;
+            }
+            if (Input.IsChinese != 1)
+            {
+                Input.IsCnBd = false;
+                Input.IsQJ = false;
+            }
+          
             if (string.IsNullOrEmpty(InputMode.CDPath)) InputMode.CDPath = "空明码";
+            
             try
             {
                 setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "ditver.shp"), Encoding.UTF8);//读配置
@@ -202,9 +251,15 @@ namespace Core.Win
                     setting = File.ReadAllLines(System.IO.Path.Combine(Input.AppPath, "dict", InputMode.CDPath, "Setting.shp"), Encoding.UTF8);//读配置
 
                     InputMode.autoup = string.IsNullOrEmpty(SetInfo.GetValue("autoup", setting)) ? (short)3 : short.Parse(SetInfo.GetValue("autoup", setting));
+                    InputMode.stopup = string.IsNullOrEmpty(SetInfo.GetValue("stopup", setting)) ? "" : SetInfo.GetValue("stopup", setting);
+                    InputMode.cffontname = string.IsNullOrEmpty(SetInfo.GetValue("cffontname", setting)) ? "" : SetInfo.GetValue("cffontname", setting);
                 }
                 else
+                {
                     InputMode.autoup = 3;
+                    InputMode.stopup = "";
+                    InputMode.cffontname = "";
+                }
             }
             catch { }
             return true;
@@ -255,10 +310,13 @@ namespace Core.Win
             set.Add("AutoUpdate=" + InputMode.AutoUpdate.ToString());
             set.Add("AutoRun=" + InputMode.AutoRun.ToString());
             set.Add("CurTrac=" + curTrac.ToString());
+            set.Add("curMouseTrac=" + curMouseTrac.ToString());
             set.Add("OpenLink=" + InputMode.OpenLink.ToString());
             set.Add("OpenAltSelect=" + InputMode.OpenAltSelect.ToString());
             set.Add("SkinHeith=" + InputMode.SkinHeith.ToString());
             set.Add("PageSize=" + InputMode.PageSize.ToString());
+            set.Add("SkinBack=" + InputMode.SkinBack.ToArgb().ToString());
+            set.Add("SkinIndex=" + InputMode.SkinIndex.ToString());
             set.Add("Skinbstring=" + InputMode.Skinbstring.ToArgb().ToString());
             set.Add("Skinbcstring=" + InputMode.Skinbcstring.ToArgb().ToString());
             set.Add("Skinfbcstring=" + InputMode.Skinfbcstring.ToArgb().ToString());
@@ -276,6 +334,13 @@ namespace Core.Win
             set.Add("pinyin=" + InputMode.pinyin.ToString());
             set.Add("closebj=" + InputMode.closebj.ToString());
             set.Add("autopos=" + InputMode.autopos.ToString());
+            set.Add("bjzckgsp=" + InputMode.bjzckgsp.ToString());
+            set.Add("omeno=" + InputMode.omeno.ToString());
+            set.Add("zsallmap=" + InputMode.zsallmap.ToString());
+            set.Add("zsmode1=" + InputMode.zsmode1.ToString());
+            set.Add("outtype=" + InputMode.outtype.ToString());
+            set.Add("IsChinese=" + Input.IsChinese);
+            set.Add("datacf=" + InputMode.datacf);
             File.WriteAllLines(Input.SettingPath, set.ToArray(), Encoding.UTF8);//保存配置
             return true;
 
@@ -303,6 +368,7 @@ namespace Core.Win
             ShowWindow(this.Handle, SW_SHOWNOACTIVATE);
             this.Width = 110;
             this.Height = 22;
+   
             SetWindowPos(this.Handle, HWND_TOPMOST, this.Left, this.Top, this.Width, this.Height, SWP_NoActiveWINDOW);
         }
         private void HideWindow()
@@ -433,6 +499,9 @@ namespace Core.Win
             this.CreateUI();
 
             this.LoadSkin();
+
+            this.toolTip1.SetToolTip(this.pictureBox1, InputMode.CDPath);
+            this.toolTip1.SetToolTip(this, InputMode.CDPath);
         }
 
         [DllImport("user32 ")]
@@ -612,6 +681,7 @@ namespace Core.Win
                 keystring = Input.CheckKeysString(keyData);
                 if (Input.IsPressShift)
                 {
+     
                     if (InputStatus.inputstr.Length > 0 && Input.CheckCode(keystring))
                     {
                         InputStatus.ShangPing(1);
@@ -621,6 +691,7 @@ namespace Core.Win
                 }
                 else if (Input.IsPressCtrl || Input.IsPressAlt || Input.IsPressWin)
                 {
+        
                     if (InputStatus.inputstr.Length > 0 && Input.CheckCode(keystring))
                     {
                         
@@ -634,7 +705,7 @@ namespace Core.Win
                 keyques.KeyData = keyData;
                 keyques.MyKeyboardHookStruct = MyKeyboardHookStruct;
 
-                SendKeyToNex = UserOnKeyDown(keyData);
+                SendKeyToNex =  UserOnKeyDown(keyData);
                 if ((keyData == Keys.LMenu || keyData == Keys.RMenu
                     || keyData == Keys.LWin || keyData == Keys.RWin
                     || keyData == Keys.VolumeDown || keyData == Keys.VolumeUp
@@ -642,8 +713,8 @@ namespace Core.Win
                     SendKeyToNex = 1;
                 if (SendKeyToNex == 1)
                 {
-                    lock (Comm.Cache.KeyQueue)
-                        Comm.Cache.KeyQueue.Enqueue(keyques);
+                    //lock (Comm.Cache.KeyQueue)
+                    Comm.Cache.KeyQueue.Enqueue(keyques);
 
                     return 1;
                 }
@@ -659,7 +730,7 @@ namespace Core.Win
             #region 键盘放开事件
             if ((wParam == WM_KEYUP || wParam == WM_SYSKEYUP))
             {
-
+ 
                 if (!Input.isActiveInput)
                 {
 
@@ -673,9 +744,11 @@ namespace Core.Win
                     Input.IsPresAltPos = 0;
                     goto lastGO;
                 }
-
-                UserOnKeyUp();
-
+                try
+                {
+                    UserOnKeyUp();
+                }
+                catch { }
                 #region 按下特殊键
                 if (keyData == Keys.RShiftKey || keyData == Keys.LShiftKey
                     || keyData == Keys.LControlKey || keyData == Keys.RControlKey)
@@ -760,11 +833,11 @@ namespace Core.Win
                     {
                         InputStatus.ShangPing(1);
                     }
-                    InputStatusFrm.SendText(keystring, "");
+                    InputStatusFrm.SendText(keystring, "",Input.IsChinese==2);
                     return 1;
                 }
                 else if ((keyData == Keys.LMenu || keyData == Keys.RMenu
-                    || keyData == Keys.LWin || keyData == Keys.RWin 
+                    || keyData == Keys.LWin || keyData == Keys.RWin
                     || keyData == Keys.VolumeDown || keyData == Keys.VolumeUp) && InputMode.OpenAltSelect && Input.isActiveInput) return 1;
                 else
                     return CallNextHookEx(hKeyboardHook, nCode, wParam, lParam);
@@ -779,7 +852,7 @@ namespace Core.Win
             {
                 if (keyData == Keys.Back) InputStatusFrm.zdzjstr = string.Empty;
                 if ((keyData == Keys.LMenu || keyData == Keys.RMenu
-                    || keyData == Keys.LWin || keyData == Keys.RWin 
+                    || keyData == Keys.LWin || keyData == Keys.RWin
                     || keyData == Keys.VolumeDown || keyData == Keys.VolumeUp) && InputMode.OpenAltSelect
                     && Input.isActiveInput) return 1;
                 else
@@ -814,8 +887,14 @@ namespace Core.Win
             }
             else if (InputStatus.inputstr.Length == 0 && key == Keys.Back)
             {
-                if (InputStatusFrm.LastLinkString.Length > 1)
+              if (InputStatusFrm.LastLinkString.Length > 1)
                     InputStatusFrm.LastLinkString = InputStatusFrm.LastLinkString.Substring(0, InputStatusFrm.LastLinkString.Length - 1);
+                if (ImageInput.imgstr.Length - 1 < 0) ImageInput.imgstr = String.Empty;
+                else
+                {
+                    ImageInput.imgstr = ImageInput.imgstr.Substring(0, ImageInput.imgstr.Length - 1);
+                    return -1;
+                }
                 return 0;
             }
             else if (InputStatus.inputstr.Length > 0 && key == Keys.Back)
@@ -927,8 +1006,8 @@ namespace Core.Win
             bool srspace = false;
             int queuecount = 0;
 
-            lock (Comm.Cache.KeyQueue)
-            {
+            //lock (Comm.Cache.KeyQueue)
+            //{
                 queuecount = Comm.Cache.KeyQueue.Count;
                 if (queuecount == 0)
                 {
@@ -967,7 +1046,7 @@ namespace Core.Win
                         srinput += Input.CheckKeysString(_lkey.KeyData);
 
                 }
-            }
+            //}
 
 
          if (Input.IsPressLAlt && Input.IsPressRAlt && srspace)
@@ -1023,7 +1102,7 @@ namespace Core.Win
             {
                 Input.isActiveInput = false;
 
-                try
+                try 
                 {
                     
                     
@@ -1035,17 +1114,24 @@ namespace Core.Win
                     }
                     else
                     {
-                        if ("qwertyuiopasdfghjklzxcvbnm".IndexOf(psrinput.ToLower()) >= 0)
+                        
+                        if ("qwertyuiopasdfghjklzxcvbnm".IndexOf(psrinput.ToLower()) >= 0 && !InputMode.bjzckgsp)
                         {
                             if (psrinput.Replace("~", "").Length == 1)
+                            {
+                                if (InputMode.zsallmap) psrinput = Input.CovertStr(srinput.Replace("~", ""));
                                 InputStatusFrm.SendText(psrinput.Replace("~", "") + " ", "", true);
+                            }
                             if (srspace)
                                 InputStatusFrm.SendText(" ", "", true);
                         }
                         else
                         {
                             if (psrinput.Replace("~", "").Length == 1)
+                            {
+                                if (InputMode.zsallmap) psrinput = Input.CovertStr(srinput.Replace("~", ""));
                                 InputStatusFrm.SendText(psrinput.Replace("~", ""), "", true);
+                            }
                             if (srspace)
                                 InputStatusFrm.SendText(" ", "", true);
                         }
@@ -1061,7 +1147,7 @@ namespace Core.Win
                 //this.Show();
                 return;
             }
-            bool hleft = false; this.ShowWindow();
+            bool hleft = false;
             bool hright = false;
             bool allNum = false;
             int trynum = 0;
@@ -1096,8 +1182,30 @@ namespace Core.Win
             }
             else if (srinput.Length > 0)
             {
-                if (!InputStatus.inputstr.StartsWith("'") || srinput.Length>2 || srinput =="yu" || srinput == "uy" || srinput == "rt" || srinput == "tr")
+                #region 二合一版
+                if (!InputStatus.inputstr.StartsWith("'") || srinput.Length > 2 || srinput == "yu" || srinput == "uy" || srinput == "rt" || srinput == "tr")
+                {
                     srinput = Input.CovertStr(srinput.Replace("~", ""));
+                    if (srinput.IndexOf("}") > 0)
+                    {
+                        //功能快捷键
+                        InputStatusFrm.SendText(srinput, "", true);
+                        InputStatus.Clear();
+                        return;
+                    }
+                }
+                #endregion
+
+                #region 单击版
+                //srinput = srinput.Replace("~", "");
+                //if (srinput.IndexOf("}") > 0)
+                //{
+                //    //功能快捷键
+                //    InputStatusFrm.SendText(srinput, "", true);
+                //    InputStatus.Clear();
+                //    return;
+                //}
+                #endregion
 
                 if (Input.IsPresAltPos > 0 && Input.IsChinese == 1)
                 {
@@ -1271,9 +1379,48 @@ namespace Core.Win
                         inputst();
                         return;
                     }
+                case "$11":
+                    {
+                        inputzsst();
+                        return;
+                    }
+                case "$111":
+                    {
+                        inputenst();
+                        return;
+                    }
+                case "$1111":
+                    {
+                        hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardHookProcedure, GetModuleHandle(ModuleName), 0);
+                        return;
+                    }
+                case "$11111":
+                    {
+                        InputMode.imgsend = !InputMode.imgsend;
+                        ImageInput.imgstr = String.Empty;
+                        if (InputMode.imgsend)
+                            ImageInput.ShowWindow();
+                        else
+                            ImageInput.Hide();
+                        return;
+                    }
                 case "$2":
                     {
                         inputstye();
+                        return;
+                    }
+                case "$22":
+                    {
+                        if (Win.WinInput.InputStatus.Visible)
+                        {
+                            //图片输出
+                            Bitmap img = new Bitmap(Win.WinInput.InputStatus.Width, Win.WinInput.InputStatus.Height);
+                            Graphics g = Graphics.FromImage(img);
+                            g.CompositingQuality = CompositingQuality.HighQuality;
+                            g.CopyFromScreen(Win.WinInput.InputStatus.Left, Win.WinInput.InputStatus.Top, 0, 0, new Size(Win.WinInput.InputStatus.Width, Win.WinInput.InputStatus.Height));
+                            Clipboard.SetImage(img);
+                            SendKeys.Send("^v"); //发送ctrl+v 进行粘贴
+                        }
                         return;
                     }
                 case "$3":
@@ -1309,8 +1456,16 @@ namespace Core.Win
                     {
                         if (InputStatus.inputstr.Length == 0)
                         {
-                            //删除
-                            InputStatusFrm.SendText("{BACKSPACE}", "",true);
+                            if (!InputMode.imgsend || ImageInput.imgstr.Length == 0)
+                            {
+                                //删除
+                                InputStatusFrm.SendText("{BACKSPACE}", "", true);
+                            }
+                            else
+                            {
+                                if (ImageInput.imgstr.Length - 1 <= 0) ImageInput.imgstr = String.Empty;
+                                else ImageInput.imgstr = ImageInput.imgstr.Substring(0, ImageInput.imgstr.Length - 1);
+                            }
                             InputStatusFrm.zdzjstr = string.Empty;
                         }
                         else
@@ -1328,57 +1483,19 @@ namespace Core.Win
                         Input.Metor = !Input.Metor;
                         return;
                     }
-                //case "U1":
-                //    {
-
-                //        InputStatusFrm.SendText("《》", true);
-                //        InputStatusFrm.SendText("{LEFT}", true);
-                //        return;
-                //    }
-                //case "u1":
-                //    {
-
-                //        InputStatusFrm.SendText("<>", true);
-                //        InputStatusFrm.SendText("{LEFT}", true);
-                //        return;
-                //    }
-                //case "U2":
-                //    {
-
-                //        InputStatusFrm.SendText("（）", true);
-                //        InputStatusFrm.SendText("{LEFT}", true);
-                //        return;
-                //    }
-                //case "u2":
-                //    {
-
-                //        InputStatusFrm.SendText("()", false);
-                //        System.Threading.Thread.Sleep(200);
-                //        InputStatusFrm.SendText("{LEFT}", true);
-                //        return;
-                //    }
-                //case "U'":
-                //    {
-
-                //        InputStatusFrm.SendText("“”", true);
-                //        InputStatusFrm.SendText("{LEFT}", true);
-                //        return;
-                //    }
-                //case "u'":
-                //    {
-
-                //        InputStatusFrm.SendText("\"\"", true);
-                //        InputStatusFrm.SendText("{LEFT}", true);
-                //        return;
-                //    }
-                
+                case "$66":
+                    {
+                        //单字模式，正常模式切换
+                        InputMode.SingleInput = !InputMode.SingleInput;
+                        return;
+                    }
                 default:
                     {
 
-                        if (Input.IsChinese==1 && srinput.Length == 2 && "d1~d2~d3~d4~d5".IndexOf(srinput) >= 0)
+                        if (Input.IsChinese==1 && srinput.Length == 2 && "1D2D3D4D5D".IndexOf(srinput) >= 0)
                         {
                             //右消字
-                            int delcount = int.Parse(srinput.Replace("d", ""));
+                            int delcount = int.Parse(srinput.Replace("D", ""));
 
                             if (InputStatusFrm.LastSPValue.Length >= delcount)
                             {
@@ -1387,7 +1504,7 @@ namespace Core.Win
                                 InputStatusFrm.SendText(lastv.Substring(0, lastv.Length - delcount), "");
                             }
                         }
-                        else if (Input.IsChinese == 1 && srinput.Length == 2 && "1d~2d~3d~4d~5d".IndexOf(srinput) >= 0)
+                        else if (Input.IsChinese == 1 && srinput.Length == 2 && "1d2d3d4d5d".IndexOf(srinput) >= 0)
                         {
                             //左消字
                             int delcount = int.Parse(srinput.Replace("d", ""));
@@ -1451,7 +1568,7 @@ namespace Core.Win
                         && !InputMode.closebj)
                     {
                         if (srspace) inputss += "~";
-                        InputStatusFrm.SendText(Input.GetLROne(inputss, hleft), "");
+                        InputStatusFrm.SendText(Input.GetLROne(inputss, hleft), inputss);
                         if (InputStatusFrm.LastLinkString.Length > 2 || (Input.IsChinese == 0 && InputStatusFrm.LastLinkString.Length > 0))
                             InputStatus.GetDreamValue(InputStatusFrm.LastLinkString);
                         return;
@@ -1459,7 +1576,7 @@ namespace Core.Win
                     else if (Input.IsChinese == 1 && InputStatus.inputstr.Length == 0 && nostr == "~" && inputss.Length == 1
                         && inputss != "'")
                     {
-                        InputStatusFrm.SendText(Input.GetLROne(nostr + inputss, hleft), "");
+                        InputStatusFrm.SendText(Input.GetLROne(nostr + inputss, hleft), inputss);
                         if (InputStatusFrm.LastLinkString.Length > 2 || (Input.IsChinese == 0 && InputStatusFrm.LastLinkString.Length > 0))
                             InputStatus.GetDreamValue(InputStatusFrm.LastLinkString);
                         return;
@@ -1469,7 +1586,10 @@ namespace Core.Win
                         InputStatus.inputstr += inputss;
                         InputStatus.input = inputss;
                     }
-                    if (Input.IsChinese == 1 && InputStatus.inputstr.Length >= InputMode.autoup && !InputStatus.inputstr.StartsWith("'")  && !InputMode.closebj)
+                    if (Input.IsChinese == 1 && InputStatus.inputstr.Length >= InputMode.autoup
+                        && !InputStatus.inputstr.StartsWith("'")
+                        && InputMode.stopup.IndexOf(InputStatus.inputstr.Substring(0, 1)) < 0
+                        && !InputMode.closebj)
                     {
                         if (!srspace) srspace = true;
                         else srspace = false;
@@ -1517,6 +1637,10 @@ namespace Core.Win
                                         InputStatusFrm.SendText(" ", "", true);
                                     }
                                     else if (inputss.Length > 1)
+                                    {
+                                        InputStatusFrm.SendText(inputss.Replace("~", ""), "", true);
+                                    }
+                                    else if(InputMode.bjzckgsp)
                                     {
                                         InputStatusFrm.SendText(inputss.Replace("~", ""), "", true);
                                     }
@@ -1642,6 +1766,54 @@ namespace Core.Win
                 Input.IsChinese = 1;
                 Input.IsCnBd = true;
             }
+            SaveSetting();
+            LoadSkin();
+        }
+
+        private void inputzsst()
+        {
+            InputStatus.Clear();
+            InputStatusFrm.LastLinkString = string.Empty;
+            InputStatusFrm.Dream = false;
+            //中文英文转换
+            if (Input.IsChinese == 1 || Input.IsChinese == 0)
+            {
+                //切换至速路助手
+                Input.IsChinese = 2;
+                Input.IsCnBd = false;
+                Input.IsQJ = false;
+            }
+            else
+            {
+                //切换至中文
+                Input.IsChinese = 1;
+                Input.IsCnBd = true;
+            }
+            SaveSetting();
+            LoadSkin();
+        }
+
+        private void inputenst()
+        {
+            InputStatus.Clear();
+            InputStatusFrm.LastLinkString = string.Empty;
+            InputStatusFrm.Dream = false;
+            //中文英文转换
+            if (Input.IsChinese == 1 || Input.IsChinese == 2)
+            {
+                InputStatusFrm.zdzjstr = string.Empty;
+                //切换至英文
+                Input.IsChinese = 0;
+                Input.IsCnBd = false;
+                Input.IsQJ = false;
+            }
+            else
+            {
+                //切换至中文
+                Input.IsChinese = 1;
+                Input.IsCnBd = true;
+            }
+            SaveSetting();
             LoadSkin();
         }
         private void inputstye()
@@ -1653,10 +1825,12 @@ namespace Core.Win
                 if (Input.IsQJ)
                 {
                     Input.IsQJ = false;
+                    Input.IsCnBd = true;
                 }
                 else
                 {
                     Input.IsQJ = true;
+                    Input.IsCnBd = true;
                 }
                 LoadSkin();
             }
@@ -1688,17 +1862,24 @@ namespace Core.Win
         private static extern IntPtr GetFocus();
         [DllImport("user32.dll")]
         public static extern bool GetCaretPos(out Point lpPoint);
+
+ 
+
         [DllImport("user32.dll")]
         private static extern void ClientToScreen(IntPtr hWnd, ref Point p);
+
+        //[DllImport("user32.dll")]
+        //private static extern void GetWindowRect(IntPtr hWnd, ref RECT p);    
         /// <summary>
         /// 可获取窗口进程信息
         /// </summary>
-        /// <param name="dwthreadid"></param>
+        /// <param name="dwthreadid"></param>   
         /// <param name="lpguithreadinfo"></param>
         /// <returns></returns>
         [DllImport("user32.dll", EntryPoint = "GetGUIThreadInfo")]
         public static extern uint GetGUIThreadInfo(uint dwthreadid, ref GUITHREADINFO lpguithreadinfo);
-
+ 
+    
         //Win32 Calls
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
@@ -1735,11 +1916,11 @@ namespace Core.Win
             InputMode.deskDC = InputMode.GetTopDc();
             WinInput.ForegroundWindow = ForegroundWindow;
             curPoint = new Point();
-
+ 
             //得到Caret在屏幕上的位置  
             if (ForegroundWindow.ToInt32() != 0)
             {
-
+      
                 targetThreadID = GetWindowThreadProcessId(ForegroundWindow, IntPtr.Zero);
 
  
@@ -1750,9 +1931,9 @@ namespace Core.Win
 
                     if (ForegroundWindow.ToInt32() != 0)
                     {
-                        if (GetCaretPos(out  curPoint))
+                        if (GetCaretPos(out curPoint))
                         {
-                            ClientToScreen(ForegroundWindow, ref  curPoint);
+                            ClientToScreen(ForegroundWindow, ref curPoint);
                         }
 
                         GUITHREADINFO gInfo = new GUITHREADINFO();
@@ -1793,21 +1974,36 @@ namespace Core.Win
 
                 }
             }
-
+           
             #endregion
         }
 
+        //public void MousGetCursorPos()
+        //{
+        //    GetCursorPos(out curPoint);
+         
+        //}
         private Point curPoint;//当前光标位置
         public bool curTrac = true;//光标跟随
+        public bool curMouseTrac = false;//鼠标跟随
         /// <summary>
         /// 设置输入框光标的位置
         /// </summary>
         private void SetCurPos()
         {
-            if (curTrac)
+            if (curMouseTrac || curTrac || InputMode.imgsend)
             {
-       
-                    if (InputStatus.inputstr == "")
+
+                if (InputStatus.inputstr == "")
+                {
+                    if (curMouseTrac)
+                    {
+
+                        InputStatus.Top = this.Top+ this.Height + 1;
+
+                        InputStatus.Left = this.Left ;
+                    }
+                    else
                     {
                         GetCurPos();
 
@@ -1815,15 +2011,15 @@ namespace Core.Win
                             InputStatus.Top = curPoint.Y + 25;
 
                         InputStatus.Left = curPoint.X + 10;
-
                     }
-                
+                }
+
             }
             else
             {
                 //InputStatus.Left = Screen.PrimaryScreen.WorkingArea.Width / 2 - 170;
                 //InputStatus.Top = this.Top;
-                InputStatus.Left = this.Left + this.Width + 30 ;
+                InputStatus.Left = this.Left + this.Width + 30;
                 InputStatus.Top = Screen.PrimaryScreen.WorkingArea.Height - InputStatus.Height - 8;
             }
         }
@@ -1852,12 +2048,15 @@ namespace Core.Win
 
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WinInput));
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -1868,7 +2067,7 @@ namespace Core.Win
             this.label1.Dock = System.Windows.Forms.DockStyle.Right;
             this.label1.Location = new System.Drawing.Point(90, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(20, 20);
+            this.label1.Size = new System.Drawing.Size(20, 22);
             this.label1.TabIndex = 0;
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.label1.Click += new System.EventHandler(this.label1_Click);
@@ -1880,10 +2079,12 @@ namespace Core.Win
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(20, 20);
+            this.pictureBox1.Size = new System.Drawing.Size(20, 22);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.IME_MouseDown);
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.IME_MouseMove);
             // 
             // label2
             // 
@@ -1892,7 +2093,7 @@ namespace Core.Win
             this.label2.Dock = System.Windows.Forms.DockStyle.Left;
             this.label2.Location = new System.Drawing.Point(20, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(20, 20);
+            this.label2.Size = new System.Drawing.Size(20, 22);
             this.label2.TabIndex = 2;
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
@@ -1903,7 +2104,7 @@ namespace Core.Win
             this.label3.Dock = System.Windows.Forms.DockStyle.Left;
             this.label3.Location = new System.Drawing.Point(40, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(20, 20);
+            this.label3.Size = new System.Drawing.Size(20, 22);
             this.label3.TabIndex = 3;
             this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
@@ -1914,15 +2115,21 @@ namespace Core.Win
             this.label4.Dock = System.Windows.Forms.DockStyle.Left;
             this.label4.Location = new System.Drawing.Point(60, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(21, 20);
+            this.label4.Size = new System.Drawing.Size(21, 22);
             this.label4.TabIndex = 4;
             this.label4.Click += new System.EventHandler(this.label4_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 200;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // WinInput
             // 
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(110, 20);
+            this.ClientSize = new System.Drawing.Size(110, 22);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -2070,13 +2277,13 @@ namespace Core.Win
                 return;
             }
 
-            TrayIcon.Text = "速录宝2.3.7";//鼠标移至托盘的提示文本
+            TrayIcon.Text = "速录宝2.6.1";//鼠标移至托盘的提示文本
             TrayIcon.Visible = true;
 
             //定义一个MenuItem数组，并把此数组同时赋值给ContextMenu对象 
             mnuItms = new MenuItem[12];
             mnuItms[mnuItms.Length - 12] = new MenuItem();
-            mnuItms[mnuItms.Length - 12].Text = "关于速录宝2.3";
+            mnuItms[mnuItms.Length - 12].Text = "关于速录宝2.6";
             mnuItms[mnuItms.Length - 12].Visible = true;
             mnuItms[mnuItms.Length - 12].Click += new System.EventHandler(this.AboutInfo);
             mnuItms[mnuItms.Length - 11] = new MenuItem();
@@ -2234,6 +2441,8 @@ namespace Core.Win
                 InputStatusFrm.LastLinkString = string.Empty;
                 InputStatus.Clear();
                 this.ShowWindow();
+                if (InputMode.imgsend)
+                    ImageInput.ShowWindow();
                 TrayIcon.Icon = new Icon(System.IO.Path.Combine(Input.AppPath, "log32.ico"));
             }
             else
@@ -2241,6 +2450,7 @@ namespace Core.Win
                 InputStatusFrm.Dream = false; InputStatusFrm.LastLinkString = string.Empty;
                 InputStatus.Clear();
                 InputStatus.Hide();
+                ImageInput.Hide();
                 this.HideWindow();
                 TrayIcon.Icon = new Icon(System.IO.Path.Combine(Input.AppPath, "nlog32.ico"));
             }
@@ -2418,6 +2628,21 @@ namespace Core.Win
         private void label4_Click(object sender, EventArgs e)
         {
             inputjf();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (curMouseTrac)
+            {
+                try
+                {
+                    curPoint = System.Windows.Forms.Cursor.Position;
+                    //MousGetCursorPos();
+                    this.Top = curPoint.Y;
+                    this.Left = curPoint.X + 17;
+                }
+                catch { }
+            }
         }
     }
 }
