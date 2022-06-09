@@ -48,9 +48,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <PlatformTarget>x86</PlatformTarget>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>true</Prefer32Bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -59,6 +59,9 @@
     <ApplicationIcon>log48.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Base\ImageInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Base\InputMode.cs" />
     <Compile Include="Base\InputStatusFrm.cs">
       <SubType>Form</SubType>
@@ -149,6 +152,9 @@
     <Folder Include="prodict\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Base\ImageInput.resx">
+      <DependentUpon>ImageInput.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Base\InputStatusFrm.resx">
       <DependentUpon>InputStatusFrm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -174,6 +180,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Win\ProDictFrm.resx">
       <DependentUpon>ProDictFrm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\QueryFrm.resx">
       <DependentUpon>QueryFrm.cs</DependentUpon>
@@ -207,6 +214,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Release\skin\4-2.png" />
+    <None Include="bin\Release\skin\hback.png" />
     <Content Include="log48.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
