@@ -19,15 +19,16 @@ namespace Core.Base
         public string[] EnDit = null;
         public List<string> ClouddDit = new List<string>();
         public string AppPath = string.Empty;
-        public Dictionary<string,string> PinYi = new Dictionary<string, string>();
+        public Dictionary<string,string> PinYi = new Dictionary<string, string>();//拼音注音
+        public Dictionary<string, string> CfDict = new Dictionary<string, string>();//拆分数据
         public string MasterDitPath = string.Empty;
         public string ProDitPath = string.Empty;
         public string UserDitPath = string.Empty;
         public string CloundDitPath = string.Empty;
         public string EnDitPath = string.Empty;
         public string SettingPath = string.Empty;
-        public string mapstr1 = "~1qaz2wsx3edc4rfv5tgb";
-        public string mapstr2 = "6yhn7ujm8ik,9ol.0p;/-['=]";
+        public string mapstr1 = "~1qaz2wsx3edc4rfv5tgb6";
+        public string mapstr2 = "yhn7ujm8ik,9ol.0p;/-['=]";
         public string[] qjzwdict;//全角中文按键字典
         public string[] bjzwdict;//半角中文按键字典
         public string[] qjywdict;//全角英文按键字典
@@ -66,22 +67,8 @@ namespace Core.Base
                 , (this.IsQJ ? "q" : "b"), (this.IsJT ? "j" : "f")));
             return skin;
         }
-        /// <summary>
-        /// 候选框背景文件名
-        /// </summary>
-        /// <returns></returns>
-        public string GetSkinBackImg()
-        {
-            return "back.png";
-        }
-        /// <summary>
-        /// 候选框背景文件名
-        /// </summary>
-        /// <returns></returns>
-        public string GetSkinHBackImg()
-        {
-            return "hback.png";
-        }
+ 
+      
         /// <summary>
         /// true激活,false禁用/隐藏输入法
         /// </summary>
@@ -127,15 +114,17 @@ namespace Core.Base
         public static bool OpenCould=true;//云词库
         public static bool AutoUpdate = true;//自动升级 
         public static bool OpenLink = true;//智能联想
+        public static bool AutoZJ = false;//自动造句
         public static bool OpenAltSelect = false;//左alt选重
         public static bool AutoRun = true;//自动运行
         public static string SkinFontName = "宋体";//字体名
         public static int SkinFontSize = 13;//字体大小
         public static int SkinFontH = 20;//字体高度
         public static int SkinFontW = 20;//字体宽度
-        public static int SkinFontJG = 25;//输入与候选汉字的间高
+        public static int SkinFontJG = 30;//输入与候选汉字的间高
         public static int SkinWidth = 160;//汉字候选框宽度
         public static int SkinHeith = 46;//汉字候选框高度
+        public static Color SkinBack = Color.FromArgb(22, 79, 141);//背景色
         public static Color Skinbordpen = Color.Gray;//边框色
         public static Color Skinbstring = Color.White;//字体颜色
         public static Color Skinbcstring = Color.Orange;//提示补码颜色
@@ -152,6 +141,16 @@ namespace Core.Base
         public static bool closebj = false;//关闭并击模式，只使用串击/连击
         public static bool autopos = false;//数字选码自动调频
         public static short autoup = 3;//几码强制上屏
+        public static string stopup = "";//什么打头字母不自动上屏
+        public static bool bjzckgsp = false;//速录助手时1、3码不自动上屏，需要空格确认上屏
+        public static bool omeno = false;
+        public static bool zsallmap = false;//速录助手完全使用指法映射配置map.shp
+        public static int zsmode1 = 0;//速录助手按键输出间隔x毫秒
+        public static bool imgsend = false;//以图片方式粘贴上屏
+        public static int outtype = 0;//0默认,1剪贴板模式，2嵌入模式
+        public static int SkinIndex=0;
+        public static bool datacf = false;//显示汉字拆分
+        public static string cffontname = "宋体";
         public IndexManger DictIndex = new IndexManger ();
         #endregion
 
@@ -172,7 +171,7 @@ namespace Core.Base
                 {
                     int count = 0;
                     int first = 0, last = MasterDit.Length - 1;
-                    int pcount = 30;// SingleInput == true ? 50 : 70;
+                    int pcount = inputstr.Length > 2 ? 88 : 36;// 30;// SingleInput == true ? 50 : 70;
                     if (ncount > 0) pcount = ncount;
 
 
@@ -247,6 +246,7 @@ namespace Core.Base
             else if(IsChinese == 2)
             {
                 GetUserDict(inputstr, ref valuestr);
+
             }
             else
             {
@@ -1043,7 +1043,7 @@ namespace Core.Base
         /// <returns></returns>
         public string CovertStr(string v, bool px = true)
         {
-            if (InputMode.closebj && v.Length<3) return v;
+            if (InputMode.closebj && v.Length<4) return v;
             bool hleft = false;
             bool hright = false;
             string oldv = v;
@@ -1154,6 +1154,9 @@ namespace Core.Base
                 System.Threading.SpinWait.SpinUntil(() => !true, inT);
                 try
                 {
+                    //if (InputMode.imgsend)
+                    //    Win.WinInput.ImageInput.Refresh();
+                    Win.WinInput.ImageInput.Refresh();
                     if (!Show)
                     {
                         Win.WinInput.InputStatus.Hide();
@@ -1161,7 +1164,8 @@ namespace Core.Base
                         continue;
                     }
                     if ((Win.WinInput.InputStatus.inputstr.Length > 0 || InputStatusFrm.Dream) && !Win.WinInput.InputStatus.Visible) { Show = true; Win.WinInput.InputStatus.ShowWindow(true); }
-
+                   
+                    
                     //要显示
                     if (InputStatusFrm.cachearry == null) continue;
                     DealView();
@@ -1172,6 +1176,7 @@ namespace Core.Base
                         //横排显示
                         Win.WinInput.InputStatus.Width = Width = MaxWidth();
                         Win.WinInput.InputStatus.Height = Height = InputMode.SkinHeith;
+                        //Win.WinInput.ImageInput.Width = ImageInput.MaxWidth();
                     }
                     else
                     {
@@ -1182,38 +1187,11 @@ namespace Core.Base
                     {
                         System.Threading.Thread.Sleep(50);
                         Win.WinInput.InputStatus.Refresh();
+                        
                         continue;
                     }
 
-                    context = BufferedGraphicsManager.Current;
-                    Font tfont = new Font(SkinFontName, SkinFontSize);
-
-                    context.MaximumBuffer = new Size(Width, Height);
-
-                    Rectangle inputg = new Rectangle(Left, Top, Width, Height);
-
-                    grafx = context.Allocate(deskDC, inputg);
-                    if (Win.WinInput.InputStatus.ViewType == 0)
-                        grafx.Graphics.DrawImage(Win.WinInput.HBackImg, new Rectangle(Left, Top, Width, Height));
-                    else
-                        grafx.Graphics.DrawImage(Win.WinInput.BackImg, new Rectangle(Left, Top, Width, Height));
-
-                    Pen bordpen = new Pen(Color.Red);
-
-                    Rectangle hzrec = new Rectangle(Left, Top, Width - 1, Height - 1);
-
-                    grafx.Graphics.DrawRectangle(bordpen, hzrec);
-                    if (Win.WinInput.InputStatus.ViewType == 0)
-                    {
-                        //横排显示
-                        HView(SkinFontJG);
-                    }
-                    else
-                    {
-                        //竖排显示
-                        SView(SkinFontJG);
-                    }
-
+     
                 }
                 catch { }
             }

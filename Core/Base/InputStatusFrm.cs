@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Core.Base
@@ -14,7 +11,9 @@ namespace Core.Base
     {
         public string inputstr = string.Empty;//当前的
         public string input = string.Empty;//本次输入的码元
-        public static string zdzjstr = string.Empty;//自动造句
+        public static string zdzjstr = string.Empty;//
+                                                    //句
+        
         private static InputMode Input = null;
         /// <summary>
         /// 在联想状态
@@ -65,53 +64,292 @@ namespace Core.Base
             Input.IsPresAltPos =0;
             if (keysend || message.StartsWith("sendkey"))
             {
-                SendKeys.Send(message.StartsWith("sendkey") ? message.Split(':')[1] : message);
+                try
+                {
+                    if (Input.IsChinese == 2 && (message.IndexOf("}") < 0 || message.IndexOf("{") < 0))
+                    {
+
+                        if (!InputMode.omeno)
+                        {
+                            if (message.IndexOf(",") >= 0)
+                                message = message.Replace(",", "") + ",";
+                            else if (message.IndexOf(".") >= 0)
+                                message = message.Replace(".", "") + ".";
+                            else if (message.IndexOf("/") >= 0)
+                                message = message.Replace("/", "") + "/";
+                            else if (message.IndexOf(";") >= 0)
+                                message = message.Replace(";", "") + ";";
+                            else if (message.IndexOf("'") >= 0)
+                                message = message.Replace("'", "") + "'";
+                        }
+
+                        for (int i = 0; i < message.Length; i++)
+                        {
+                            if (message.Substring(i, 1) == " ")
+                            {
+                                keybd_event((byte)Keys.Space, 0, 0, 0);
+                                keybd_event((byte)Keys.Space, 0, 0x2, 0);
+                            }
+                            else if ("qwertyuiopassdfghjklzxcvbnm".IndexOf(message.Substring(i, 1)) >= 0)
+                            {
+                                keybd_event(((byte)((Keys)Enum.Parse(typeof(Keys), message.Substring(i, 1).ToUpper()))), 0, 0, 0);
+                                if (InputMode.zsmode1 > 0 && "qwertyuiopassdfghjklzxcvbnm".IndexOf(message.Substring(i, 1)) >= 0)
+                                {
+                                    System.Threading.Thread.Sleep(InputMode.zsmode1);
+                                }
+                                keybd_event(((byte)((Keys)Enum.Parse(typeof(Keys), message.Substring(i, 1).ToUpper()))), 0, 0x2, 0);
+                            }
+                            else if ("qwertyuiopassdfghjklzxcvbnm".ToUpper().IndexOf(message.Substring(i, 1)) >= 0)
+                            {
+                                if (!Win.WinInput.Input.IsPressShift)
+                                    keybd_event((byte)Keys.LShiftKey, 0, 0, 0);
+                                keybd_event(((byte)((Keys)Enum.Parse(typeof(Keys), message.Substring(i, 1).ToUpper()))), 0, 0, 0);
+                                if (InputMode.zsmode1 > 0 && "qwertyuiopassdfghjklzxcvbnm".IndexOf(message.Substring(i, 1)) >= 0)
+                                {
+                                    System.Threading.Thread.Sleep(InputMode.zsmode1);
+                                }
+                                keybd_event(((byte)((Keys)Enum.Parse(typeof(Keys), message.Substring(i, 1).ToUpper()))), 0, 0x2, 0);
+                                if (!Win.WinInput.Input.IsPressShift)
+                                    keybd_event((byte)Keys.LShiftKey, 0, 0x2, 0);
+
+
+
+                            }
+                            else if ("123456789".IndexOf(message.Substring(i, 1)) >= 0)
+                            {
+                                keybd_event(((byte)((Keys)Enum.Parse(typeof(Keys), "D" + message.Substring(i, 1)))), 0, 0, 0);
+                                keybd_event(((byte)((Keys)Enum.Parse(typeof(Keys), "D" + message.Substring(i, 1)))), 0, 0x2, 0);
+                            }
+                            else if ("!@#$%^&*()".IndexOf(message.Substring(i, 1)) >= 0)
+                            {
+                                string ms = message.Substring(i, 1).Replace("!", "1").Replace("@", "2").Replace("#", "3").Replace("$", "4")
+                                    .Replace("%", "5").Replace("^", "6").Replace("&", "7").Replace("*", "8").Replace("(", "9").Replace(")", "0");
+                                if (!Win.WinInput.Input.IsPressShift)
+                                    keybd_event((byte)Keys.LShiftKey, 0, 0, 0);
+                                keybd_event(((byte)((Keys)Enum.Parse(typeof(Keys), "D" + ms))), 0, 0, 0);
+                                keybd_event(((byte)((Keys)Enum.Parse(typeof(Keys), "D" + ms))), 0, 0x2, 0);
+                                if (!Win.WinInput.Input.IsPressShift)
+                                    keybd_event((byte)Keys.LShiftKey, 0, 0x2, 0);
+                            }
+                            else if (",<>./?\\|;:'-_=+[]\"`~}{".IndexOf(message.Substring(i, 1)) >= 0)
+                            {
+                                if (message.Substring(i, 1) == "." || message.Substring(i, 1) == ">") keybd_event(190, 0, 0, 0);
+                                else if (message.Substring(i, 1) == "," || message.Substring(i, 1) == "<") keybd_event(0xBC, 0, 0, 0);
+                                else if (message.Substring(i, 1) == ";" || message.Substring(i, 1) == ":") keybd_event(186, 0, 0, 0);
+                                else if (message.Substring(i, 1) == "-" || message.Substring(i, 1) == "_") keybd_event(189, 0, 0, 0);
+                                else if (message.Substring(i, 1) == "=" || message.Substring(i, 1) == "+") keybd_event(187, 0, 0, 0);
+                                else if (message.Substring(i, 1) == "/" || message.Substring(i, 1) == "?") keybd_event(191, 0, 0, 0);
+                                else if (message.Substring(i, 1) == "'" || message.Substring(i, 1) == "\"") keybd_event((byte)Keys.Oem7, 0, 0, 0);
+                                else if (message.Substring(i, 1) == "[" || message.Substring(i, 1) == "{") keybd_event(219, 0, 0, 0);
+                                else if (message.Substring(i, 1) == "]" || message.Substring(i, 1) == "}") keybd_event(221, 0, 0, 0);
+                                else if (message.Substring(i, 1) == "\\" || message.Substring(i, 1) == "|") keybd_event((byte)Keys.Oem5, 0, 0, 0);
+                                else if (message.Substring(i, 1) == "`" || message.Substring(i, 1) == "~") keybd_event((byte)Keys.Oemtilde, 0, 0, 0);
+
+
+                                if (message.Substring(i, 1) == "." || message.Substring(i, 1) == ">") keybd_event(190, 0, 0x2, 0);
+                                else if (message.Substring(i, 1) == "," || message.Substring(i, 1) == "<") keybd_event(0xBC, 0, 0x2, 0);
+                                else if (message.Substring(i, 1) == ";" || message.Substring(i, 1) == ":") keybd_event(186, 0, 0x2, 0);
+                                else if (message.Substring(i, 1) == "-" || message.Substring(i, 1) == "_") keybd_event(189, 0, 0x2, 0);
+                                else if (message.Substring(i, 1) == "=" || message.Substring(i, 1) == "+") keybd_event(187, 0, 0x2, 0);
+                                else if (message.Substring(i, 1) == "/" || message.Substring(i, 1) == "?") keybd_event(191, 0, 0x2, 0);
+                                else if (message.Substring(i, 1) == "'" || message.Substring(i, 1) == "\"") keybd_event((byte)Keys.Oem7, 0, 0x2, 0);
+                                else if (message.Substring(i, 1) == "[" || message.Substring(i, 1) == "{") keybd_event(219, 0, 0x2, 0);
+                                else if (message.Substring(i, 1) == "]" || message.Substring(i, 1) == "}") keybd_event(221, 0, 0x2, 0);
+                                else if (message.Substring(i, 1) == "\\" || message.Substring(i, 1) == "|") keybd_event((byte)Keys.Oem5, 0, 0x2, 0);
+                                else if (message.Substring(i, 1) == "`" || message.Substring(i, 1) == "~") keybd_event((byte)Keys.Oemtilde, 0, 0x2, 0);
+
+                            }
+                            else
+                                SendKeys.Send(message.Substring(i, 1));
+                        }
+
+                    }
+                    else if (Input.IsChinese == 2 && message.IndexOf("}") >= 0)
+                    {
+                        if (message.ToLower().IndexOf("backspace") > 0)
+                        {
+                            keybd_event((byte)Keys.Back, 0, 0, 0);
+                            keybd_event((byte)Keys.Back, 0, 0x2, 0);
+                        }
+                        else if (message.ToLower().IndexOf("home") > 0)
+                        {
+                            keybd_event((byte)Keys.Home, 0, 0, 0);
+                            keybd_event((byte)Keys.Home, 0, 0x2, 0);
+                        }
+                        else if (message.ToLower().IndexOf("escape") > 0)
+                        {
+                            keybd_event((byte)Keys.Escape, 0, 0, 0);
+                            keybd_event((byte)Keys.Escape, 0, 0x2, 0);
+                        }
+                        else if (message.ToLower().IndexOf("tab") > 0)
+                        {
+                            keybd_event((byte)Keys.Tab, 0, 0, 0);
+                            keybd_event((byte)Keys.Tab, 0, 0x2, 0);
+                        }
+                        else if (message.ToLower().IndexOf("left") > 0)
+                        {
+                            keybd_event((byte)Keys.Left, 0, 0, 0);
+                            keybd_event((byte)Keys.Left, 0, 0x2, 0);
+                        }
+                        else if (message.ToLower().IndexOf("right") > 0)
+                        {
+                            keybd_event((byte)Keys.Right, 0, 0, 0);
+                            keybd_event((byte)Keys.Right, 0, 0x2, 0);
+                        }
+                        else if (message.ToLower().IndexOf("up") > 0)
+                        {
+                            keybd_event((byte)Keys.Up, 0, 0, 0);
+                            keybd_event((byte)Keys.Up, 0, 0x2, 0);
+                        }
+                        else if (message.ToLower().IndexOf("down") > 0)
+                        {
+                            keybd_event((byte)Keys.Down, 0, 0, 0);
+                            keybd_event((byte)Keys.Down, 0, 0x2, 0);
+                        }
+                        else
+                            SendKeys.Send(message.StartsWith("sendkey") ? message.Split(':')[1] : message);
+                    }
+                    else
+                    {
+                        if (message.StartsWith("sendkey"))
+                        {
+                            SendKeys.Send(message.Split(':')[1]);
+                        }
+                        else if (message.IndexOf("}") > 0 && message.IndexOf("{") >= 0)
+                        {
+                            SendKeys.Send(message);
+                        }
+                        else
+                        {
+                            if (InputMode.imgsend)
+                            {
+                                ImageInput.imgstr += message;
+
+                                if (message == " ")
+                                {
+                                    //图片输出
+                                    var img = TextToBitmap(ImageInput.imgstr, new Font(InputMode.SkinFontName, InputMode.SkinFontSize < 16 ? 16 : InputMode.SkinFontSize)
+                                        , Color.White, GetColor());
+
+                                    Clipboard.SetImage(img);
+                                    //发送ctrl+v 进行粘贴
+                                    keybd_event((byte)Keys.ControlKey, 0, 0, 0);//按下
+                                    keybd_event((byte)Keys.V, 0, 0, 0);
+                                    keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
+                                    keybd_event((byte)Keys.V, 0, 0x2, 0);
+
+                                    ImageInput.imgstr = String.Empty;
+                                }
+                            }
+                            else
+                            {
+                                SendKeys.Send(message);
+                            }
+                        }
+
+                    }
+                }
+                catch { }
                 return;
             }
             if (Input.OutType == 0)
             {
-                INPUT[] input_down = new INPUT[message.Length];
-                INPUT[] input_up = new INPUT[message.Length];
-                for (int i = 0; i < message.Length; i++)
+                if (InputMode.imgsend)
                 {
-                    input_down[i].type = (int)InputType.INPUT_KEYBOARD;
-                    input_down[i].ki.dwFlags = (int)KEYEVENTF.UNICODE;
-                    input_down[i].ki.wScan = (ushort)message[i];
-                    input_down[i].ki.wVk = 0;
-                    input_up[i].type = input_down[i].type;
-                    input_up[i].ki.wScan = input_down[i].ki.wScan;
-                    input_up[i].ki.wVk = 0;
-                    input_up[i].ki.dwFlags = (int)(KEYEVENTF.KEYUP | KEYEVENTF.UNICODE);
-                }
+                    ImageInput.imgstr += message;
+                    if (message == " ")
+                    {
+                        //图片输出
+                        var img = TextToBitmap(ImageInput.imgstr, new Font(InputMode.SkinFontName, InputMode.SkinFontSize < 16 ? 16 : InputMode.SkinFontSize)
+                    , Color.White, GetColor());
 
-                for (int i = 0; i < input_down.Length; i++)
+                        Clipboard.SetImage(img);
+                        //发送ctrl+v 进行粘贴
+                        keybd_event((byte)Keys.ControlKey, 0, 0, 0);//按下
+                        keybd_event((byte)Keys.V, 0, 0, 0);
+                        keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
+                        keybd_event((byte)Keys.V, 0, 0x2, 0);
+
+                        ImageInput.imgstr = String.Empty;
+                    }
+                }
+                else
                 {
-                    SendInput(1, ref input_down[i], Marshal.SizeOf(input_down[i]));//keydown 
-                    SendInput(1, ref input_up[i], Marshal.SizeOf(input_up[i]));//keyup    
+                    if (InputMode.outtype==0)
+                    {
+                        INPUT[] input_down = new INPUT[message.Length];
+                        INPUT[] input_up = new INPUT[message.Length];
+                        for (int i = 0; i < message.Length; i++)
+                        {
+                            input_down[i].type = (int)InputType.INPUT_KEYBOARD;
+                            input_down[i].ki.dwFlags = (int)KEYEVENTF.UNICODE;
+                            input_down[i].ki.wScan = (ushort)message[i];
+                            input_down[i].ki.wVk = 0;
+                            input_up[i].type = input_down[i].type;
+                            input_up[i].ki.wScan = input_down[i].ki.wScan;
+                            input_up[i].ki.wVk = 0;
+                            input_up[i].ki.dwFlags = (int)(KEYEVENTF.KEYUP | KEYEVENTF.UNICODE);
+                        }
+
+                        for (int i = 0; i < input_down.Length; i++)
+                        {
+                            SendInput(1, ref input_down[i], Marshal.SizeOf(input_down[i]));//keydown 
+                            SendInput(1, ref input_up[i], Marshal.SizeOf(input_up[i]));//keyup    
+                        }
+                    }
+                    else if (InputMode.outtype == 1)
+                    {
+                        try
+                        {
+                            Input.SelfOut = true;
+                            Clipboard.SetText(message);
+                            //发送ctrl+v 进行粘贴
+                            keybd_event((byte)Keys.ControlKey, 0, 0, 0);//按下
+                            keybd_event((byte)Keys.V, 0, 0, 0);
+                            keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
+                            keybd_event((byte)Keys.V, 0, 0x2, 0);
+    
+                        }
+                        catch { }
+                        finally { Input.SelfOut = false; }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            
+                            Input.SelfOut = true;
+                            SendKeys.Send(message);
+
+                        }
+                        catch { }
+                        finally { Input.SelfOut = false; }
+                       
+                    }
                 }
             }
-            else if (Input.OutType == 1)
-            {
-                try
-                {
-                    Clipboard.SetText(message);
-                    Input.SelfOut = true;
-                    //发送ctrl+v 进行粘贴
-                    keybd_event((byte)Keys.ControlKey, 0, 0, 0);//按下
-                    keybd_event((byte)Keys.V, 0, 0, 0);
-                    keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
-                    keybd_event((byte)Keys.V, 0, 0x2, 0);
-                    System.Threading.Thread.Sleep(30);
+            //else if (Input.OutType == 1)
+            //{
+            //    try
+            //    {
+            //        Clipboard.SetText(message);
+            //        Input.SelfOut = true;
+            //        //发送ctrl+v 进行粘贴
+            //        keybd_event((byte)Keys.ControlKey, 0, 0, 0);//按下
+            //        keybd_event((byte)Keys.V, 0, 0, 0);
+            //        keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
+            //        keybd_event((byte)Keys.V, 0, 0x2, 0);
+            //        System.Threading.Thread.Sleep(30);
 
-                }
-                catch { }
-                finally { Input.SelfOut = false; }
-            }
+            //    }
+            //    catch { }
+            //    finally { Input.SelfOut = false; }
+            //}
             
             LastSPValue = message;
             LastLinkString += message;
             LastLinkCodeString += mcode;
-            if (Input.IsChinese == 1 && !CheckChinese(message,true))
+            if (Input.IsChinese == 1 && !CheckChinese(message, true))
             {
                 LastLinkString = string.Empty;
                 if (Dream)
@@ -119,7 +357,8 @@ namespace Core.Base
                     Input.Show = false;
                     Dream = false;
                 }
-                //AutoZJ();
+
+                AutoZJ();
             }
             else if (Input.IsChinese == 0 && !IsLowerLetter(message) && !IsUpperLetter(message))
             {
@@ -138,29 +377,16 @@ namespace Core.Base
         //自动造4字以上的句，词作为联想字库，输入重请后消失。
         public static void AutoZJ()
         {
-            if (InputMode.OpenLink)
+            if (InputMode.AutoZJ)
             {
                 zdzjstr = zdzjstr.Trim();
                 if (zdzjstr.Length > 3)
                 {
                     if (!Input.linkdictp.ContainsKey(zdzjstr.Substring(0, 3)))
                     {
-                        Input.linkdictp.Add(zdzjstr.Substring(0, 3), new List<string>() { zdzjstr });
+                        Input.linkdictp.Add(zdzjstr.Substring(0, 3), new List<string>() {  "#"+zdzjstr});
                     }
-                    else
-                    {
-                        var tl = Input.linkdictp[zdzjstr.Substring(0, 3)];
-                        bool add = true;
-                        foreach (var item in tl)
-                        {
-                            if (item == zdzjstr)
-                            {
-                                add = false;
-                                break;
-                            }
-                        }
-                        if (add) tl.Add(zdzjstr);
-                    }
+                    
                 }
             }
             zdzjstr = string.Empty;
@@ -173,7 +399,7 @@ namespace Core.Base
         public static bool CheckChinese(string str, bool sp = false)
         {
             bool vv = Regex.IsMatch(str, @"^[\u4e00-\u9fa5]+$");
-            //if (sp) zdzjstr += str;
+            if (sp) zdzjstr += str;
             return vv;
         }
         /// <summary>
@@ -212,6 +438,16 @@ namespace Core.Base
                 Clear();
                 return;
             }
+
+            if(InputStatusFrm.Dream && tpos > 0  && !string.IsNullOrEmpty(InputStatusFrm.cachearry[tpos]) && InputStatusFrm.cachearry[tpos].Split('|')[1].StartsWith("#"))
+            {
+                SendText(InputStatusFrm.cachearry[tpos].Split('|')[1].Substring(4), input);
+                LSView = false;
+                inputstr = string.Empty;
+                input = string.Empty;
+                Clear();
+                return;
+            }
             for (int i = 0; i < InputStatusFrm.cachearry.Length; i++)
             {
                 if (pos == 0)
@@ -220,8 +456,22 @@ namespace Core.Base
                     {
                         if (LSView)
                         {
-                            for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
-                                InputStatusFrm.SendText("{BACKSPACE}", "",true);
+                            if (!InputMode.imgsend)
+                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
+                                    InputStatusFrm.SendText("{BACKSPACE}", "", true);
+                            else
+                            {
+
+                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
+                                {
+                                    if (ImageInput.imgstr.Length > 0)
+                                    {
+                                        if (ImageInput.imgstr.Length - 1 <= 0) ImageInput.imgstr = String.Empty;
+                                        else ImageInput.imgstr = ImageInput.imgstr.Substring(0, ImageInput.imgstr.Length - 1);
+                                    }
+                                }
+
+                            }
                         }
                         SendText(InputStatusFrm.cachearry[i - 1].Split('|')[1].Substring(index), input);
                         break;
@@ -230,8 +480,22 @@ namespace Core.Base
                     {
                         if (LSView)
                         {
-                            for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
+                            if (!InputMode.imgsend)
+                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
                                 InputStatusFrm.SendText("{BACKSPACE}", "", true);
+                            else
+                            {
+
+                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
+                                {
+                                    if (ImageInput.imgstr.Length > 0)
+                                    {
+                                        if (ImageInput.imgstr.Length - 1 <= 0) ImageInput.imgstr = String.Empty;
+                                        else ImageInput.imgstr = ImageInput.imgstr.Substring(0, ImageInput.imgstr.Length - 1);
+                                    }
+                                }
+
+                            }
                         }
                         SendText(InputStatusFrm.cachearry[i].Split('|')[1].Substring(index), input);
                         break;
@@ -243,8 +507,22 @@ namespace Core.Base
                     {
                         if (LSView)
                         {
-                            for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
+                            if (!InputMode.imgsend)
+                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
                                 InputStatusFrm.SendText("{BACKSPACE}", "",true);
+                            else
+                            {
+
+                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
+                                {
+                                    if (ImageInput.imgstr.Length > 0)
+                                    {
+                                        if (ImageInput.imgstr.Length - 1 <= 0) ImageInput.imgstr = String.Empty;
+                                        else ImageInput.imgstr = ImageInput.imgstr.Substring(0, ImageInput.imgstr.Length - 1);
+                                    }
+                                }
+
+                            }
                         }
                         SendText(InputStatusFrm.cachearry[PageSize - 1 - i].Split('|')[1].Substring(index), input);
                         break;
@@ -256,8 +534,22 @@ namespace Core.Base
                     {
                         if (LSView)
                         {
-                            for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
+                            if (!InputMode.imgsend)
+                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
                                 InputStatusFrm.SendText("{BACKSPACE}","", true);
+                            else
+                            {
+
+                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
+                                {
+                                    if (ImageInput.imgstr.Length > 0)
+                                    {
+                                        if (ImageInput.imgstr.Length - 1 <= 0) ImageInput.imgstr = String.Empty;
+                                        else ImageInput.imgstr = ImageInput.imgstr.Substring(0, ImageInput.imgstr.Length - 1);
+                                    }
+                                }
+
+                            }
                         }
                         if (InputStatusFrm.Dream)
                             index = 0;
@@ -268,8 +560,22 @@ namespace Core.Base
                     {
                         if (LSView)
                         {
-                            for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
+                            if (!InputMode.imgsend)
+                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
                                 InputStatusFrm.SendText("{BACKSPACE}", "",true);
+                            else
+                            {
+
+                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
+                                {
+                                    if (ImageInput.imgstr.Length > 0)
+                                    {
+                                        if (ImageInput.imgstr.Length - 1 <= 0) ImageInput.imgstr = String.Empty;
+                                        else ImageInput.imgstr = ImageInput.imgstr.Substring(0, ImageInput.imgstr.Length - 1);
+                                    }
+                                }
+
+                            }
                         }
                         SendText(InputStatusFrm.cachearry[PageSize - 1 - i].Split('|')[1].Substring(index), input);
                         break;
@@ -350,22 +656,53 @@ namespace Core.Base
         /// </summary>
         public void DelLastInput()
         {
-            if (LastSPValue.Length > 0)
-                for (int j = 0; j < LastSPValue.Length; j++)
-                    SendText("{BACKSPACE}", "",true);
+            if (!InputMode.imgsend || ImageInput.imgstr.Length==0)
+            {
+                if (LastSPValue.Length > 0)
+                    for (int j = 0; j < LastSPValue.Length; j++)
+                        SendText("{BACKSPACE}", "", true);
+                else
+                    SendText("{BACKSPACE}", "", true);
+            }
             else
-                SendText("{BACKSPACE}", "",true);
-
+            {
+                if (LastSPValue.Length > 0)
+                {
+                    for (int j = 0; j < LastSPValue.Length; j++)
+                        if (ImageInput.imgstr.Length > 0)
+                        {
+                            if (ImageInput.imgstr.Length - 1 <= 0) ImageInput.imgstr = String.Empty;
+                            else ImageInput.imgstr = ImageInput.imgstr.Substring(0, ImageInput.imgstr.Length - 1);
+                        }
+                }
+                else
+                {
+                    if (ImageInput.imgstr.Length - 1 <= 0) ImageInput.imgstr = String.Empty;
+                    else ImageInput.imgstr = ImageInput.imgstr.Substring(0, ImageInput.imgstr.Length - 1);
+                }
+            }
             LastSPValue = string.Empty;
             LastLinkString = string.Empty;
         }
-         /// <summary>
+        /// <summary>
         /// 删除指定字数
         /// </summary>
         public void DelLastInput(int num)
         {
-            for (int j = 0; j < num; j++)
-                SendText("{BACKSPACE}","", true);
+            if (!InputMode.imgsend)
+            {
+                for (int j = 0; j < num; j++)
+                    SendText("{BACKSPACE}", "", true);
+            }
+            else
+            {
+                for (int j = 0; j < num; j++)
+                    if (ImageInput.imgstr.Length > 0)
+                    {
+                        if (ImageInput.imgstr.Length - 1 <= 0) ImageInput.imgstr = String.Empty;
+                        else ImageInput.imgstr = ImageInput.imgstr.Substring(0, ImageInput.imgstr.Length - 1);
+                    }
+            }
         }
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
         private static extern int ShowWindow(IntPtr hWnd, short cmdShow);
@@ -382,7 +719,9 @@ namespace Core.Base
         {
             Win.WinInput.InputStatus.Left = this.Left;
             Win.WinInput.InputStatus.Top = this.Top;
-
+            Win.WinInput.InputStatus.Left = this.Left;
+            Win.WinInput.ImageInput.Top = this.Top-this.Height;
+            Win.WinInput.ImageInput.Left = this.Left;
             Input.ShowInput(f);
             if (!this.Visible && f)
             {
@@ -526,8 +865,26 @@ namespace Core.Base
                     }
                     else
                     {
-                        SendText(PreFirstValue, this.inputstr.Length > 2 ? this.inputstr.Substring(0, 2) : this.inputstr);
-                        this.inputstr = this.input;
+                        if (this.input.Length > 1)
+                        {
+                            SendText(PreFirstValue, this.inputstr.Length > 2 ? this.inputstr.Substring(0, 2) : this.inputstr);
+                            this.inputstr = this.input;
+                        }
+                        else
+                        {
+                            SendText(PreFirstValue, this.inputstr);
+                            string outstr = Input.GetLROne(this.input, true);
+                            if (!string.IsNullOrEmpty(outstr))
+                            {
+                                Clear();
+                                InputStatusFrm.SendText(outstr, "");
+                            }
+                            else
+                            {
+                                this.inputstr = this.input;
+                            }
+                        }
+                      
                     }
                     if (smspace)
                     {
@@ -627,6 +984,7 @@ namespace Core.Base
                     else
                     {
                         Dream = true;
+                        LSView = true;
                         this.ShowWindow(true);
                     }
                 }
@@ -661,6 +1019,7 @@ namespace Core.Base
                     else
                     {
                         Dream = true;
+                        LSView = true;
                         this.ShowWindow(true);
                     }
                 }
@@ -775,55 +1134,75 @@ namespace Core.Base
         }
         public int pinyipos = 0;
         string pys = "";
+        string cfs = "";
         /// <summary>
         /// 绘制候选框
         /// </summary>
         /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Input.Metor) return;
-           
+       
             BufferedGraphicsContext context = BufferedGraphicsManager.Current;
             BufferedGraphics grafx = context.Allocate(e.Graphics, e.ClipRectangle);
       
             try
             {
                 if (this.inputstr.Length==0 && !Dream) return;
-           
+ 
                 if (ViewType == 0)
-                    grafx.Graphics.DrawImage(Win.WinInput.HBackImg, new Rectangle(0, 0, Width, Height));
+                    grafx.Graphics.FillRectangle(new SolidBrush(InputMode.SkinBack), new Rectangle(0, 0, Width, Height));
                 else
-                    grafx.Graphics.DrawImage(Win.WinInput.BackImg, new Rectangle(0, 0, Width, Height));
+                    grafx.Graphics.FillRectangle(new SolidBrush(InputMode.SkinBack), new Rectangle(0, 0, Width, Height));
 
-                if (InputMode.pinyin)
+                if (InputMode.pinyin || InputMode.datacf)
                 {
                     if (valuearry != null && valuearry.Length <= pinyipos || PageSize <= pinyipos) pinyipos = 0;
-                    if (valuearry != null && valuearry.Length > pinyipos
-                        && cachearry[pinyipos].Split('|').Length > 1
-                        && Input.PinYi.ContainsKey(cachearry[pinyipos].Split('|')[1].Substring(0, 1)))
+
+                    if (InputMode.pinyin)
                     {
-                        pys = Input.PinYi[cachearry[pinyipos].Split('|')[1].Substring(0, 1)];
+                        if (valuearry != null && valuearry.Length > pinyipos
+                            && cachearry[pinyipos].Split('|').Length > 1
+                            && Input.PinYi.ContainsKey(cachearry[pinyipos].Split('|')[1].Substring(0, 1)))
+                        {
+                            pys = Input.PinYi[cachearry[pinyipos].Split('|')[1].Substring(0, 1)];
+                        }
+                        else pys = String.Empty;
+
                     }
+                    else pys = String.Empty;
+
+                    if (InputMode.datacf)
+                    {
+                        if (valuearry != null && valuearry.Length > pinyipos
+                        && cachearry[pinyipos].Split('|').Length > 1
+                        && Input.CfDict.ContainsKey(cachearry[pinyipos].Split('|')[1].Substring(0, 1)))
+                        {
+                            cfs = Input.CfDict[cachearry[pinyipos].Split('|')[1].Substring(0, 1)];
+                        }
+                        else cfs = String.Empty;
+                    }
+                    else cfs = String.Empty;
                 }
                 else
                 {
                     pys = String.Empty;
+                    cfs = String.Empty;
                     pinyipos = 0;
                 }
 
-                Pen bordpen = new Pen(InputMode.Skinbordpen);
+               Pen bordpen = new Pen(InputMode.Skinbordpen);
                 SolidBrush bstring = new SolidBrush(InputMode.Skinbstring);
                 SolidBrush bcstring = new SolidBrush(InputMode.Skinbcstring);
                 SolidBrush fbcstring = new SolidBrush(InputMode.Skinfbcstring);
                 Rectangle hzrec = new Rectangle(0, 0, Width - 1, Height  - 1);
                 grafx.Graphics.DrawRectangle(bordpen, hzrec);
                 int inputy = InputMode.SkinFontJG;
-                string ins = InputStatusFrm.Dream ? "智能联想" : this.inputstr + (pys.Length > 0 ? "  " + (pinyipos + 1) + "." + pys : "");
+                string ins = InputStatusFrm.Dream ? "智能联想" : this.inputstr + (pys.Length > 0 || cfs.Length>0 ? "  " + (pinyipos + 1) + "." + pys+" "+cfs : "");
                 int fontsize = InputMode.SkinFontSize;
- 
-                grafx.Graphics.DrawString(ins, new Font(InputMode.SkinFontName, fontsize, FontStyle.Bold), bstring, new Point(0 + 3, 0 + 4));
+                grafx.Graphics.DrawString(ins, new Font(InputMode.cffontname, fontsize > 18 ? 18 : fontsize), bstring, new Point(0 + 3, 0 + 3));
+               
                 if (valuearry != null && valuearry.Length > 0 && !InputStatusFrm.Dream && valuearry.Length > PageSize) //分页数显示
-                    grafx.Graphics.DrawString(string.Format("{0}/{1}", PageNum, valuearry.Length / PageSize + 1), new Font("", 10F), bstring, new Point(Width - 44, 0 + 4));
+                    grafx.Graphics.DrawString(string.Format("{0}/{1}", PageNum, valuearry.Length / PageSize + 1), new Font("", 11F), bstring, new Point(Width - 44, 0 + 3));
                 if (ViewType == 0)
                 {
                     //横排显示
@@ -845,11 +1224,13 @@ namespace Core.Base
                             grafx.Graphics.DrawString(pos + v, tfont, bstring, new Point(wx, inputy));
 
                         if (InputMode.lbinputv == null || InputMode.lbinputv[i] == null) return;
+
                         InputMode.lbinputv[i].Text = pos + v ;
                      
                         wx += InputMode.lbinputv[i].PreferredWidth - 10;
+
                         grafx.Graphics.DrawString(cachearry[i].Split('|')[2], new Font("宋体", fontsize - 1), bcstring, new Point(wx, inputy));
-                        if (string.IsNullOrEmpty(InputMode.lbinputc[i].Text))
+                        if (InputMode.lbinputc[i] == null || string.IsNullOrEmpty(InputMode.lbinputc[i].Text))
                         {
                             wx += 4;
                         }
@@ -891,6 +1272,74 @@ namespace Core.Base
                 grafx.Graphics.Dispose();
                 grafx.Dispose();
             }
+        }
+
+        //图片输出
+        /// <summary>
+        /// 把文字转换才Bitmap
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="font"></param>
+        /// <param name="rect">用于输出的矩形，文字在这个矩形内显示，为空时自动计算</param>
+        /// <param name="fontcolor">字体颜色</param>
+        /// <param name="backColor">背景颜色</param>
+        /// <returns></returns>
+        public static Bitmap TextToBitmap(string text, Font font, Color fontcolor, Color backColor)
+        {
+            Graphics g;
+            Bitmap bmp;
+            StringFormat format = new StringFormat(StringFormatFlags.NoClip);
+            
+            bmp = new Bitmap(1, 1);
+            g = Graphics.FromImage(bmp);
+            //计算绘制文字所需的区域大小（根据宽度计算长度），重新创建矩形区域绘图
+            SizeF sizef = g.MeasureString(text, font, PointF.Empty, format);
+
+            int width = (int)(sizef.Width+1);
+            int height = (int)(sizef.Height-2);
+            var rect = new Rectangle(0,0, width, height);
+            bmp.Dispose();
+
+            bmp = new Bitmap(width, height);
+
+
+            g = Graphics.FromImage(bmp);
+
+            //使用ClearType字体功能
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            g.FillRectangle(new SolidBrush(backColor), rect);
+            g.DrawString(text, font, new SolidBrush(fontcolor), rect, format);
+            return bmp;
+        }
+
+        public static short colorpos = 0;
+        /// <summary>
+        /// 随机获取颜色
+        /// </summary>
+        /// <returns></returns>
+        
+        public static Color GetColor()
+        {
+            switch (colorpos)
+            {
+                case 0: { colorpos++; return Color.FromArgb(218, 138, 70); }
+                case 1: { colorpos++; return Color.FromArgb(58, 29, 79); }
+                case 2: { colorpos++; return Color.FromArgb(150, 59, 25); }
+                case 3: { colorpos++; return Color.FromArgb(181, 173, 145); }
+                case 4: { colorpos++; return Color.FromArgb(230, 110, 180); }
+                case 5: { colorpos++; return Color.FromArgb(32, 156, 219); }
+                case 6: { colorpos++; return Color.FromArgb(112, 63, 168); }
+                case 7: { colorpos++; return Color.FromArgb(215, 59, 45); }
+                case 8: { colorpos++; return Color.FromArgb(22, 148, 73); }
+                case 9: { colorpos++; return Color.FromArgb(131, 114, 73); }
+                default: { colorpos = 0; return Color.FromArgb(22, 79, 142); }
+            }
+            
+        }
+
+        public void SendSelfImg()
+        {
+
         }
     }
 
