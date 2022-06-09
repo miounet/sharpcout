@@ -177,7 +177,7 @@ namespace Core.Win
                 {
                     try
                     {
-                        string item1 = item.Split('\t')[1];
+                        string item1 = item.Split(' ')[1];
                         if (item1.Length < 2) continue;
                         if (dicta.Find(f => f.IndexOf(" " + item1) > 0) == null)
                         {

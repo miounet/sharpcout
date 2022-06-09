@@ -30,6 +30,14 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigFrm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chedatacf = new System.Windows.Forms.CheckBox();
+            this.cmouttype = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.nuzsmode2 = new System.Windows.Forms.NumericUpDown();
+            this.chkzsallmap = new System.Windows.Forms.CheckBox();
+            this.chkomeno = new System.Windows.Forms.CheckBox();
+            this.chkbjzckgsp = new System.Windows.Forms.CheckBox();
             this.ckautopos = new System.Windows.Forms.CheckBox();
             this.chclosebj = new System.Windows.Forms.CheckBox();
             this.ckpinyin = new System.Windows.Forms.CheckBox();
@@ -44,6 +52,8 @@
             this.ckOpenCould = new System.Windows.Forms.CheckBox();
             this.ckalt = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.btnSkinFontName = new System.Windows.Forms.Button();
             this.btnSkinfbcstring = new System.Windows.Forms.Button();
             this.btnSkinbcstring = new System.Windows.Forms.Button();
@@ -67,7 +77,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtlra = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.mousetracchk = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nuzsmode2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.selectnum)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSkinHeight)).BeginInit();
@@ -75,6 +87,15 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.mousetracchk);
+            this.groupBox1.Controls.Add(this.chedatacf);
+            this.groupBox1.Controls.Add(this.cmouttype);
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Controls.Add(this.nuzsmode2);
+            this.groupBox1.Controls.Add(this.chkzsallmap);
+            this.groupBox1.Controls.Add(this.chkomeno);
+            this.groupBox1.Controls.Add(this.chkbjzckgsp);
             this.groupBox1.Controls.Add(this.ckautopos);
             this.groupBox1.Controls.Add(this.chclosebj);
             this.groupBox1.Controls.Add(this.ckpinyin);
@@ -86,23 +107,118 @@
             this.groupBox1.Controls.Add(this.chkAutoRun);
             this.groupBox1.Controls.Add(this.ckLink);
             this.groupBox1.Controls.Add(this.ckAutoUpdate);
-            this.groupBox1.Controls.Add(this.ckOpenCould);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(559, 121);
+            this.groupBox1.Size = new System.Drawing.Size(644, 136);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "基本设置";
+            // 
+            // chedatacf
+            // 
+            this.chedatacf.AutoSize = true;
+            this.chedatacf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chedatacf.Location = new System.Drawing.Point(382, 24);
+            this.chedatacf.Margin = new System.Windows.Forms.Padding(4);
+            this.chedatacf.Name = "chedatacf";
+            this.chedatacf.Size = new System.Drawing.Size(119, 20);
+            this.chedatacf.TabIndex = 34;
+            this.chedatacf.Text = "显示汉字拆分";
+            this.chedatacf.UseVisualStyleBackColor = true;
+            // 
+            // cmouttype
+            // 
+            this.cmouttype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmouttype.FormattingEnabled = true;
+            this.cmouttype.Items.AddRange(new object[] {
+            "默认",
+            "剪贴板",
+            "嵌入式"});
+            this.cmouttype.Location = new System.Drawing.Point(440, 84);
+            this.cmouttype.Name = "cmouttype";
+            this.cmouttype.Size = new System.Drawing.Size(121, 24);
+            this.cmouttype.TabIndex = 33;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label10.Location = new System.Drawing.Point(355, 88);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(77, 14);
+            this.label10.TabIndex = 32;
+            this.label10.Text = "输出模式：";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label9.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.label9.Location = new System.Drawing.Point(493, 114);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(77, 14);
+            this.label9.TabIndex = 31;
+            this.label9.Text = "延时按键：";
+            // 
+            // nuzsmode2
+            // 
+            this.nuzsmode2.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.nuzsmode2.Location = new System.Drawing.Point(576, 106);
+            this.nuzsmode2.Margin = new System.Windows.Forms.Padding(4);
+            this.nuzsmode2.Name = "nuzsmode2";
+            this.nuzsmode2.Size = new System.Drawing.Size(54, 26);
+            this.nuzsmode2.TabIndex = 30;
+            // 
+            // chkzsallmap
+            // 
+            this.chkzsallmap.AutoSize = true;
+            this.chkzsallmap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkzsallmap.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.chkzsallmap.Location = new System.Drawing.Point(347, 111);
+            this.chkzsallmap.Margin = new System.Windows.Forms.Padding(4);
+            this.chkzsallmap.Name = "chkzsallmap";
+            this.chkzsallmap.Size = new System.Drawing.Size(135, 20);
+            this.chkzsallmap.TabIndex = 28;
+            this.chkzsallmap.Text = "助手指法全映射";
+            this.chkzsallmap.UseVisualStyleBackColor = true;
+            // 
+            // chkomeno
+            // 
+            this.chkomeno.AutoSize = true;
+            this.chkomeno.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkomeno.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.chkomeno.Location = new System.Drawing.Point(216, 111);
+            this.chkomeno.Margin = new System.Windows.Forms.Padding(4);
+            this.chkomeno.Name = "chkomeno";
+            this.chkomeno.Size = new System.Drawing.Size(119, 20);
+            this.chkomeno.TabIndex = 27;
+            this.chkomeno.Text = "助手启用标点";
+            this.chkomeno.UseVisualStyleBackColor = true;
+            // 
+            // chkbjzckgsp
+            // 
+            this.chkbjzckgsp.AutoSize = true;
+            this.chkbjzckgsp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkbjzckgsp.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.chkbjzckgsp.Location = new System.Drawing.Point(7, 111);
+            this.chkbjzckgsp.Margin = new System.Windows.Forms.Padding(4);
+            this.chkbjzckgsp.Name = "chkbjzckgsp";
+            this.chkbjzckgsp.Size = new System.Drawing.Size(199, 20);
+            this.chkbjzckgsp.TabIndex = 26;
+            this.chkbjzckgsp.Text = "助手空格上屏，适合整句";
+            this.chkbjzckgsp.UseVisualStyleBackColor = true;
             // 
             // ckautopos
             // 
             this.ckautopos.AutoSize = true;
             this.ckautopos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ckautopos.Location = new System.Drawing.Point(339, 87);
+            this.ckautopos.Location = new System.Drawing.Point(184, 84);
             this.ckautopos.Margin = new System.Windows.Forms.Padding(4);
             this.ckautopos.Name = "ckautopos";
             this.ckautopos.Size = new System.Drawing.Size(151, 20);
@@ -114,7 +230,7 @@
             // 
             this.chclosebj.AutoSize = true;
             this.chclosebj.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.chclosebj.Location = new System.Drawing.Point(339, 59);
+            this.chclosebj.Location = new System.Drawing.Point(453, 56);
             this.chclosebj.Margin = new System.Windows.Forms.Padding(4);
             this.chclosebj.Name = "chclosebj";
             this.chclosebj.Size = new System.Drawing.Size(159, 20);
@@ -126,19 +242,19 @@
             // 
             this.ckpinyin.AutoSize = true;
             this.ckpinyin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ckpinyin.Location = new System.Drawing.Point(204, 87);
+            this.ckpinyin.Location = new System.Drawing.Point(512, 24);
             this.ckpinyin.Margin = new System.Windows.Forms.Padding(4);
             this.ckpinyin.Name = "ckpinyin";
             this.ckpinyin.Size = new System.Drawing.Size(119, 20);
             this.ckpinyin.TabIndex = 24;
-            this.ckpinyin.Text = "显示首字拼音";
+            this.ckpinyin.Text = "显示拼音注音";
             this.ckpinyin.UseVisualStyleBackColor = true;
             // 
             // ckright3out
             // 
             this.ckright3out.AutoSize = true;
             this.ckright3out.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ckright3out.Location = new System.Drawing.Point(8, 87);
+            this.ckright3out.Location = new System.Drawing.Point(8, 84);
             this.ckright3out.Margin = new System.Windows.Forms.Padding(4);
             this.ckright3out.Name = "ckright3out";
             this.ckright3out.Size = new System.Drawing.Size(159, 20);
@@ -150,7 +266,7 @@
             // 
             this.SingleInput.AutoSize = true;
             this.SingleInput.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SingleInput.Location = new System.Drawing.Point(236, 58);
+            this.SingleInput.Location = new System.Drawing.Point(347, 56);
             this.SingleInput.Margin = new System.Windows.Forms.Padding(4);
             this.SingleInput.Name = "SingleInput";
             this.SingleInput.Size = new System.Drawing.Size(87, 20);
@@ -161,7 +277,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(268, 28);
+            this.label1.Location = new System.Drawing.Point(239, 26);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(71, 16);
@@ -170,7 +286,7 @@
             // 
             // selectnum
             // 
-            this.selectnum.Location = new System.Drawing.Point(345, 24);
+            this.selectnum.Location = new System.Drawing.Point(316, 22);
             this.selectnum.Margin = new System.Windows.Forms.Padding(4);
             this.selectnum.Maximum = new decimal(new int[] {
             10,
@@ -195,7 +311,7 @@
             // 
             this.tracchk.AutoSize = true;
             this.tracchk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.tracchk.Location = new System.Drawing.Point(137, 58);
+            this.tracchk.Location = new System.Drawing.Point(137, 56);
             this.tracchk.Margin = new System.Windows.Forms.Padding(4);
             this.tracchk.Name = "tracchk";
             this.tracchk.Size = new System.Drawing.Size(87, 20);
@@ -207,7 +323,7 @@
             // 
             this.chkAutoRun.AutoSize = true;
             this.chkAutoRun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.chkAutoRun.Location = new System.Drawing.Point(8, 58);
+            this.chkAutoRun.Location = new System.Drawing.Point(8, 56);
             this.chkAutoRun.Margin = new System.Windows.Forms.Padding(4);
             this.chkAutoRun.Name = "chkAutoRun";
             this.chkAutoRun.Size = new System.Drawing.Size(119, 20);
@@ -219,7 +335,7 @@
             // 
             this.ckLink.AutoSize = true;
             this.ckLink.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ckLink.Location = new System.Drawing.Point(139, 27);
+            this.ckLink.Location = new System.Drawing.Point(139, 25);
             this.ckLink.Margin = new System.Windows.Forms.Padding(4);
             this.ckLink.Name = "ckLink";
             this.ckLink.Size = new System.Drawing.Size(87, 20);
@@ -231,7 +347,7 @@
             // 
             this.ckAutoUpdate.AutoSize = true;
             this.ckAutoUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ckAutoUpdate.Location = new System.Drawing.Point(8, 27);
+            this.ckAutoUpdate.Location = new System.Drawing.Point(8, 25);
             this.ckAutoUpdate.Margin = new System.Windows.Forms.Padding(4);
             this.ckAutoUpdate.Name = "ckAutoUpdate";
             this.ckAutoUpdate.Size = new System.Drawing.Size(87, 20);
@@ -243,10 +359,10 @@
             // 
             this.ckOpenCould.AutoSize = true;
             this.ckOpenCould.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ckOpenCould.Location = new System.Drawing.Point(425, 28);
+            this.ckOpenCould.Location = new System.Drawing.Point(528, 256);
             this.ckOpenCould.Margin = new System.Windows.Forms.Padding(4);
             this.ckOpenCould.Name = "ckOpenCould";
-            this.ckOpenCould.Size = new System.Drawing.Size(103, 20);
+            this.ckOpenCould.Size = new System.Drawing.Size(93, 18);
             this.ckOpenCould.TabIndex = 0;
             this.ckOpenCould.Text = "开启云词库";
             this.ckOpenCould.UseVisualStyleBackColor = true;
@@ -257,7 +373,7 @@
             this.ckalt.AutoSize = true;
             this.ckalt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ckalt.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ckalt.Location = new System.Drawing.Point(14, 230);
+            this.ckalt.Location = new System.Drawing.Point(14, 240);
             this.ckalt.Margin = new System.Windows.Forms.Padding(4);
             this.ckalt.Name = "ckalt";
             this.ckalt.Size = new System.Drawing.Size(487, 20);
@@ -268,6 +384,8 @@
             // groupBox2
             // 
             this.groupBox2.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.groupBox2.Controls.Add(this.label11);
+            this.groupBox2.Controls.Add(this.comboBox1);
             this.groupBox2.Controls.Add(this.btnSkinFontName);
             this.groupBox2.Controls.Add(this.btnSkinfbcstring);
             this.groupBox2.Controls.Add(this.btnSkinbcstring);
@@ -276,20 +394,53 @@
             this.groupBox2.Controls.Add(this.label54);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.groupBox2.Location = new System.Drawing.Point(0, 121);
+            this.groupBox2.Location = new System.Drawing.Point(0, 136);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Size = new System.Drawing.Size(559, 102);
+            this.groupBox2.Size = new System.Drawing.Size(644, 102);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "字体大小设置";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label11.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(521, 40);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(63, 14);
+            this.label11.TabIndex = 19;
+            this.label11.Text = "主题风格";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "默认",
+            "清風",
+            "安卓",
+            "星際爭霸",
+            "小鹤",
+            "战争",
+            "Dota 2",
+            "谷歌/Google",
+            "空明"});
+            this.comboBox1.Location = new System.Drawing.Point(508, 59);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 24);
+            this.comboBox1.TabIndex = 34;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // btnSkinFontName
             // 
             this.btnSkinFontName.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnSkinFontName.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSkinFontName.Location = new System.Drawing.Point(358, 23);
+            this.btnSkinFontName.Location = new System.Drawing.Point(327, 23);
             this.btnSkinFontName.Margin = new System.Windows.Forms.Padding(4);
             this.btnSkinFontName.Name = "btnSkinFontName";
             this.btnSkinFontName.Size = new System.Drawing.Size(153, 68);
@@ -302,7 +453,7 @@
             // 
             this.btnSkinfbcstring.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnSkinfbcstring.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSkinfbcstring.Location = new System.Drawing.Point(176, 59);
+            this.btnSkinfbcstring.Location = new System.Drawing.Point(145, 59);
             this.btnSkinfbcstring.Margin = new System.Windows.Forms.Padding(4);
             this.btnSkinfbcstring.Name = "btnSkinfbcstring";
             this.btnSkinfbcstring.Size = new System.Drawing.Size(175, 31);
@@ -315,7 +466,7 @@
             // 
             this.btnSkinbcstring.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnSkinbcstring.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSkinbcstring.Location = new System.Drawing.Point(270, 23);
+            this.btnSkinbcstring.Location = new System.Drawing.Point(239, 23);
             this.btnSkinbcstring.Margin = new System.Windows.Forms.Padding(4);
             this.btnSkinbcstring.Name = "btnSkinbcstring";
             this.btnSkinbcstring.Size = new System.Drawing.Size(82, 31);
@@ -328,7 +479,7 @@
             // 
             this.btnSkinbstring.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnSkinbstring.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSkinbstring.Location = new System.Drawing.Point(176, 23);
+            this.btnSkinbstring.Location = new System.Drawing.Point(145, 23);
             this.btnSkinbstring.Margin = new System.Windows.Forms.Padding(4);
             this.btnSkinbstring.Name = "btnSkinbstring";
             this.btnSkinbstring.Size = new System.Drawing.Size(82, 31);
@@ -339,7 +490,7 @@
             // 
             // numSkinHeight
             // 
-            this.numSkinHeight.Location = new System.Drawing.Point(85, 46);
+            this.numSkinHeight.Location = new System.Drawing.Point(69, 46);
             this.numSkinHeight.Margin = new System.Windows.Forms.Padding(4);
             this.numSkinHeight.Maximum = new decimal(new int[] {
             500,
@@ -364,7 +515,7 @@
             // label54
             // 
             this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(13, 50);
+            this.label54.Location = new System.Drawing.Point(5, 50);
             this.label54.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label54.Name = "label54";
             this.label54.Size = new System.Drawing.Size(55, 16);
@@ -375,7 +526,7 @@
             // 
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnSave.Location = new System.Drawing.Point(135, 406);
+            this.btnSave.Location = new System.Drawing.Point(135, 414);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(88, 34);
@@ -388,7 +539,7 @@
             // 
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnClose.Location = new System.Drawing.Point(251, 406);
+            this.btnClose.Location = new System.Drawing.Point(251, 414);
             this.btnClose.Margin = new System.Windows.Forms.Padding(4);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(88, 34);
@@ -401,7 +552,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(42, 267);
+            this.label2.Location = new System.Drawing.Point(42, 277);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 14);
@@ -411,7 +562,7 @@
             // txtla
             // 
             this.txtla.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtla.Location = new System.Drawing.Point(131, 261);
+            this.txtla.Location = new System.Drawing.Point(131, 271);
             this.txtla.Margin = new System.Windows.Forms.Padding(4);
             this.txtla.MaxLength = 20;
             this.txtla.Name = "txtla";
@@ -423,7 +574,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3.ForeColor = System.Drawing.Color.Blue;
-            this.label3.Location = new System.Drawing.Point(92, 364);
+            this.label3.Location = new System.Drawing.Point(92, 372);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(271, 32);
@@ -433,7 +584,7 @@
             // txtra
             // 
             this.txtra.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtra.Location = new System.Drawing.Point(131, 293);
+            this.txtra.Location = new System.Drawing.Point(131, 303);
             this.txtra.Margin = new System.Windows.Forms.Padding(4);
             this.txtra.MaxLength = 20;
             this.txtra.Name = "txtra";
@@ -444,7 +595,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(42, 299);
+            this.label4.Location = new System.Drawing.Point(42, 309);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 14);
@@ -454,7 +605,7 @@
             // txtras
             // 
             this.txtras.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtras.Location = new System.Drawing.Point(320, 292);
+            this.txtras.Location = new System.Drawing.Point(320, 302);
             this.txtras.Margin = new System.Windows.Forms.Padding(4);
             this.txtras.MaxLength = 20;
             this.txtras.Name = "txtras";
@@ -465,7 +616,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(230, 298);
+            this.label5.Location = new System.Drawing.Point(230, 308);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(84, 14);
@@ -475,7 +626,7 @@
             // txtlas
             // 
             this.txtlas.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtlas.Location = new System.Drawing.Point(320, 260);
+            this.txtlas.Location = new System.Drawing.Point(320, 270);
             this.txtlas.Margin = new System.Windows.Forms.Padding(4);
             this.txtlas.MaxLength = 20;
             this.txtlas.Name = "txtlas";
@@ -486,7 +637,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(230, 266);
+            this.label6.Location = new System.Drawing.Point(230, 276);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(84, 14);
@@ -496,7 +647,7 @@
             // txtlras
             // 
             this.txtlras.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtlras.Location = new System.Drawing.Point(320, 326);
+            this.txtlras.Location = new System.Drawing.Point(320, 336);
             this.txtlras.Margin = new System.Windows.Forms.Padding(4);
             this.txtlras.MaxLength = 20;
             this.txtlras.Name = "txtlras";
@@ -507,7 +658,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(230, 332);
+            this.label7.Location = new System.Drawing.Point(230, 342);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(84, 14);
@@ -517,7 +668,7 @@
             // txtlra
             // 
             this.txtlra.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txtlra.Location = new System.Drawing.Point(131, 327);
+            this.txtlra.Location = new System.Drawing.Point(131, 337);
             this.txtlra.Margin = new System.Windows.Forms.Padding(4);
             this.txtlra.MaxLength = 20;
             this.txtlra.Name = "txtlra";
@@ -528,18 +679,30 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label8.Location = new System.Drawing.Point(14, 333);
+            this.label8.Location = new System.Drawing.Point(14, 343);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(105, 14);
             this.label8.TabIndex = 15;
             this.label8.Text = "左右同按输出：";
             // 
+            // mousetracchk
+            // 
+            this.mousetracchk.AutoSize = true;
+            this.mousetracchk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.mousetracchk.Location = new System.Drawing.Point(244, 56);
+            this.mousetracchk.Margin = new System.Windows.Forms.Padding(4);
+            this.mousetracchk.Name = "mousetracchk";
+            this.mousetracchk.Size = new System.Drawing.Size(87, 20);
+            this.mousetracchk.TabIndex = 35;
+            this.mousetracchk.Text = "鼠标跟随";
+            this.mousetracchk.UseVisualStyleBackColor = true;
+            // 
             // ConfigFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(559, 452);
+            this.ClientSize = new System.Drawing.Size(644, 454);
             this.Controls.Add(this.txtlras);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.txtlra);
@@ -558,6 +721,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.ckalt);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.ckOpenCould);
             this.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -570,6 +734,7 @@
             this.Load += new System.EventHandler(this.ConfigFrm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nuzsmode2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.selectnum)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -619,5 +784,16 @@
         private System.Windows.Forms.CheckBox ckpinyin;
         private System.Windows.Forms.CheckBox chclosebj;
         private System.Windows.Forms.CheckBox ckautopos;
+        private System.Windows.Forms.CheckBox chkbjzckgsp;
+        private System.Windows.Forms.CheckBox chkomeno;
+        private System.Windows.Forms.CheckBox chkzsallmap;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.NumericUpDown nuzsmode2;
+        private System.Windows.Forms.ComboBox cmouttype;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.CheckBox chedatacf;
+        private System.Windows.Forms.CheckBox mousetracchk;
     }
 }
