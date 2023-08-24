@@ -116,7 +116,7 @@ namespace Core.Comm
                         {
                             WebClient client = new WebClient();
                             client = new WebClient();
-                            string filename = System.IO.Path.Combine(Win.WinInput.Input.AppPath, "updatesoft.zip");
+                            string filename = System.IO.Path.Combine(InputMode.AppPath, "updatesoft.zip");
                             client.DownloadFile(du, filename);
                             Thread.Sleep(200);
                             updataok = true;
@@ -132,7 +132,7 @@ namespace Core.Comm
                     {
                         //关闭速录软件，打开升级解压程序
 
-                        System.Diagnostics.Process.Start(System.IO.Path.Combine(Win.WinInput.Input.AppPath, "update.exe"));
+                        System.Diagnostics.Process.Start(System.IO.Path.Combine(InputMode.AppPath, "update.exe"));
 
                         Program.MIme.ExitSelect(null, null);
                     }
@@ -171,7 +171,7 @@ namespace Core.Comm
                         {
 
                             WebClient client = new WebClient();
-                            string filename = System.IO.Path.Combine(Win.WinInput.Input.AppPath, DateTime.Now.Ticks.ToString() + ".zip");
+                            string filename = System.IO.Path.Combine(InputMode.AppPath, DateTime.Now.Ticks.ToString() + ".zip");
                        
                             client.DownloadFile(du, filename);
                             Thread.Sleep(200);
@@ -179,7 +179,7 @@ namespace Core.Comm
                             if (File.Exists(filename))
                             {
                                 //下载完成解压
-                                updataok = ZipClass.UnZip(filename, System.IO.Path.Combine(Win.WinInput.Input.AppPath, "dict", InputMode.CDPath),"");
+                                updataok = ZipClass.UnZip(filename, System.IO.Path.Combine(InputMode.AppPath, "dict", InputMode.CDPath),"");
                                 Thread.Sleep(200);
                                 File.Delete(filename);//解压完成，删除下载的文件
                                 updataok = true;
