@@ -240,13 +240,13 @@ namespace Core.Win
                             var data = ApiClient.GetProDict(Win.WinInput.ApiUrl, d.Dictid);//获取下载地址
                             if (data.DictList.Count == 0) continue;
                             WebClient client = new WebClient();
-                            string filename = System.IO.Path.Combine(Win.WinInput.Input.AppPath, DateTime.Now.Ticks.ToString() + ".zip");
+                            string filename = System.IO.Path.Combine(InputMode.AppPath, DateTime.Now.Ticks.ToString() + ".zip");
                             client.DownloadFile(data.DictList[0].UpdateUrl[0], filename);
                             Thread.Sleep(100);
                             if (File.Exists(filename))
                             {
                                 //下载完成解压
-                                ZipClass.UnZip(filename, System.IO.Path.Combine(Win.WinInput.Input.AppPath, "prodict"), string.Empty);
+                                ZipClass.UnZip(filename, System.IO.Path.Combine(InputMode.AppPath, "prodict"), string.Empty);
                                 d.UpdateFalg = 0;
                                 d.DictVersion = data.DictList[0].DictVersion;
                                 Thread.Sleep(200);

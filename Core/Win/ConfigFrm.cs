@@ -1,8 +1,10 @@
 ﻿using Core.Base;
+using Core.Comm;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,7 +55,19 @@ namespace Core.Win
             InputMode.zsmode1 = ((int)this.nuzsmode2.Value);
             InputMode.outtype = this.cmouttype.SelectedIndex;
             InputMode.datacf = this.chedatacf.Checked;
+            InputMode.imghh = this.chimghh.Checked ;
+            InputMode.oneoutbj = this.choneoutbj.Checked;
+            InputMode.ftfzxs = this.chftfzxs.Checked;
+            InputMode.dcxz = this.chkdcxz.Checked;
+            InputMode.iselect = this.chkiselect.Checked;
+            InputMode.onesp = this.chkonesp.Checked;
+            InputMode.select3 = this.chkselect3.Checked;
+            InputMode.spaceaout = this.cmspace.SelectedIndex;
+            InputMode.autodata = this.chkautodata.Checked;
+            InputMode.useregular = this.cheuseregular.Checked;
             winput.SaveSetting();
+            if (InputMode.useregular && File.Exists(System.IO.Path.Combine(InputMode.AppPath, "dict", InputMode.CDPath, "setting.yaml")))
+                WinInput.settingYaml = new YAMLHelp(System.IO.Path.Combine(InputMode.AppPath, "dict", InputMode.CDPath, "setting.yaml"));
             Comm.Function.RunWhenStart(InputMode.AutoRun);
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -62,6 +76,7 @@ namespace Core.Win
         private void ConfigFrm_Load(object sender, EventArgs e)
         {
             this.cmouttype.SelectedIndex = 0;
+            this.cmspace.SelectedIndex = 0;
             this.ckOpenCould.Checked = InputMode.OpenCould;
             this.ckAutoUpdate.Checked = InputMode.AutoUpdate;
             this.chkAutoRun.Checked = InputMode.AutoRun;
@@ -91,9 +106,22 @@ namespace Core.Win
             this.chkzsallmap.Checked = InputMode.zsallmap;
             this.nuzsmode2.Value = InputMode.zsmode1;
             this.cmouttype.SelectedIndex = InputMode.outtype;
+            this.cmspace.SelectedIndex = InputMode.spaceaout;
             this.groupBox2.BackColor = InputMode.SkinBack;
             this.comboBox1.SelectedIndex = InputMode.SkinIndex;
             this.chedatacf.Checked = InputMode.datacf;
+            this.chimghh.Checked = InputMode.imghh;
+            this.choneoutbj.Checked = InputMode.oneoutbj;
+            this.chftfzxs.Checked = InputMode.ftfzxs;
+
+            this.chkdcxz.Checked = InputMode.dcxz;
+            this.chkiselect.Checked = InputMode.iselect;
+            this.chkonesp.Checked = InputMode.onesp;
+            this.chkselect3.Checked = InputMode.select3;
+
+            this.chkautodata.Checked = InputMode.autodata;
+
+            this.cheuseregular.Checked = InputMode.useregular;
         }
  
         private void numSkinHeight_ValueChanged(object sender, EventArgs e)
@@ -276,6 +304,25 @@ namespace Core.Win
                 this.btnSkinbcstring.ForeColor = InputMode.Skinbcstring;
                 this.btnSkinfbcstring.ForeColor = InputMode.Skinfbcstring;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            LXFrm lxfrm = new LXFrm();
+            lxfrm.Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("清除后将重新统计,确定清除吗?？", "清除", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                WinInput.Input.mapkeys.ForEach(f =>
+                {
+                    f.keydown = 0;
+                });
+            }
+             
         }
     }
 }

@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigFrm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chimghh = new System.Windows.Forms.CheckBox();
+            this.mousetracchk = new System.Windows.Forms.CheckBox();
             this.chedatacf = new System.Windows.Forms.CheckBox();
             this.cmouttype = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -77,7 +79,18 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtlra = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.mousetracchk = new System.Windows.Forms.CheckBox();
+            this.choneoutbj = new System.Windows.Forms.CheckBox();
+            this.chftfzxs = new System.Windows.Forms.CheckBox();
+            this.chkdcxz = new System.Windows.Forms.CheckBox();
+            this.chkiselect = new System.Windows.Forms.CheckBox();
+            this.chkonesp = new System.Windows.Forms.CheckBox();
+            this.chkselect3 = new System.Windows.Forms.CheckBox();
+            this.cmspace = new System.Windows.Forms.ComboBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.chkautodata = new System.Windows.Forms.CheckBox();
+            this.cheuseregular = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nuzsmode2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.selectnum)).BeginInit();
@@ -87,6 +100,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chimghh);
             this.groupBox1.Controls.Add(this.mousetracchk);
             this.groupBox1.Controls.Add(this.chedatacf);
             this.groupBox1.Controls.Add(this.cmouttype);
@@ -118,6 +132,30 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "基本设置";
             // 
+            // chimghh
+            // 
+            this.chimghh.AutoSize = true;
+            this.chimghh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chimghh.Location = new System.Drawing.Point(542, 85);
+            this.chimghh.Margin = new System.Windows.Forms.Padding(4);
+            this.chimghh.Name = "chimghh";
+            this.chimghh.Size = new System.Drawing.Size(87, 20);
+            this.chimghh.TabIndex = 36;
+            this.chimghh.Text = "图片换行";
+            this.chimghh.UseVisualStyleBackColor = true;
+            // 
+            // mousetracchk
+            // 
+            this.mousetracchk.AutoSize = true;
+            this.mousetracchk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.mousetracchk.Location = new System.Drawing.Point(244, 56);
+            this.mousetracchk.Margin = new System.Windows.Forms.Padding(4);
+            this.mousetracchk.Name = "mousetracchk";
+            this.mousetracchk.Size = new System.Drawing.Size(87, 20);
+            this.mousetracchk.TabIndex = 35;
+            this.mousetracchk.Text = "鼠标跟随";
+            this.mousetracchk.UseVisualStyleBackColor = true;
+            // 
             // chedatacf
             // 
             this.chedatacf.AutoSize = true;
@@ -138,16 +176,16 @@
             "默认",
             "剪贴板",
             "嵌入式"});
-            this.cmouttype.Location = new System.Drawing.Point(440, 84);
+            this.cmouttype.Location = new System.Drawing.Point(436, 84);
             this.cmouttype.Name = "cmouttype";
-            this.cmouttype.Size = new System.Drawing.Size(121, 24);
+            this.cmouttype.Size = new System.Drawing.Size(90, 24);
             this.cmouttype.TabIndex = 33;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label10.Location = new System.Drawing.Point(355, 88);
+            this.label10.Location = new System.Drawing.Point(348, 88);
             this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(77, 14);
@@ -359,7 +397,7 @@
             // 
             this.ckOpenCould.AutoSize = true;
             this.ckOpenCould.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ckOpenCould.Location = new System.Drawing.Point(528, 256);
+            this.ckOpenCould.Location = new System.Drawing.Point(7, 386);
             this.ckOpenCould.Margin = new System.Windows.Forms.Padding(4);
             this.ckOpenCould.Name = "ckOpenCould";
             this.ckOpenCould.Size = new System.Drawing.Size(93, 18);
@@ -526,7 +564,7 @@
             // 
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnSave.Location = new System.Drawing.Point(135, 414);
+            this.btnSave.Location = new System.Drawing.Point(139, 469);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(88, 34);
@@ -539,7 +577,7 @@
             // 
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnClose.Location = new System.Drawing.Point(251, 414);
+            this.btnClose.Location = new System.Drawing.Point(256, 469);
             this.btnClose.Margin = new System.Windows.Forms.Padding(4);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(88, 34);
@@ -686,23 +724,171 @@
             this.label8.TabIndex = 15;
             this.label8.Text = "左右同按输出：";
             // 
-            // mousetracchk
+            // choneoutbj
             // 
-            this.mousetracchk.AutoSize = true;
-            this.mousetracchk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.mousetracchk.Location = new System.Drawing.Point(244, 56);
-            this.mousetracchk.Margin = new System.Windows.Forms.Padding(4);
-            this.mousetracchk.Name = "mousetracchk";
-            this.mousetracchk.Size = new System.Drawing.Size(87, 20);
-            this.mousetracchk.TabIndex = 35;
-            this.mousetracchk.Text = "鼠标跟随";
-            this.mousetracchk.UseVisualStyleBackColor = true;
+            this.choneoutbj.AutoSize = true;
+            this.choneoutbj.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.choneoutbj.Location = new System.Drawing.Point(522, 243);
+            this.choneoutbj.Margin = new System.Windows.Forms.Padding(4);
+            this.choneoutbj.Name = "choneoutbj";
+            this.choneoutbj.Size = new System.Drawing.Size(107, 18);
+            this.choneoutbj.TabIndex = 19;
+            this.choneoutbj.Text = "一键输出标点";
+            this.choneoutbj.UseVisualStyleBackColor = true;
+            // 
+            // chftfzxs
+            // 
+            this.chftfzxs.AutoSize = true;
+            this.chftfzxs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chftfzxs.Location = new System.Drawing.Point(522, 270);
+            this.chftfzxs.Margin = new System.Windows.Forms.Padding(4);
+            this.chftfzxs.Name = "chftfzxs";
+            this.chftfzxs.Size = new System.Drawing.Size(107, 18);
+            this.chftfzxs.TabIndex = 20;
+            this.chftfzxs.Text = "繁体辅助显示";
+            this.chftfzxs.UseVisualStyleBackColor = true;
+            // 
+            // chkdcxz
+            // 
+            this.chkdcxz.AutoSize = true;
+            this.chkdcxz.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkdcxz.Location = new System.Drawing.Point(522, 296);
+            this.chkdcxz.Margin = new System.Windows.Forms.Padding(4);
+            this.chkdcxz.Name = "chkdcxz";
+            this.chkdcxz.Size = new System.Drawing.Size(79, 18);
+            this.chkdcxz.TabIndex = 21;
+            this.chkdcxz.Text = "打词消字";
+            this.chkdcxz.UseVisualStyleBackColor = true;
+            // 
+            // chkiselect
+            // 
+            this.chkiselect.AutoSize = true;
+            this.chkiselect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkiselect.Location = new System.Drawing.Point(522, 322);
+            this.chkiselect.Margin = new System.Windows.Forms.Padding(4);
+            this.chkiselect.Name = "chkiselect";
+            this.chkiselect.Size = new System.Drawing.Size(100, 18);
+            this.chkiselect.TabIndex = 22;
+            this.chkiselect.Text = "数字+i 选重";
+            this.chkiselect.UseVisualStyleBackColor = true;
+            // 
+            // chkonesp
+            // 
+            this.chkonesp.AutoSize = true;
+            this.chkonesp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkonesp.Location = new System.Drawing.Point(522, 346);
+            this.chkonesp.Margin = new System.Windows.Forms.Padding(4);
+            this.chkonesp.Name = "chkonesp";
+            this.chkonesp.Size = new System.Drawing.Size(79, 18);
+            this.chkonesp.TabIndex = 23;
+            this.chkonesp.Text = "一码上屏";
+            this.chkonesp.UseVisualStyleBackColor = true;
+            // 
+            // chkselect3
+            // 
+            this.chkselect3.AutoSize = true;
+            this.chkselect3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkselect3.Location = new System.Drawing.Point(436, 370);
+            this.chkselect3.Margin = new System.Windows.Forms.Padding(4);
+            this.chkselect3.Name = "chkselect3";
+            this.chkselect3.Size = new System.Drawing.Size(198, 18);
+            this.chkselect3.TabIndex = 24;
+            this.chkselect3.Text = "空格+第3码 左右选字词上屏";
+            this.chkselect3.UseVisualStyleBackColor = true;
+            // 
+            // cmspace
+            // 
+            this.cmspace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmspace.FormattingEnabled = true;
+            this.cmspace.Items.AddRange(new object[] {
+            "0-上屏首选",
+            "1-1个重码时次选",
+            "2-强制次选",
+            "3-，。、标点顶"});
+            this.cmspace.Location = new System.Drawing.Point(498, 395);
+            this.cmspace.Name = "cmspace";
+            this.cmspace.Size = new System.Drawing.Size(132, 22);
+            this.cmspace.TabIndex = 35;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label12.Location = new System.Drawing.Point(414, 398);
+            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(77, 14);
+            this.label12.TabIndex = 34;
+            this.label12.Text = "空格模式：";
+            // 
+            // chkautodata
+            // 
+            this.chkautodata.AutoSize = true;
+            this.chkautodata.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkautodata.Location = new System.Drawing.Point(130, 430);
+            this.chkautodata.Margin = new System.Windows.Forms.Padding(4);
+            this.chkautodata.Name = "chkautodata";
+            this.chkautodata.Size = new System.Drawing.Size(135, 18);
+            this.chkautodata.TabIndex = 36;
+            this.chkautodata.Text = "自动保存统计数据";
+            this.chkautodata.UseVisualStyleBackColor = true;
+            // 
+            // cheuseregular
+            // 
+            this.cheuseregular.AutoSize = true;
+            this.cheuseregular.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cheuseregular.Location = new System.Drawing.Point(371, 430);
+            this.cheuseregular.Margin = new System.Windows.Forms.Padding(4);
+            this.cheuseregular.Name = "cheuseregular";
+            this.cheuseregular.Size = new System.Drawing.Size(170, 18);
+            this.cheuseregular.TabIndex = 37;
+            this.cheuseregular.Text = "使用正则处理指法/显示";
+            this.cheuseregular.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button1.Location = new System.Drawing.Point(394, 469);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(88, 34);
+            this.button1.TabIndex = 38;
+            this.button1.Text = "并击测速";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Font = new System.Drawing.Font("宋体", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button2.ForeColor = System.Drawing.Color.Red;
+            this.button2.Location = new System.Drawing.Point(498, 469);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(124, 34);
+            this.button2.TabIndex = 39;
+            this.button2.Text = "清除统计数据";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // ConfigFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(644, 454);
+            this.ClientSize = new System.Drawing.Size(644, 520);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.cheuseregular);
+            this.Controls.Add(this.chkautodata);
+            this.Controls.Add(this.cmspace);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.chkselect3);
+            this.Controls.Add(this.chkonesp);
+            this.Controls.Add(this.chkiselect);
+            this.Controls.Add(this.chkdcxz);
+            this.Controls.Add(this.chftfzxs);
+            this.Controls.Add(this.choneoutbj);
             this.Controls.Add(this.txtlras);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.txtlra);
@@ -795,5 +981,18 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.CheckBox chedatacf;
         private System.Windows.Forms.CheckBox mousetracchk;
+        private System.Windows.Forms.CheckBox chimghh;
+        private System.Windows.Forms.CheckBox choneoutbj;
+        private System.Windows.Forms.CheckBox chftfzxs;
+        private System.Windows.Forms.CheckBox chkdcxz;
+        private System.Windows.Forms.CheckBox chkiselect;
+        private System.Windows.Forms.CheckBox chkonesp;
+        private System.Windows.Forms.CheckBox chkselect3;
+        private System.Windows.Forms.ComboBox cmspace;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.CheckBox chkautodata;
+        private System.Windows.Forms.CheckBox cheuseregular;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
