@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -49,7 +50,31 @@ namespace Core.Base
 
         [DllImport("user32")]
         public static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
+        /// <summary>
+        /// 获取字符串长度，一个汉字长度为2
+        /// </summary>
+        /// <param name="inputString">参数字符串</param>
+        /// <returns></returns>
+        public static int StrLength(string inputString)
+        {
+            bool en = false;
+            char[] c = inputString.ToCharArray();
+            for (int i = 0; i < inputString.Length; i++)
+            {
+                if ((int)c[i] <= 127)
+                {
+                    en = true;
+                    break;
+                }
 
+
+            }
+
+            if (en)
+                return inputString.Length;
+            else
+                return System.Text.Encoding.Default.GetBytes(inputString).Length / 2;
+        }
         /// <summary>
         /// 发送字符串
         /// </summary>
@@ -133,6 +158,24 @@ namespace Core.Base
                             }
                             else if (",<>./?\\|;:'-_=+[]\"`~}{".IndexOf(message.Substring(i, 1)) >= 0)
                             {
+                                if (!Win.WinInput.Input.IsPressShift &&
+                                    (message.Substring(i, 1) == ">"
+                                    || message.Substring(i, 1) == "<"
+                                    || message.Substring(i, 1) == ":"
+                                    || message.Substring(i, 1) == "_"
+                                    || message.Substring(i, 1) == "+"
+                                    || message.Substring(i, 1) == "?"
+                                    || message.Substring(i, 1) == "{"
+                                    || message.Substring(i, 1) == "}"
+                                    || message.Substring(i, 1) == "|"
+                                    || message.Substring(i, 1) == "~"
+                                    ))
+                                {
+                                    keybd_event((byte)Keys.LShiftKey, 0, 0, 0);
+
+                                }
+
+
                                 if (message.Substring(i, 1) == "." || message.Substring(i, 1) == ">") keybd_event(190, 0, 0, 0);
                                 else if (message.Substring(i, 1) == "," || message.Substring(i, 1) == "<") keybd_event(0xBC, 0, 0, 0);
                                 else if (message.Substring(i, 1) == ";" || message.Substring(i, 1) == ":") keybd_event(186, 0, 0, 0);
@@ -158,6 +201,21 @@ namespace Core.Base
                                 else if (message.Substring(i, 1) == "\\" || message.Substring(i, 1) == "|") keybd_event((byte)Keys.Oem5, 0, 0x2, 0);
                                 else if (message.Substring(i, 1) == "`" || message.Substring(i, 1) == "~") keybd_event((byte)Keys.Oemtilde, 0, 0x2, 0);
 
+                                if (!Win.WinInput.Input.IsPressShift &&
+                                     (message.Substring(i, 1) == ">"
+                                            || message.Substring(i, 1) == "<"
+                                            || message.Substring(i, 1) == ":"
+                                            || message.Substring(i, 1) == "_"
+                                            || message.Substring(i, 1) == "+"
+                                            || message.Substring(i, 1) == "?"
+                                            || message.Substring(i, 1) == "{"
+                                            || message.Substring(i, 1) == "}"
+                                            || message.Substring(i, 1) == "|"
+                                            || message.Substring(i, 1) == "~"
+                                     ))
+                                {
+                                    keybd_event((byte)Keys.LShiftKey, 0, 0x2, 0);
+                                }
                             }
                             else
                                 SendKeys.Send(message.Substring(i, 1));
@@ -223,27 +281,48 @@ namespace Core.Base
                         {
                             if (InputMode.imgsend)
                             {
+
                                 ImageInput.imgstr += message;
 
                                 if (message == " ")
                                 {
-                                    //图片输出
-                                    var img = TextToBitmap(ImageInput.imgstr, new Font(InputMode.SkinFontName, InputMode.SkinFontSize < 16 ? 16 : InputMode.SkinFontSize)
-                                        , Color.White, GetColor());
+                                    if (InputMode.zjsend)
+                                    {
+                                        SendKeys.Send(ImageInput.imgstr.Trim());
+                                    }
+                                    else
+                                    {
+                                        var img = MTextToBitmap(ImageInput.imgstr, new Font(InputMode.SkinFontName, InputMode.SkinFontSize < 16 ? 16 : InputMode.SkinFontSize)
+                                    , Color.White, GetColor());
 
-                                    Clipboard.SetImage(img);
-                                    //发送ctrl+v 进行粘贴
-                                    keybd_event((byte)Keys.ControlKey, 0, 0, 0);//按下
-                                    keybd_event((byte)Keys.V, 0, 0, 0);
-                                    keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
-                                    keybd_event((byte)Keys.V, 0, 0x2, 0);
+                                        Clipboard.SetImage(img);
+
+                                        //发送ctrl+v 进行粘贴
+                                        keybd_event((byte)Keys.ControlKey, 0, 0, 0);//按下
+                                        keybd_event((byte)Keys.V, 0, 0, 0);
+                                        keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
+                                        keybd_event((byte)Keys.V, 0, 0x2, 0);
+                                    }
+
 
                                     ImageInput.imgstr = String.Empty;
                                 }
+
                             }
                             else
                             {
-                                SendKeys.Send(message);
+                                if (message == " ")
+                                {
+                                    //发送空格
+                                    keybd_event((byte)Keys.Space, 0, 0, 0);//按下
+         
+                                    keybd_event((byte)Keys.Space, 0, 0x2, 0);//松开
+                         
+                                }
+                                else
+                                {
+                                    SendKeys.Send(message);
+                                }
                             }
                         }
 
@@ -254,47 +333,108 @@ namespace Core.Base
             }
             if (Input.OutType == 0)
             {
+                if (message.Trim().Length == 1)
+                    Win.WinInput.inputdznum++;
+                else if (message.Trim().Length > 1)
+                {
+                    Win.WinInput.inputcznum++;
+                    Win.WinInput.inputczsnum += message.Trim().Length;
+                }
+
                 if (InputMode.imgsend)
                 {
                     ImageInput.imgstr += message;
+
                     if (message == " ")
                     {
                         //图片输出
-                        var img = TextToBitmap(ImageInput.imgstr, new Font(InputMode.SkinFontName, InputMode.SkinFontSize < 16 ? 16 : InputMode.SkinFontSize)
-                    , Color.White, GetColor());
+                        if (InputMode.zjsend)
+                        {
+                            if (InputMode.outtype == 0)
+                            {
+                                SendKeys.Send(ImageInput.imgstr.Trim());
+                            }
+                            else if (InputMode.outtype == 1)
+                            {
+                                try
+                                {
+                                    Input.SelfOut = true;
+                                    Clipboard.SetText(ImageInput.imgstr.Trim());
+                                    //发送ctrl+v 进行粘贴
+                                    keybd_event((byte)Keys.ControlKey, 0, 0, 0);//按下
+                                    keybd_event((byte)Keys.V, 0, 0, 0);
+                                    keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
+                                    keybd_event((byte)Keys.V, 0, 0x2, 0);
 
-                        Clipboard.SetImage(img);
-                        //发送ctrl+v 进行粘贴
-                        keybd_event((byte)Keys.ControlKey, 0, 0, 0);//按下
-                        keybd_event((byte)Keys.V, 0, 0, 0);
-                        keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
-                        keybd_event((byte)Keys.V, 0, 0x2, 0);
+                                }
+                                catch { }
+                                finally { Input.SelfOut = false; }
+                            }
+                            else
+                            {
+                                try
+                                {
+
+                                    Input.SelfOut = true;
+                                    SendKeys.Send(ImageInput.imgstr.Trim());
+
+                                }
+                                catch { }
+                                finally { Input.SelfOut = false; }
+
+                            }
+                           
+                        }
+                        else
+                        {
+                            var img = MTextToBitmap(ImageInput.imgstr, new Font(InputMode.SkinFontName, InputMode.SkinFontSize < 16 ? 16 : InputMode.SkinFontSize)
+                        , Color.White, GetColor());
+
+                            Clipboard.SetImage(img);
+                            //发送ctrl+v 进行粘贴
+                            keybd_event((byte)Keys.ControlKey, 0, 0, 0);//按下
+                            keybd_event((byte)Keys.V, 0, 0, 0);
+                            keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
+                            keybd_event((byte)Keys.V, 0, 0x2, 0);
+                        }
+                      
 
                         ImageInput.imgstr = String.Empty;
                     }
+
                 }
                 else
                 {
-                    if (InputMode.outtype==0)
+                    if (InputMode.outtype == 0)
                     {
-                        INPUT[] input_down = new INPUT[message.Length];
-                        INPUT[] input_up = new INPUT[message.Length];
-                        for (int i = 0; i < message.Length; i++)
+                        if (message == " ")
                         {
-                            input_down[i].type = (int)InputType.INPUT_KEYBOARD;
-                            input_down[i].ki.dwFlags = (int)KEYEVENTF.UNICODE;
-                            input_down[i].ki.wScan = (ushort)message[i];
-                            input_down[i].ki.wVk = 0;
-                            input_up[i].type = input_down[i].type;
-                            input_up[i].ki.wScan = input_down[i].ki.wScan;
-                            input_up[i].ki.wVk = 0;
-                            input_up[i].ki.dwFlags = (int)(KEYEVENTF.KEYUP | KEYEVENTF.UNICODE);
-                        }
+                            //发送空格
+                            keybd_event((byte)Keys.Space, 0, 0, 0);//按下
 
-                        for (int i = 0; i < input_down.Length; i++)
+                            keybd_event((byte)Keys.Space, 0, 0x2, 0);//松开
+                        }
+                        else
                         {
-                            SendInput(1, ref input_down[i], Marshal.SizeOf(input_down[i]));//keydown 
-                            SendInput(1, ref input_up[i], Marshal.SizeOf(input_up[i]));//keyup    
+                            INPUT[] input_down = new INPUT[message.Length];
+                            INPUT[] input_up = new INPUT[message.Length];
+                            for (int i = 0; i < message.Length; i++)
+                            {
+                                input_down[i].type = (int)InputType.INPUT_KEYBOARD;
+                                input_down[i].ki.dwFlags = (int)KEYEVENTF.UNICODE;
+                                input_down[i].ki.wScan = (ushort)message[i];
+                                input_down[i].ki.wVk = 0;
+                                input_up[i].type = input_down[i].type;
+                                input_up[i].ki.wScan = input_down[i].ki.wScan;
+                                input_up[i].ki.wVk = 0;
+                                input_up[i].ki.dwFlags = (int)(KEYEVENTF.KEYUP | KEYEVENTF.UNICODE);
+                            }
+
+                            for (int i = 0; i < input_down.Length; i++)
+                            {
+                                SendInput(1, ref input_down[i], Marshal.SizeOf(input_down[i]));//keydown 
+                                SendInput(1, ref input_up[i], Marshal.SizeOf(input_up[i]));//keyup    
+                            }
                         }
                     }
                     else if (InputMode.outtype == 1)
@@ -308,7 +448,7 @@ namespace Core.Base
                             keybd_event((byte)Keys.V, 0, 0, 0);
                             keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
                             keybd_event((byte)Keys.V, 0, 0x2, 0);
-    
+
                         }
                         catch { }
                         finally { Input.SelfOut = false; }
@@ -317,34 +457,18 @@ namespace Core.Base
                     {
                         try
                         {
-                            
+
                             Input.SelfOut = true;
                             SendKeys.Send(message);
 
                         }
                         catch { }
                         finally { Input.SelfOut = false; }
-                       
+
                     }
                 }
             }
-            //else if (Input.OutType == 1)
-            //{
-            //    try
-            //    {
-            //        Clipboard.SetText(message);
-            //        Input.SelfOut = true;
-            //        //发送ctrl+v 进行粘贴
-            //        keybd_event((byte)Keys.ControlKey, 0, 0, 0);//按下
-            //        keybd_event((byte)Keys.V, 0, 0, 0);
-            //        keybd_event((byte)Keys.ControlKey, 0, 0x2, 0);//松开
-            //        keybd_event((byte)Keys.V, 0, 0x2, 0);
-            //        System.Threading.Thread.Sleep(30);
-
-            //    }
-            //    catch { }
-            //    finally { Input.SelfOut = false; }
-            //}
+ 
             
             LastSPValue = message;
             LastLinkString += message;
@@ -425,21 +549,21 @@ namespace Core.Base
         }
         /// <summary>
         /// 上屏
-        /// </summary>
+        /// </summary>像
         /// <param name="pos"></param>
-        public void ShangPing(int pos,int index=0,bool clear=true)
+        public void ShangPing(int pos, int index = 0, bool clear = true,string end="")
         {
             pinyipos = 0;
- 
+
             int tpos = pos != 0 ? pos - 1 : pos;
-            if (InputStatusFrm.cachearry==null ||
+            if (InputStatusFrm.cachearry == null ||
                 (InputStatusFrm.cachearry.Length > 0 && string.IsNullOrEmpty(InputStatusFrm.cachearry[0])))
             {
                 Clear();
                 return;
             }
 
-            if(InputStatusFrm.Dream && tpos > 0  && !string.IsNullOrEmpty(InputStatusFrm.cachearry[tpos]) && InputStatusFrm.cachearry[tpos].Split('|')[1].StartsWith("#"))
+            if (InputStatusFrm.Dream && tpos > 0 && !string.IsNullOrEmpty(InputStatusFrm.cachearry[tpos]) && InputStatusFrm.cachearry[tpos].Split('|')[1].StartsWith("#"))
             {
                 SendText(InputStatusFrm.cachearry[tpos].Split('|')[1].Substring(4), input);
                 LSView = false;
@@ -457,7 +581,7 @@ namespace Core.Base
                         if (LSView)
                         {
                             if (!InputMode.imgsend)
-                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
+                                for (int j = 0; j < StrLength(InputStatusFrm.cachearry[0].Split('|')[1]); j++)
                                     InputStatusFrm.SendText("{BACKSPACE}", "", true);
                             else
                             {
@@ -473,7 +597,7 @@ namespace Core.Base
 
                             }
                         }
-                        SendText(InputStatusFrm.cachearry[i - 1].Split('|')[1].Substring(index), input);
+                        SendText(InputStatusFrm.cachearry[i - 1].Split('|')[1].Substring(index) + end, input);
                         break;
                     }
                     else if (i == PageSize - 1)
@@ -481,8 +605,8 @@ namespace Core.Base
                         if (LSView)
                         {
                             if (!InputMode.imgsend)
-                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
-                                InputStatusFrm.SendText("{BACKSPACE}", "", true);
+                                for (int j = 0; j < StrLength(InputStatusFrm.cachearry[0].Split('|')[1]); j++)
+                                    InputStatusFrm.SendText("{BACKSPACE}", "", true);
                             else
                             {
 
@@ -497,7 +621,7 @@ namespace Core.Base
 
                             }
                         }
-                        SendText(InputStatusFrm.cachearry[i].Split('|')[1].Substring(index), input);
+                        SendText(InputStatusFrm.cachearry[i].Split('|')[1].Substring(index) + end, input);
                         break;
                     }
                 }
@@ -508,8 +632,8 @@ namespace Core.Base
                         if (LSView)
                         {
                             if (!InputMode.imgsend)
-                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
-                                InputStatusFrm.SendText("{BACKSPACE}", "",true);
+                                for (int j = 0; j < StrLength(InputStatusFrm.cachearry[0].Split('|')[1]); j++)
+                                    InputStatusFrm.SendText("{BACKSPACE}", "", true);
                             else
                             {
 
@@ -524,7 +648,7 @@ namespace Core.Base
 
                             }
                         }
-                        SendText(InputStatusFrm.cachearry[PageSize - 1 - i].Split('|')[1].Substring(index), input);
+                        SendText(InputStatusFrm.cachearry[PageSize - 1 - i].Split('|')[1].Substring(index) + end, input);
                         break;
                     }
                 }
@@ -535,8 +659,18 @@ namespace Core.Base
                         if (LSView)
                         {
                             if (!InputMode.imgsend)
-                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
-                                InputStatusFrm.SendText("{BACKSPACE}","", true);
+                            {
+                                if (InputMode.select3)
+                                {
+                                    for (int j = 0; j < StrLength(InputStatusFrm.LastSPValue); j++)
+                                        InputStatusFrm.SendText("{BACKSPACE}", "", true);
+                                }
+                                else
+                                {
+                                    for (int j = 0; j < StrLength(InputStatusFrm.cachearry[0].Split('|')[1]); j++)
+                                        InputStatusFrm.SendText("{BACKSPACE}", "", true);
+                                }
+                            }
                             else
                             {
 
@@ -553,7 +687,7 @@ namespace Core.Base
                         }
                         if (InputStatusFrm.Dream)
                             index = 0;
-                        SendText(InputStatusFrm.cachearry[tpos].Split('|')[1].Substring(index), input);
+                        SendText(InputStatusFrm.cachearry[tpos].Split('|')[1].Substring(index)+end, input);
                         break;
                     }
                     else if (!string.IsNullOrEmpty(InputStatusFrm.cachearry[PageSize - 1 - i]))
@@ -561,8 +695,8 @@ namespace Core.Base
                         if (LSView)
                         {
                             if (!InputMode.imgsend)
-                                for (int j = 0; j < InputStatusFrm.cachearry[0].Split('|')[1].Length; j++)
-                                InputStatusFrm.SendText("{BACKSPACE}", "",true);
+                                for (int j = 0; j < StrLength(InputStatusFrm.cachearry[0].Split('|')[1]); j++)
+                                    InputStatusFrm.SendText("{BACKSPACE}", "", true);
                             else
                             {
 
@@ -577,11 +711,11 @@ namespace Core.Base
 
                             }
                         }
-                        SendText(InputStatusFrm.cachearry[PageSize - 1 - i].Split('|')[1].Substring(index), input);
+                        SendText(InputStatusFrm.cachearry[PageSize - 1 - i].Split('|')[1].Substring(index)+end, input);
                         break;
                     }
                 }
-                
+
             }
             if (clear)
             {
@@ -590,7 +724,7 @@ namespace Core.Base
                 input = string.Empty;
                 Clear();
             }
-            else 
+            else
                 LSView = true;
 
             if (index > 0)
@@ -604,7 +738,7 @@ namespace Core.Base
 
         public void Clear()
         {
-            inputstr = string.Empty;
+             inputstr = string.Empty;
             input = string.Empty;
             HideWindow();
         }
@@ -621,7 +755,7 @@ namespace Core.Base
             this.Text = string.Empty;
             this.TopLevel = true;
             this.TopMost = true;
-            this.Width = 170;
+            this.Width = 175;
             this.Height = 133;
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -659,7 +793,7 @@ namespace Core.Base
             if (!InputMode.imgsend || ImageInput.imgstr.Length==0)
             {
                 if (LastSPValue.Length > 0)
-                    for (int j = 0; j < LastSPValue.Length; j++)
+                    for (int j = 0; j < StrLength(LastSPValue); j++)
                         SendText("{BACKSPACE}", "", true);
                 else
                     SendText("{BACKSPACE}", "", true);
@@ -720,7 +854,7 @@ namespace Core.Base
             Win.WinInput.InputStatus.Left = this.Left;
             Win.WinInput.InputStatus.Top = this.Top;
             Win.WinInput.InputStatus.Left = this.Left;
-            Win.WinInput.ImageInput.Top = this.Top-this.Height;
+            Win.WinInput.ImageInput.Top = Win.WinInput.InputStatus.Top - this.Height;
             Win.WinInput.ImageInput.Left = this.Left;
             Input.ShowInput(f);
             if (!this.Visible && f)
@@ -770,11 +904,13 @@ namespace Core.Base
         public static string LastLinkCodeString = string.Empty;
         public static string LastLinkNum = string.Empty;
         public static bool LSView = false;
+        public static bool three_no2=false;
         /// <summary>
         /// 显示候选框的汉字
         /// smspace  
         /// </summary>
-        public void ShowInput(bool sp,bool clear=true,int ncount=0,bool smspace=false,bool alt=false)//可上屏
+        public void ShowInput(bool sp, bool clear = true, int ncount = 0, bool smspace = false, bool alt = false, int spp = 1, bool isright = false
+            , int selectpos = 0)//可上屏
         {
             if (LSView)
             {
@@ -783,7 +919,7 @@ namespace Core.Base
             this.HideByApi();
             Dream = false;
             PageNum = 1;
-            valuearry = Input.GetInputValue(this.inputstr);
+            valuearry = Input.GetInputValue(this.inputstr,false,0,isright);
             int count = 0;
             PreFirstValue = string.Empty;
             if (valuearry != null)
@@ -791,46 +927,158 @@ namespace Core.Base
                 cachearry = new string[PageSize];
                 for (int i = 0; i < PageSize && i < valuearry.Length; i++)
                 {
-                    count++;
+                    try
+                    {
+                        if (Input.IsChinese==1 && (spp==1 || spp==3) && InputMode.spaceaout == 3 && !string.IsNullOrEmpty(valuearry[i]))
+                        {
+                            if(this.inputstr.Length>2 && selectpos == 3)
+                            {
+                                Input.IsPresAltPos = 2;
+                                //selectpos = 2;
+                            }
+                            else if (this.inputstr.Length > 2 || (this.inputstr.Length <= 2 && valuearry[i].Split('|')[1].Length > 1 && valuearry.Length<5))
+                            {
+
+                                if (selectpos == 2)
+                                {
+                                    valuearry[i] = valuearry[i].Replace("|" + valuearry[i].Split('|')[1] + "|", "|" + valuearry[i].Split('|')[1] + "。|");
+                                    if (this.inputstr.Length > 2 || valuearry.Length == 1)
+                                    {
+                                        Input.IsPresAltPos = 0;
+                                        if (valuearry.Length == 1)
+                                            alt = false;
+                                        else if (this.inputstr.Length == 3)
+                                            sp = true;
+                                    }
+                                    else if (valuearry[i].Length >= selectpos && valuearry[selectpos - 1].Split('|')[1].Length > 1)
+                                    {
+                                        Input.IsPresAltPos = 0;
+                                    }
+                                    spp = 1;
+                                }
+                                else if (selectpos == 4)
+                                {
+                                    valuearry[i] = valuearry[i].Replace("|" + valuearry[i].Split('|')[1] + "|", "|" + valuearry[i].Split('|')[1] + "、|");
+                                    Input.IsPresAltPos = 0;
+                                    alt = false;
+                                    if (this.inputstr.Length == 3)
+                                        sp = true;
+                                }
+                                else if (smspace && !alt)
+                                {
+                                    valuearry[i] = valuearry[i].Replace("|" + valuearry[i].Split('|')[1] + "|", "|" + valuearry[i].Split('|')[1] + "，|");
+                                    Input.IsPresAltPos = 0;
+                                    spp = 1;
+                                }
+                            }
+                            else if (this.inputstr.Length <= 2 && valuearry[i].Split('|')[1].Length == 1)
+                            {
+                                if (selectpos == 4)
+                                {
+                                    Input.IsPresAltPos = 0; spp = 1;
+                                    if (valuearry[0].Split('|')[1].Length == 1)
+                                        sp = true;
+                                    valuearry[i] = valuearry[i].Replace("|" + valuearry[i].Split('|')[1] + "|", "|" + valuearry[i].Split('|')[1] + "，|");
+
+                                }
+                            }
+                        }
+                    }
+                    catch { }
                     cachearry[i] = valuearry[i];
+                    count++;
                 }
                 if (count == 1 && !alt)
                 {
                     //无重码直接上屏
-                    ShangPing(1);
-                }
-                else if (valuearry.Length == 2 && !alt && this.inputstr.Length > 2
-                    && !this.inputstr.StartsWith("'") && !InputMode.closebj)
-                {
-                    if (smspace)
+                    if (!InputMode.useregular)
                     {
-                        ShangPing(2, 0, false);
+                        ShangPing(1,0,true);
                     }
                     else
                     {
-                        ShangPing(1, 0, false);
-                        this.ShowWindow(true);
+                        if (cachearry[0].Split('|')[2].Length == 0)
+                        {
+
+                            ShangPing(1, 0, true);
+                        }
+                        else
+                            this.ShowWindow(true);
                     }
-                  
                 }
-           
                 else
                 {
-                    if (sp && count > 1) clear = false;
+                    if (sp && count > 1)
+                    {
+                        clear = false;
+                    }
                     if (sp)
-                        ShangPing(1, 0, clear);
+                    {
+                        if (smspace && InputMode.spaceaout > 0 && !InputMode.select3)
+                        {
+                            if (InputMode.spaceaout == 1 && valuearry.Length == 2)
+                                ShangPing(2, 0, false);
+                            else if (InputMode.spaceaout == 1 && valuearry.Length > 2)
+                                ShangPing(1, 0, false);
+                            else
+                                ShangPing(2, 0, false);
+                        }
+                        else
+                        {
+                            this.ShowWindow(true);
+                            if (three_no2 && this.inputstr.Length == 3 && isright)
+                            {
+                                if (cachearry[1].Split('|')[2].Length == 0)
+                                {
+                                    ShangPing(spp, 0, clear);
+                                }
+                                else
+                                    ShangPing(1, 0, clear);
+                            }
+                            else if (smspace && InputMode.spaceaout > 0 && valuearry.Length >= 2)
+                            {
+
+                                if (InputMode.spaceaout == 1 && valuearry.Length == 2)
+                                    ShangPing(2, 0, false);
+                                else if (InputMode.spaceaout == 2 && spp < 2)
+                                    ShangPing(2, 0, false);
+                                else if (InputMode.spaceaout == 3 && this.inputstr.Length == 3)
+                                    ShangPing(1, 0, false);
+                                else
+                                    ShangPing(spp, 0, clear);
+
+                            }
+                            else
+                                ShangPing(spp, 0, clear);
+                            //if(!clear)
+                            //    this.ShowWindow(true);
+                        }
+                    }
+                    else if (smspace && InputMode.spaceaout > 0)
+                    {
+                        if (InputMode.spaceaout == 1 && valuearry.Length == 2)
+                            ShangPing(2, 0, false);
+                        else if (InputMode.spaceaout == 2)
+                            ShangPing(2, 0, false);
+                        else if (InputMode.spaceaout == 3 && this.inputstr.Length >= 3)
+                            ShangPing(1, 0, false);
+                        else
+                            this.ShowWindow(true);
+                    }
                     else
+                    {
                         this.ShowWindow(true);
+                    }
                 }
             }
             else
             {
-                if (cachearry!=null && cachearry.Length > 0)
+                if (cachearry != null && cachearry.Length > 0)
                 {
                     if (!string.IsNullOrEmpty(cachearry[0])) PreFirstValue = cachearry[0].Split('|')[1];
                 }
                 if (cachearry == null) cachearry = new string[PageSize];
-                if (PreFirstValue.Length > 0 && this.inputstr != this.input &&  this.inputstr.Length>=2)
+                if (PreFirstValue.Length > 0 && this.inputstr != this.input && this.inputstr.Length >= 2)
                 {
                     //错码上屏
                     if (InputMode.closebj)
@@ -854,7 +1102,7 @@ namespace Core.Base
                             {
                                 SendText(oPreFirstValue, this.inputstr);
                                 this.inputstr = this.input;
-                        
+
                             }
                         }
                         else
@@ -873,7 +1121,7 @@ namespace Core.Base
                         else
                         {
                             SendText(PreFirstValue, this.inputstr);
-                            string outstr = Input.GetLROne(this.input, true);
+                            string outstr = Input.GetLROne(this.input + (smspace ? "~" : ""), !isright, Input.IsPresAltPos);
                             if (!string.IsNullOrEmpty(outstr))
                             {
                                 Clear();
@@ -884,29 +1132,29 @@ namespace Core.Base
                                 this.inputstr = this.input;
                             }
                         }
-                      
+
                     }
                     if (smspace)
                     {
                         if (this.inputstr.Length > 0)
                         {
-                            ShowInput(true);
+                            ShowInput(true,true,0, smspace,alt,spp,isright,selectpos);
                             Clear();
                         }
-                 
+
                     }
                     else
                     {
                         if (this.inputstr.Length > 0)
                         {
-                            if (this.inputstr.Length == 1 && InputMode.closebj 
-                                && ",./;，。、；，．／；＇‘’　".IndexOf(this.inputstr)>=0)
+                            if (this.inputstr.Length == 1 && InputMode.closebj
+                                && ",./;，。、；，．／；＇‘’　".IndexOf(this.inputstr) >= 0)
                             {
                                 SendText(this.inputstr.Replace(",", "，").Replace(".", "。").Replace("/", "、").Replace(";", "；"), "");
                                 this.Clear();
                             }
                             else
-                                ShowInput(false);
+                                ShowInput(false,true,0,false,alt,spp,isright,selectpos);
 
                         }
                     }
@@ -992,7 +1240,8 @@ namespace Core.Base
                 {
                     Dream = false;
                     LastLinkString = string.Empty;
-                    this.ShowWindow(false);
+                     
+                    //this.ShowWindow(false);
                 }
             }
             else
@@ -1135,6 +1384,7 @@ namespace Core.Base
         public int pinyipos = 0;
         string pys = "";
         string cfs = "";
+        public string s2t = "";
         /// <summary>
         /// 绘制候选框
         /// </summary>
@@ -1153,8 +1403,8 @@ namespace Core.Base
                     grafx.Graphics.FillRectangle(new SolidBrush(InputMode.SkinBack), new Rectangle(0, 0, Width, Height));
                 else
                     grafx.Graphics.FillRectangle(new SolidBrush(InputMode.SkinBack), new Rectangle(0, 0, Width, Height));
-
-                if (InputMode.pinyin || InputMode.datacf)
+ 
+                if (InputMode.pinyin || InputMode.datacf || InputMode.ftfzxs || !Input.IsJT)
                 {
                     if (valuearry != null && valuearry.Length <= pinyipos || PageSize <= pinyipos) pinyipos = 0;
 
@@ -1182,27 +1432,95 @@ namespace Core.Base
                         else cfs = String.Empty;
                     }
                     else cfs = String.Empty;
+
+                    if (!Input.IsJT || InputMode.ftfzxs)
+                    {
+                        if (valuearry != null && valuearry.Length > pinyipos
+                        && cachearry[pinyipos].Split('|').Length > 1)
+                        {
+                            string osz = cachearry[pinyipos].Split('|')[1];
+                            string sz = Input.IsJT ? cachearry[pinyipos].Split('|')[1]
+                                : Microsoft.VisualBasic.Strings.StrConv(cachearry[pinyipos].Split('|')[1], Microsoft.VisualBasic.VbStrConv.SimplifiedChinese, 0);
+                            if (sz.Length == 1)
+                            {
+                                if (Input.S2TDict.ContainsKey(sz))
+                                {
+                                    s2t = "";
+                                    sz = Input.S2TDict[sz].Replace(osz, "").Trim();
+                                    if (sz.Length > 0)
+                                    {
+                                        for (int i = 0; i < sz.Split(' ').Length; i++)
+                                        {
+                                            s2t += (i + 1) + "." + sz.Split(' ')[i] + " ";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        s2t = String.Empty;
+                                    }
+                                }
+                                else
+                                {
+                                    s2t = String.Empty;
+                                }
+                            }
+                            else if(Input.IsJT)
+                            {
+                                s2t = "";
+                                bool haveft = false;
+                                for (int i = 0; i < sz.Length; i++)
+                                {
+                                    if (Input.S2TDict.ContainsKey(sz.Substring(i, 1)))
+                                    {
+                                        string s2t1 = Input.S2TDict[sz.Substring(i, 1)].Split(' ')[0];
+                                        if(sz.Substring(i, 1)== s2t1 && Input.S2TDict[sz.Substring(i, 1)].Split(' ').Length > 1)
+                                        {
+                                            s2t1 = Input.S2TDict[sz.Substring(i, 1)].Split(' ')[1];
+                                        }
+                                        s2t += s2t1;
+                                        haveft = true;
+                                    }
+                                    else
+                                        s2t += sz.Substring(i, 1);
+                                }
+                                if (!haveft) s2t = String.Empty;
+                            }
+                            else s2t = String.Empty;
+                        }
+                        else {
+                            s2t = String.Empty;
+                        }
+                    }
+                    else { s2t = String.Empty; }
                 }
                 else
                 {
                     pys = String.Empty;
                     cfs = String.Empty;
+                    s2t = string.Empty;
                     pinyipos = 0;
                 }
 
-               Pen bordpen = new Pen(InputMode.Skinbordpen);
+                
+                Pen bordpen = new Pen(InputMode.Skinbordpen);
                 SolidBrush bstring = new SolidBrush(InputMode.Skinbstring);
                 SolidBrush bcstring = new SolidBrush(InputMode.Skinbcstring);
                 SolidBrush fbcstring = new SolidBrush(InputMode.Skinfbcstring);
                 Rectangle hzrec = new Rectangle(0, 0, Width - 1, Height  - 1);
                 grafx.Graphics.DrawRectangle(bordpen, hzrec);
                 int inputy = InputMode.SkinFontJG;
-                string ins = InputStatusFrm.Dream ? "智能联想" : this.inputstr + (pys.Length > 0 || cfs.Length>0 ? "  " + (pinyipos + 1) + "." + pys+" "+cfs : "");
+                string ins = "";
+                if (InputMode.useregular)
+                    ins = InputStatusFrm.Dream ? "智能联想" : InputMode.CovertCodeStrByReg(this.inputstr) + (s2t.Length > 0 ? " " + s2t : "") + (pys.Length > 0 || cfs.Length > 0 ? "  " + (pinyipos + 1) + "." + pys + " " + cfs : "");
+                else
+                    ins = InputStatusFrm.Dream ? "智能联想" : this.inputstr + (s2t.Length > 0 ? " " + s2t : "") + (pys.Length > 0 || cfs.Length > 0 ? "  " + (pinyipos + 1) + "." + pys + " " + cfs : "");
                 int fontsize = InputMode.SkinFontSize;
                 grafx.Graphics.DrawString(ins, new Font(InputMode.cffontname, fontsize > 18 ? 18 : fontsize), bstring, new Point(0 + 3, 0 + 3));
                
                 if (valuearry != null && valuearry.Length > 0 && !InputStatusFrm.Dream && valuearry.Length > PageSize) //分页数显示
                     grafx.Graphics.DrawString(string.Format("{0}/{1}", PageNum, valuearry.Length / PageSize + 1), new Font("", 11F), bstring, new Point(Width - 44, 0 + 3));
+
+               
                 if (ViewType == 0)
                 {
                     //横排显示
@@ -1210,37 +1528,42 @@ namespace Core.Base
                     int wx = 1;
                     for (int i = 0; i < cachearry.Length; i++)
                     {
-                        if (InputMode.lbinputc[i] == null) break;
-                        if (string.IsNullOrEmpty(cachearry[i])) break; ;
-                        string v = GetCutStr(cachearry[i].Split('|')[1]);
-
-                        string pos = i == 9 ? "0." : (i + 1).ToString() + ".";
-                      
-                       
-                        Font tfont = new Font(InputMode.SkinFontName, fontsize);
-                        if (i == 0)
-                            grafx.Graphics.DrawString(pos + v, tfont, fbcstring, new Point(wx, inputy));
-                        else
-                            grafx.Graphics.DrawString(pos + v, tfont, bstring, new Point(wx, inputy));
-
-                        if (InputMode.lbinputv == null || InputMode.lbinputv[i] == null) return;
-
-                        InputMode.lbinputv[i].Text = pos + v ;
-                     
-                        wx += InputMode.lbinputv[i].PreferredWidth - 10;
-
-                        grafx.Graphics.DrawString(cachearry[i].Split('|')[2], new Font("宋体", fontsize - 1), bcstring, new Point(wx, inputy));
-                        if (InputMode.lbinputc[i] == null || string.IsNullOrEmpty(InputMode.lbinputc[i].Text))
+                        try
                         {
-                            wx += 4;
+                            if (InputMode.lbinputc[i] == null) break;
+                            if (string.IsNullOrEmpty(cachearry[i])) break; ;
+                            string v = GetCutStr(cachearry[i].Split('|')[1]);
+
+                            string pos = i == 9 ? "0." : (i + 1).ToString() + ".";
+
+
+                            Font tfont = new Font(InputMode.SkinFontName, fontsize);
+
+                            if (i == 0)
+                                grafx.Graphics.DrawString(pos + v, tfont, fbcstring, new PointF(wx, inputy));
+                            else
+                                grafx.Graphics.DrawString(pos + v, tfont, bstring, new PointF(wx, inputy));
+
+                            if (InputMode.lbinputv == null || InputMode.lbinputv[i] == null) return;
+
+                            InputMode.lbinputv[i].Text = pos + v;
+
+                            wx += InputMode.lbinputv[i].PreferredWidth - 7;
+
+                            grafx.Graphics.DrawString(cachearry[i].Split('|')[2], new Font("", fontsize - 1), bcstring, new Point(wx, inputy - 2));
+
+                            if (InputMode.lbinputc[i] == null || string.IsNullOrEmpty(InputMode.lbinputc[i].Text))
+                            {
+                                wx += 1;
+                            }
+                            else
+                            {
+                                wx += InputMode.lbinputc[i].PreferredWidth + 2;
+                                if (InputMode.lbinputv[i].Text.Length > 3)
+                                    wx += -4;
+                            }
                         }
-                        else
-                        {
-                            wx += InputMode.lbinputc[i].PreferredWidth;
-                            if (InputMode.lbinputv[i].Text.Length > 3)
-                                wx += -4;
-                        }
-                        
+                        catch { }
                     }
               
                 }
@@ -1259,7 +1582,7 @@ namespace Core.Base
                             grafx.Graphics.DrawString(pos + v, tfont, fbcstring, new Point(3, inputy + i * InputMode.SkinFontH));
                         else
                             grafx.Graphics.DrawString(pos + v, tfont, bstring, new Point(3, inputy + i * InputMode.SkinFontH));
-
+ 
                         grafx.Graphics.DrawString(cachearry[i].Split('|')[2], new Font("宋体", InputMode.SkinFontSize - 1), bcstring, new Point(3 + vw, (inputy + i * InputMode.SkinFontH) - 1));
                     }
                 }
@@ -1312,6 +1635,44 @@ namespace Core.Base
             return bmp;
         }
 
+        /// <summary>
+        /// 图片输出 ,QQ,wx
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="font"></param>
+        /// <param name="fontcolor"></param>
+        /// <param name="backColor"></param>
+        /// <returns></returns>
+        public static Bitmap MTextToBitmap(string text, Font font, Color fontcolor, Color backColor)
+        {
+            if (!InputMode.imghh || text.Length < 5) return TextToBitmap(text, font, fontcolor, backColor);
+
+            Graphics g;
+            Bitmap bmp;
+            StringFormat format = new StringFormat(StringFormatFlags.NoClip);
+
+            bmp = new Bitmap(1, 1);
+            g = Graphics.FromImage(bmp);
+            //计算绘制文字所需的区域大小（根据宽度计算长度），重新创建矩形区域绘图
+            SizeF sizef = g.MeasureString("我我我我我我我我", font, PointF.Empty, format);
+
+            int mh = (int)sizef.Height * 2 + (int)(text.Length / 10 * sizef.Height * 1.5);
+
+            int width = (int)(sizef.Width + 7);
+            int height = mh + 7;
+            var rect = new Rectangle(0, 0, width, height);
+            bmp.Dispose();
+
+            bmp = new Bitmap(width, height);
+
+            g = Graphics.FromImage(bmp);
+
+            //使用ClearType字体功能
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            g.FillRectangle(new SolidBrush(backColor), rect);
+            g.DrawString("\n" + text, font, new SolidBrush(fontcolor), rect, format);
+            return bmp;
+        }
         public static short colorpos = 0;
         /// <summary>
         /// 随机获取颜色

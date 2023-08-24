@@ -18,9 +18,10 @@ namespace Core.Base
         public string[] UserDit = null;
         public string[] EnDit = null;
         public List<string> ClouddDit = new List<string>();
-        public string AppPath = string.Empty;
+        public static string AppPath = string.Empty;
         public Dictionary<string,string> PinYi = new Dictionary<string, string>();//拼音注音
         public Dictionary<string, string> CfDict = new Dictionary<string, string>();//拆分数据
+        public Dictionary<string, string> S2TDict = new Dictionary<string, string>();//繁体数据
         public string MasterDitPath = string.Empty;
         public string ProDitPath = string.Empty;
         public string UserDitPath = string.Empty;
@@ -89,7 +90,7 @@ namespace Core.Base
         /// <summary>
         /// 参与的编码
         /// </summary>
-        protected string mdcode = "qwertyuiopasdfghjkl;'zxcvbnm,./QWERTYUIOPASDFGHJKL:ZXCVBNM<>?!，。、；’‘，．／`~@*_";
+        public string mdcode = "qwertyuiopasdfghjkl;'zxcvbnm,./QWERTYUIOPASDFGHJKL:ZXCVBNM<>?!`~，。、；@*_#$%^&0123456789";
        
         public  bool isActiveInput = true;
         public  bool IsPressShift = false;
@@ -111,10 +112,13 @@ namespace Core.Base
         #region static
       
         public static string CDPath = string.Empty;//当前词库目录
+        public static string ZFPath = string.Empty;//当前指法目录
+        public static string PFPath = string.Empty;//当前皮肤
         public static bool OpenCould=true;//云词库
         public static bool AutoUpdate = true;//自动升级 
         public static bool OpenLink = true;//智能联想
-        public static bool AutoZJ = false;//自动造句
+        public static bool AutoZJ = false;//自动
+                                          //
         public static bool OpenAltSelect = false;//左alt选重
         public static bool AutoRun = true;//自动运行
         public static string SkinFontName = "宋体";//字体名
@@ -147,10 +151,22 @@ namespace Core.Base
         public static bool zsallmap = false;//速录助手完全使用指法映射配置map.shp
         public static int zsmode1 = 0;//速录助手按键输出间隔x毫秒
         public static bool imgsend = false;//以图片方式粘贴上屏
+        public static bool zjsend = false;//以整句方式粘贴上屏
         public static int outtype = 0;//0默认,1剪贴板模式，2嵌入模式
         public static int SkinIndex=0;
         public static bool datacf = false;//显示汉字拆分
         public static string cffontname = "宋体";
+        public static bool imghh = false;//图片换行
+        public static bool oneoutbj = true;//一键输出标点,./;
+        public static bool ftfzxs = false;//繁体辅助显示
+        public static bool dcxz = true;//打词消字功能
+        public static bool iselect = true;//数字+i选重
+        public static bool onesp = true;//一码上屏
+        public static bool select3 = false;//开启 空格＋第3码 右手选2，左手选3
+        public static int spaceaout = 0;//0 上屏首选，1当1个重码时上屏次选，2强制上屏次选 3强制，顶上首之词
+        public static bool outdatetime=true;
+        public static bool autodata = true;
+        public static bool useregular = false;
         public IndexManger DictIndex = new IndexManger ();
         #endregion
 
@@ -160,7 +176,7 @@ namespace Core.Base
         /// <param name="inputstr"></param>
         /// <param name="dream"></param>
         /// <returns></returns>
-        public virtual string[] GetInputValue(string inputstr, bool dream = false,int ncount=0)
+        public virtual string[] GetInputValue(string inputstr, bool dream = false,int ncount=0,bool isright=false)
         {
             string valuestr = "";
             if (IsChinese == 1)
@@ -171,14 +187,15 @@ namespace Core.Base
                 {
                     int count = 0;
                     int first = 0, last = MasterDit.Length - 1;
-                    int pcount = inputstr.Length > 2 ? 88 : 36;// 30;// SingleInput == true ? 50 : 70;
+                    int pcount = inputstr.Length > 2 ? 188 : 66;// 30;// SingleInput == true ? 50 : 70;
                     if (ncount > 0) pcount = ncount;
 
 
                     #region 取字
+                    string[] mdict = null;
                     if (indexComplete)
                     {
-                        PosIndex poi = DictIndex.GetPos(inputstr);
+                        PosIndex poi = DictIndex.GetPos(inputstr, ref mdict);
                         if (poi != null)
                         {
                             first = poi.Start;
@@ -190,38 +207,42 @@ namespace Core.Base
                         }
                     }
                     else last = 0;
+                    if (mdict == null)
+                        mdict = MasterDit;
 
                     for (int i = first; i <= last; i++)
                     {
-                        if (MasterDit[i].StartsWith(inputstr))
+                        if (mdict.Length > 0)
                         {
-                            string strarr = MasterDit[i];
-                            string fcode = strarr.Split(' ')[0];
-                            string fvalue = strarr.Substring(strarr.Split(' ')[0].Length).Trim();//获取汉字
-                            int startint = fcode.IndexOf(inputstr) + inputstr.Length;
-                            foreach (var hzvalue in fvalue.Split(' '))
+                            if (mdict[i].StartsWith(inputstr))
                             {
-                                if (string.IsNullOrEmpty(hzvalue)) continue;
-                                fvalue = hzvalue;
-                                if (SingleInput)
+                                string strarr = mdict[i];
+                                string fcode = strarr.Split(' ')[0];
+                                string fvalue = strarr.Substring(strarr.Split(' ')[0].Length).Trim();//获取汉字
+                                int startint = fcode.IndexOf(inputstr) + inputstr.Length;
+                                foreach (var hzvalue in fvalue.Split(' '))
                                 {
-                                    if (fvalue.Length > 1 && fcode.Length > 3)
+                                    if (string.IsNullOrEmpty(hzvalue)) continue;
+                                    fvalue = hzvalue;
+                                    if (SingleInput)
                                     {
-                                        //单字
-                                        continue;
+                                        if (fvalue.Length > 1 && fcode.Length > 3)
+                                        {
+                                            //单字
+                                            continue;
+                                        }
+                                    }
+                                    if (valuestr.IndexOf("|" + fvalue + "|") < 0)
+                                    {
+                                        //去重
+                                        valuestr += i + "z|" + fvalue + "|" + (startint < fcode.Length ? fcode.Substring(startint, fcode.Length - inputstr.Length) : "") + "\n";
+                                        count++;
                                     }
                                 }
-                                if (valuestr.IndexOf("|" + fvalue + "|") < 0)
-                                {
-                                    //去重
-                                    valuestr += i + "z|" + fvalue + "|" + (startint < fcode.Length ? fcode.Substring(startint, fcode.Length - inputstr.Length) : "") + "\n";
-                                    count++;
-                                }
+
+
                             }
-
-
                         }
-
                         if (count > pcount) break;
                     }
 
@@ -243,10 +264,10 @@ namespace Core.Base
                 #endregion
 
             }
-            else if(IsChinese == 2)
+            else if (IsChinese == 2)
             {
-                GetUserDict(inputstr, ref valuestr);
-
+                if (!bjzckgsp)
+                    GetUserDict(inputstr, ref valuestr);
             }
             else
             {
@@ -255,6 +276,14 @@ namespace Core.Base
 
             if (valuestr.Length > 0)
             {
+                if (inputstr.Length == 1 && IsChinese == 1 && inputstr!="'")
+                {
+                    string onestr = GetLROne(inputstr, !isright);
+                    if (!string.IsNullOrEmpty(onestr) && valuestr.Split(new string[1] { "\n" }, StringSplitOptions.RemoveEmptyEntries)[0].Split('|')[1]!=onestr)
+                    {
+                        valuestr = "292184z|"+ onestr + "|\n" + valuestr;
+                    }
+                }
                 valuestr = valuestr.Replace("^", "＾");
                
                 if (!this.IsJT)
@@ -262,7 +291,7 @@ namespace Core.Base
                     //转繁体
                     try
                     {
-                        valuestr = Microsoft.VisualBasic.Strings.StrConv(valuestr, Microsoft.VisualBasic.VbStrConv.TraditionalChinese, 0);
+                        valuestr = S2TConv(valuestr);
                     }
                     catch { }
                 }
@@ -277,13 +306,200 @@ namespace Core.Base
         }
 
 
-        public bool UpdatePos(string inputstr, int pos)
+        public virtual string[] GetInputOneValue(string inputstr)
+        {
+            string valuestr = "";
+            if (IsChinese == 1)
+            {
+                #region 中文处理
+                if (inputstr.Length == 0 || inputstr.Length>1) return null;
+                if (!inputstr.StartsWith("'"))
+                {
+                    int count = 0;
+                    int first = 0, last = MasterDit.Length - 1;
+                    int pcount = inputstr.Length > 2 ? 2 : 2;
+      
+
+
+                    #region 取字
+                    string[] mdict = null;
+                    if (indexComplete)
+                    {
+                        PosIndex poi = DictIndex.GetPos(inputstr, ref mdict);
+                        if (poi != null)
+                        {
+                            first = poi.Start;
+                            last = poi.End;
+                        }
+                        else
+                        {
+                            last = 0;
+                        }
+                    }
+                    else last = 0;
+                    if (mdict == null)
+                        mdict = MasterDit;
+
+                    for (int i = first; i <= last; i++)
+                    {
+                        if (mdict.Length > 0)
+                        {
+                            if (mdict[i].StartsWith(inputstr))
+                            {
+                                string strarr = mdict[i];
+                                string fcode = strarr.Split(' ')[0];
+                                string fvalue = strarr.Substring(strarr.Split(' ')[0].Length).Trim();//获取汉字
+                                int startint = fcode.IndexOf(inputstr) + inputstr.Length;
+                                foreach (var hzvalue in fvalue.Split(' '))
+                                {
+                                    if (string.IsNullOrEmpty(hzvalue)) continue;
+                                    fvalue = hzvalue;
+                                    if (SingleInput)
+                                    {
+                                        if (fvalue.Length > 1 && fcode.Length > 3)
+                                        {
+                                            //单字
+                                            continue;
+                                        }
+                                    }
+                                    if (valuestr.IndexOf("|" + fvalue + "|") < 0)
+                                    {
+                                        //去重
+                                        valuestr += i + "z|" + fvalue + "|" + (startint < fcode.Length ? fcode.Substring(startint, fcode.Length - inputstr.Length) : "") + "\n";
+                                        count++;
+                                    }
+                                }
+
+
+                            }
+                        }
+                        if (count > pcount) break;
+                    }
+
+                    #endregion
+
+                    if (count < 28)
+                    {
+                        string prostr = GetProInputValue(inputstr, 20);
+                        valuestr += prostr;
+                    }
+                    if (count < 28)
+                        GetUserDict(inputstr, ref valuestr);
+
+                }
+                else
+                {
+                    GetCloudDict(inputstr, ref valuestr);
+                }
+                #endregion
+                if (valuestr.Length > 0)
+                {
+
+                    if (!this.IsJT)
+                    {
+                        //转繁体
+                        try
+                        {
+                            valuestr = S2TConv(valuestr);
+                        }
+                        catch { }
+                    }
+                    string[] vsa = valuestr.Split(new string[1] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < vsa.Length; i++)
+                        vsa[i] = Comm.Function.ReplaceSystem(vsa[i]);
+                    //vsa = vsa.OrderBy(v => v.Split('|')[1].Length).ToArray();
+                    return vsa;
+                }
+            }
+            
+            return null;
+        }
+
+        public string S2TConv(string s)
+        {
+            if (S2TDict.Count <= 0)
+            {
+                return Microsoft.VisualBasic.Strings.StrConv(s, Microsoft.VisualBasic.VbStrConv.TraditionalChinese, 0);
+            }
+            string ss = "";
+            if (s.IndexOf("|") > 0)
+            {
+                string cs = "";
+                for (int ii = 0; ii < s.Length; ii++)
+                {
+                    bool en = false;
+                    char[] c = s.Substring(ii,1).ToCharArray();
+                    for (int i = 0; i < s.Substring(ii, 1).Length; i++)
+                    {
+                        if ((int)c[i] <= 127)
+                        {
+                            en = true;
+                            break;
+                        }
+                    }
+
+                    if (en)
+                    {
+                        if (cs.Length > 0)
+                        {
+
+
+                            if (S2TDict.ContainsKey(cs))
+                            {
+                                ss += S2TDict[cs].Split(' ')[0];
+                            }
+                            else
+                            {
+                                if (cs.Length > 1)
+                                {
+                                    for (int i = 0; i < cs.Length; i++)
+                                    {
+                                        if (S2TDict.ContainsKey(cs.Substring(i,1)))
+                                        {
+                                            ss += S2TDict[cs.Substring(i, 1)].Split(' ')[0];
+                                        }
+                                        else
+                                            ss += Microsoft.VisualBasic.Strings.StrConv(cs.Substring(i, 1), Microsoft.VisualBasic.VbStrConv.TraditionalChinese, 0);
+                                    }
+                                }
+                                else
+                                    ss += Microsoft.VisualBasic.Strings.StrConv(cs, Microsoft.VisualBasic.VbStrConv.TraditionalChinese, 0);
+                            }
+                            cs = "";
+                        }
+                        ss += s.Substring(ii, 1);
+                    }
+                    else
+                    {
+                        cs += s.Substring(ii, 1);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < s.Length; i++)
+                {
+                    if (S2TDict.ContainsKey(s.Substring(i, 1)))
+                    {
+                        ss += S2TDict[s.Substring(i, 1)].Split(' ')[0];
+                    }
+                    else
+                    {
+                        ss += Microsoft.VisualBasic.Strings.StrConv(s.Substring(i, 1), Microsoft.VisualBasic.VbStrConv.TraditionalChinese, 0);
+                    }
+                }
+            }
+            return ss;
+        }
+        public bool UpdatePos(string inputstr, int pos,int page=1,int pagesize=9)
         {
             try
             {
                 if (IsChinese == 1)
                 {
                     #region 中文处理
+                    //if (page > 1) pos = pos + ((page-1)*pagesize);
+                    if (page > 1) return false;
                     if (inputstr.Length == 0) return false;
                     if (!inputstr.StartsWith("'"))
                     {
@@ -291,36 +507,149 @@ namespace Core.Base
                         int first = 0, last = MasterDit.Length - 1;
 
                         #region 自动调频
+                        string[] mdict = null;
                         if (indexComplete)
                         {
-                            PosIndex poi = DictIndex.GetPos(inputstr);
+                            PosIndex poi = DictIndex.GetPos(inputstr, ref mdict, false);
                             if (poi == null) return false;
                             first = poi.Start;
                             last = poi.End;
                         }
                         else return false;
-
+                        if (mdict == null) mdict = MasterDit;
+                        int fpos = 0;
+                        bool jpok = false;
+                        int xtcount = 0;
                         for (int i = first; i <= last; i++)
                         {
-                            if (MasterDit[i].StartsWith(inputstr))
+                            if (fpos == 0 && mdict[i].Split(' ')[0].StartsWith(inputstr))
                             {
-                                string strarr = MasterDit[i];
-                                string fcode = strarr.Split(' ')[0];
-                                string fvalue = strarr.Substring(strarr.Split(' ')[0].Length).Trim();//获取汉字
-                                if (fvalue.Split(' ').Length < 2) return false;
-                                if (fvalue.Split(' ').Length < pos - 1) pos = fvalue.Split(' ').Length;
-                                string zdit = fvalue.Split(' ')[pos - 1];
-                                MasterDit[i] = fcode + " " + zdit + " ";
-                                foreach (var item in fvalue.Split(' '))
+                                fpos = i;
+                            }
+
+                            if (mdict[i].Split(' ')[0] == inputstr)
+                            {
+                                xtcount++;
+                                if (i != fpos && xtcount == pos && page == 1)
                                 {
-                                    if (item.Length == 0) continue;
-                                    if (item == zdit) continue;
-                                    MasterDit[i] += "" + item + " ";
+                                    string temp = mdict[i];
+                                    int jhi = i;
+                                    for (int j = i - 1; j >= fpos; j--)
+                                    {
+                                        if (mdict[j].Split(' ')[0] == inputstr)
+                                        {
+                                            mdict[jhi] = mdict[j];
+                                            mdict[j] = temp;
+                                            jhi = j;
+                                        }
+                                    }
+                                    jpok = true;
                                 }
-                                MasterDit[i] = MasterDit[i].TrimEnd();
+                                else
+                                {
+                                    if (mdict[i].Split(' ').Length <= pos)
+                                    {
+                                        continue;
+                                    }
+                                    string strarr = mdict[i];
+                                    string fcode = strarr.Split(' ')[0];
+                                    string fvalue = strarr.Substring(strarr.Split(' ')[0].Length).Trim();//获取汉字
+                                    if (fvalue.Split(' ').Length < 2) return false;
+                                    if (fvalue.Split(' ').Length < pos - 1) pos = fvalue.Split(' ').Length;
+                                    string zdit = fvalue.Split(' ')[pos - 1];
+                                    mdict[i] = fcode + " " + zdit + " ";
+                                    foreach (var item in fvalue.Split(' '))
+                                    {
+                                        if (item.Length == 0) continue;
+                                        if (item == zdit) continue;
+                                        mdict[i] += "" + item + " ";
+                                    }
+                                    mdict[i] = mdict[i].TrimEnd();
+                                    jpok = true;
+                                }
+
+                                break;
+
                             }
 
 
+                        }
+                        if (!jpok)
+                        {
+                            string temp = mdict[fpos];
+                            mdict[fpos] = mdict[fpos + pos - 1];
+                            mdict[fpos + pos - 1] = temp;
+                        }
+                        jpok = false;
+                        if (indexComplete)
+                        {
+                            PosIndex poi = DictIndex.GetPos(inputstr, ref mdict, true);
+                            if (poi == null) return false;
+                            first = poi.Start;
+                            last = poi.End;
+                        }
+                        else return false;
+                        if (mdict == null) mdict = MasterDit;
+                        fpos = 0;
+                        xtcount = 0;
+                        for (int i = first; i <= last; i++)
+                        {
+                            if (fpos == 0 && mdict[i].Split(' ')[0].StartsWith(inputstr))
+                            {
+                                fpos = i;
+                            }
+                            if (mdict[i].Split(' ')[0] == inputstr)
+                            {
+                                xtcount++;
+                                if (i != fpos && xtcount == pos && page == 1)
+                                {
+                                    string temp = mdict[i];
+                                    int jhi = i;
+                                    for (int j = i - 1; j >= fpos; j--)
+                                    {
+                                        if (mdict[j].Split(' ')[0] == inputstr)
+                                        {
+                                            mdict[jhi] = mdict[j];
+                                            mdict[j] = temp;
+                                            jhi = j;
+                                        }
+                                    }
+                                    jpok = true;
+                                }
+                                else
+                                {
+                                    if (mdict[i].Split(' ').Length <= pos)
+                                    {
+                                        continue;
+                                    }
+                                    string strarr = mdict[i];
+                                    string fcode = strarr.Split(' ')[0];
+                                    string fvalue = strarr.Substring(strarr.Split(' ')[0].Length).Trim();//获取汉字
+                                    if (fvalue.Split(' ').Length < 2) return false;
+                                    if (fvalue.Split(' ').Length < pos - 1) pos = fvalue.Split(' ').Length;
+                                    string zdit = fvalue.Split(' ')[pos - 1];
+                                    mdict[i] = fcode + " " + zdit + " ";
+                                    foreach (var item in fvalue.Split(' '))
+                                    {
+                                        if (item.Length == 0) continue;
+                                        if (item == zdit) continue;
+                                        mdict[i] += "" + item + " ";
+                                    }
+                                    mdict[i] = mdict[i].TrimEnd();
+                                    jpok = true;
+                                }
+
+                                break;
+
+                            }
+
+
+                        }
+                        if (!jpok)
+                        {
+                            string temp = mdict[fpos];
+                            mdict[fpos] = mdict[fpos + pos - 1];
+                            mdict[fpos + pos - 1] = temp;
                         }
 
                         #endregion
@@ -331,7 +660,10 @@ namespace Core.Base
 
                 }
             }
-            catch { return false; }
+            catch
+            {
+                return false;
+            }
             return true;
         }
 
@@ -529,28 +861,60 @@ namespace Core.Base
         /// <param name="input"></param>
         /// <param name="left"></param>
         /// <returns></returns>
-        public virtual string GetLROne(string code, bool left)
+        public virtual string GetLROne(string code, bool left,int pos=0)
         {
             string vv = string.Empty;
+            pos = pos - 1;
+            if (pos < 0) pos = 0;
             foreach (var dit in onedict)
             {
-                if (dit.StartsWith(code+"="))
-                    if (left) vv = dit.Split('=')[1].Split(' ')[0];
-                    else vv = dit.Split('=')[1].Split(' ')[1];
+                if (dit.StartsWith(code + "="))
+                {
+                    try
+                    {
+                        if (left)
+                        {
+                            vv = dit.Split('=')[1].Split(' ')[0];
+                            if (vv.IndexOf("_") > 0 && pos < vv.Split('_').Length)
+                            {
+                                vv = vv.Split('_')[pos];
+                            }
+                            else if (vv.IndexOf("_") > 0 && pos >= vv.Split('_').Length)
+                            {
+                                vv = vv.Split('_')[vv.Split('_').Length - 1];
+                            }
+                        }
+                        else
+                        {
+                            vv = dit.Split('=')[1].Split(' ')[1];
+                            if (vv.IndexOf("_") > 0 && pos < vv.Split('_').Length)
+                            {
+                                vv = vv.Split('_')[pos];
+                            }
+                            else if (vv.IndexOf("_") > 0 && pos >= vv.Split('_').Length)
+                            {
+                                vv = vv.Split('_')[vv.Split('_').Length - 1];
+                            }
+                        }
+                        break;
+                    }
+                    catch { }
+                }
             }
+            vv = vv.Replace("~", " ");
             if (!this.IsJT)
             {
                 try
                 {
                     //转繁体
-                    vv = Microsoft.VisualBasic.Strings.StrConv(vv, Microsoft.VisualBasic.VbStrConv.TraditionalChinese, 0);
+                    vv = S2TConv(vv);
                 }
                 catch { }
             }
             if (string.IsNullOrEmpty(vv))
             {
                 //取词库本身的一级简码
-                var v= GetInputValue(code,false,1);
+                var v= GetInputOneValue(code);
                 if(v!=null && v.Length > 0)
                 {
                     vv = v[0].Split('|')[1];
@@ -563,29 +927,48 @@ namespace Core.Base
             return vv;
         }
 
-        public virtual void CreateIndex(string[] dict,ref List<PosIndex> posl,int p,int s,int e)
+        public virtual void CreateIndex(string[] dict, ref List<PosIndex> posl, int p, int s, int e)
         {
             string ts = string.Empty;
-            posl = new List<PosIndex> ();
-
-            for (int i = s; i < e; i++) {
-                if (!string.IsNullOrEmpty (dict [i]) && dict [i].Split (' ') [0].Length > p - 1) {
-                    if (string.Compare (ts, dict [i].Substring (p - 1, 1), false) != 0) {
-                        PosIndex pos = new PosIndex ();
-                        ts = dict [i].Substring (p - 1, 1);
-                        if (!string.IsNullOrEmpty (ts)) {
+            posl = new List<PosIndex>();
+            if (e == 0) e = dict.Length;
+            for (int i = s; i < e; i++)
+            {
+                if (!string.IsNullOrEmpty(dict[i]) && dict[i].Split(' ')[0].Length > p - 1)
+                {
+                    if (string.Compare(ts, dict[i].Substring(0, p), false) != 0)
+                    {
+                        PosIndex pos = new PosIndex();
+                        ts = dict[i].Substring(0, p);
+                        if (!string.IsNullOrEmpty(ts))
+                        {
                             pos.Letter = ts;
                             pos.Start = i;
                             pos.End = i;
-                            posl.Add (pos);
+                            if (p==1 && dict[i].Split(' ')[0].Length > 1)
+                                pos.subdict.Add(dict[i]);
+                            posl.Add(pos);
                         }
 
-                    } else {
-                        posl [posl.Count - 1].End = i;
+                    }
+                    else
+                    {
+                        posl[posl.Count - 1].End = i;
+                        if (p == 1 && dict[i].Split(' ')[0].Length > 1)
+                            posl[posl.Count - 1].subdict.Add(dict[i]);
                     }
                 }
             }
+            if (p == 1)
+            {
+                posl.AsParallel().ForAll(item =>
+                {
 
+                    item.mdict = (string[])item.subdict.OrderBy(o => o.Substring(0, 2)).ToArray();
+                    item.subdict = null;
+                    CreateIndex(item.mdict, ref item.SubIndex, 2, 0, item.mdict.Length);
+                });
+            }
             //if (p == 1)
             //    posl.AsParallel ().ForAll (item => {
             //        CreateIndex (dict, ref item.SubIndex, 2, item.Start, item.End);
@@ -600,7 +983,7 @@ namespace Core.Base
         /// <returns></returns>
         public string CheckKeysString(Keys keys)
         {
-            if (this.IsChinese==0 && keys == Keys.Space) return " ";
+            if ((this.IsChinese==0 && keys == Keys.Space) || (useregular && keys == Keys.Space)) return " ";
             string str = "";
             if (this.IsQJ)
             {
@@ -886,8 +1269,14 @@ namespace Core.Base
                                 {
                                     if (keys.ToString() == bjywdict[i].Split('=')[0] && bjywdict[i].Split(' ').Length > 1)
                                     {
-
-                                        str = bjywdict[i].Split('=')[1].Split(' ')[1];
+                                        if (bjywdict[i].IndexOf("== +")>0)
+                                        {
+                                            str = "+";
+                                        }
+                                        else
+                                        {
+                                            str = bjywdict[i].Split('=')[1].Split(' ')[1];
+                                        }
                                         break;
                                     }
                                 }
@@ -934,9 +1323,9 @@ namespace Core.Base
         /// </summary>
         /// <param name="codechar"></param>
         /// <returns></returns>
-        public   bool CheckCode(string codechar)
+        public bool CheckCode(string codechar)
         {
-           bool valuebool = false;
+             bool valuebool = false;
             for (int i = 0; i < mdcode.Length; i++)
             {
                 if (mdcode.Substring(i,1) == codechar)
@@ -948,7 +1337,7 @@ namespace Core.Base
             if (!valuebool) valuebool = CheckSRCode(codechar);
             return valuebool;
         }
-        private   bool SRLeft(string s)
+        public bool SRLeft(string s)
         {
             int count = 0;
             for (int i = 0; i < s.Length; i++)
@@ -958,7 +1347,7 @@ namespace Core.Base
 
             return count == s.Length;
         }
-        private   bool SRRight(string s)
+        public   bool SRRight(string s)
         {
             int count = 0;
             for (int i = 0; i < s.Length; i++)
@@ -979,33 +1368,35 @@ namespace Core.Base
             hleft = false;
             hright = false;
             if (InputMode.closebj) return;
- 
+
             string oldv = v;
-                v = v.Replace("；", ";").Replace("，", ",").Replace("。", ".").Replace("、", "/").Replace("‘", "'").Replace("’", "'").Replace("~","");
-                if (v.Length == 1 && !CheckSRCode(v)) return;
-                string s = string.Empty;
+            v = v.Replace("；", ";").Replace("，", ",").Replace("。", ".").Replace("、", "/").Replace("‘", "'").Replace("’", "'").Replace("~", "");
+            if (v.Length == 1 && !CheckSRCode(v)) return;
+            string s = string.Empty;
 
-                mapsortkeys.FindAll(f => v.IndexOf(f.ZM) >= 0).OrderBy(o => o.Pos).ToList().ForEach(f => s += f.ZM);
-                v = s;
-                s = string.Empty;
+            mapsortkeys.FindAll(f => v.IndexOf(f.ZM) >= 0).OrderBy(o => o.Pos).ToList().ForEach(f => s += f.ZM);
+            v = s;
+            s = string.Empty;
 
 
-            lbg:
-                bool have = false;
-                foreach (var m in mapkeys)
+        lbg:
+            bool have = false;
+            foreach (var m in mapkeys)
+            {
+                if (v.StartsWith(m.ZM))
                 {
-                    if (v.StartsWith(m.ZM))
-                    {
-                        s += m.Map;
-                        v = v.Replace(m.ZM, string.Empty);
-                        have = true;
-                        hleft = SRLeft(m.ZM);
-                        hright = SRRight(m.ZM);
-                        break;
-                    }
-                    if (v.Length == 0) break;
+                    s += m.Map;
+                    v = v.Replace(m.ZM, string.Empty);
+                    have = true;
+                    hleft = m.left;
+                    hright = m.right;
+                    //hleft = SRLeft(m.ZM);
+                    //hright = SRRight(m.ZM);
+                    break;
                 }
-                if (v.Length > 0 && have) goto lbg;
+                if (v.Length == 0) break;
+            }
+            if (v.Length > 0 && have) goto lbg;
             if (!hright) hleft = true;
 
         }
@@ -1049,6 +1440,11 @@ namespace Core.Base
             string oldv = v;
             v = v.Replace("；", ";").Replace("，", ",").Replace("。", ".").Replace("、", "/").Replace("‘", "'").Replace("’", "'");
             v = v.Replace("，", ",").Replace("．", ".");
+            if (v == " " && px)
+            {
+
+                return oldv;
+            }
             if (v.Length == 1 && !CheckSRCode(v) && px) return oldv;
             string s = string.Empty;
             if (px)
@@ -1072,7 +1468,9 @@ namespace Core.Base
                         havezh = true;
                     if (mapstr1.IndexOf(m.ZM) >= 0) hleft = true;
                     if (mapstr2.IndexOf(m.ZM) >= 0) hright = true;
-
+                    //hleft = m.left;
+                    //hright = m.right;
+                    m.keydown++;
                     break;
                 }
                 if (v.Length == 0) break;
@@ -1085,7 +1483,82 @@ namespace Core.Base
             return s + v;
         }
 
+        //正则转按键
+        public string CovertStrByReg(string v)
+        {
+            if (InputMode.closebj && v.Length < 4) return v;
 
+            v = v.Replace("；", ";").Replace("，", ",").Replace("。", ".").Replace("、", "/").Replace("‘", "'").Replace("’", "'");
+            v = v.Replace("，", ",").Replace("．", ".").Replace("－", "-").Replace("＝", "=");
+
+            try
+            {
+                //排序
+                var node = Win.WinInput.settingYaml.findNodeByKey("alphabet");
+                if (node != null && node.name.Length > 0 && node.value.Length > 2)
+                    v = Comm.RegHelp.RegexReplace(v, node.name + ":" + node.value);
+
+                foreach (var m in mapkeys)
+                {
+                    if (v.Length == 0) break;
+                    if (v.StartsWith(m.ZM))
+                    {
+                        //统计按键
+                        m.keydown++;
+                        break;
+                    }
+                }
+
+                //正则替换 
+                node = Win.WinInput.settingYaml.findNodeByKey("algebra");
+                if (node != null)
+                {
+                    List<Core.Comm.YAMLHelp.Node> nodes = new List<Comm.YAMLHelp.Node>();
+                    Win.WinInput.settingYaml.findChildren(node, nodes);
+                    if (nodes.Count > 0)
+                    {
+                        foreach (var item in nodes)
+                        {
+                            v = Comm.RegHelp.RegexReplace(v, item.value);
+                        }
+                    }
+                }
+
+            }
+            catch { }
+
+            return v;
+        }
+
+        public static string CovertCodeStrByReg(string v)
+        {
+            if (InputMode.closebj && v.Length < 4) return v;
+            if (v.Length == 0) return v;
+            v = v.Replace("；", ";").Replace("，", ",").Replace("。", ".").Replace("、", "/").Replace("‘", "'").Replace("’", "'");
+            v = v.Replace("，", ",").Replace("．", ".");
+
+            try
+            {
+                //正则替换 
+                var node = Win.WinInput.settingYaml.findNodeByKey("preedit_format");
+                if (node != null)
+                {
+                    List<Core.Comm.YAMLHelp.Node> nodes = new List<Comm.YAMLHelp.Node>();
+                    Win.WinInput.settingYaml.findChildren(node, nodes);
+                    if (nodes.Count > 0)
+                    {
+                        foreach (var item in nodes)
+                        {
+                            v = Comm.RegHelp.RegexReplace(v, item.value);
+                        }
+                    }
+                }
+
+            }
+            catch { }
+
+            return v;
+        }
         /// <summary>
         /// 是否关闭线程
         /// </summary>
@@ -1208,8 +1681,8 @@ namespace Core.Base
                 string v = InputStatusFrm.GetCutStr(inputv[i]);
                 string pos = i == 9 ? "0." : (i + 1).ToString() + ".";
                 lbinputv[i].Text = pos + v;
-                vw += lbinputv[i].PreferredWidth -6 + lbinputc[i].PreferredWidth;
-              
+                vw += lbinputv[i].PreferredWidth - 6 + lbinputc[i].PreferredWidth;
+
             }
             if (vw < 240) vw = 240;
             else if (rcount > 6 && vw < 300) vw = 300;
@@ -1381,18 +1854,20 @@ namespace Core.Base
  
 }
 
-    /// <summary>
-    /// 索引类
-    /// </summary>
-    public class PosIndex
-    {
-        public string Letter=string.Empty;
-        public int Start=0;
-        public int End=0;
+/// <summary>
+/// 索引类
+/// </summary>
+public class PosIndex
+{
+    public string Letter = string.Empty;
+    public int Start = 0;
+    public int End = 0;
 
-        public  List<PosIndex> SubIndex=new List<PosIndex>();
- 
-    }
+    public List<string> subdict = new List<string>();
+    public string[] mdict = null;
+    public List<PosIndex> SubIndex = new List<PosIndex>();
+
+}
 /// <summary>
     /// 索引管理类
     /// </summary>
@@ -1401,25 +1876,39 @@ namespace Core.Base
         public List<PosIndex>  IndexList=new List<PosIndex>();
         public List<PosIndex> EnList = new List<PosIndex>();
         public List<PosIndex> ProList = new List<PosIndex>();
-        /// <summary>
-        /// 通过输入获取索引对象
-        /// </summary>
-        /// <param name="str">String.</param>
-        public PosIndex GetPos(string str)
+    /// <summary>
+    /// 通过输入获取索引对象
+    /// </summary>
+    /// <param name="str">String.</param>
+    public PosIndex GetPos(string str, ref string[] dict,bool f=true)
+    {
+        dict = null;
+        if (str.Length == 1)
         {
-            if (str.Length == 1) {
-                return IndexList.Find (i => i.Letter == str);
-            } else     if (str.Length > 1){
-                var o=IndexList.Find (i => i.Letter == str.Substring(0,1));
-                return o;
-                //if (o != null)
-                //    return o.SubIndex.Find (i => i.Letter == str.Substring (1, 1));
-                //else
-                //    return null;
-            }
-
-            return null;
+            return IndexList.Find(i => i.Letter == str);
         }
+        else if (str.Length > 1)
+        {
+            if (f)
+            {
+                var o = IndexList.Find(i => i.Letter == str.Substring(0, 1));
+                if (o != null)
+                {
+                    dict = o.mdict;
+                    return o.SubIndex.Find(i => i.Letter == str.Substring(0, 2));
+                }
+                else
+                    return null;
+            }
+            else
+            {
+                var o = IndexList.Find(i => i.Letter == str.Substring(0, 1));
+                return o;
+            }
+        }
+
+        return null;
+    }
 
         /// <summary>
         /// 通过输入获取索引对象
@@ -1458,10 +1947,18 @@ namespace Core.Base
             return null;
         }
     }
-    public class MapintKey
-    {
-        public string ZM = string.Empty;
-        public string Map = string.Empty;
-        public short Pos = 0;
-    }
+public class MapintKey
+{
+    public string ZM = string.Empty;
+    public string Map = string.Empty;
+    public short Pos = 0;
+    public bool zfzh = false;
+
+    public Keys ZMK;
+    public Keys MapK;
+
+    public bool right = false;
+    public bool left = false;
+    public long keydown = 0;
+}
  
