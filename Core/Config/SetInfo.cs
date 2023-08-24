@@ -17,7 +17,7 @@ namespace Core.Config
             string ss = string.Empty;
 
             foreach (var s in setting)
-                if (s.StartsWith(skey + "=")) ss = s.Split('=')[1];
+                if (s.StartsWith(skey + "=")) ss = s.Replace(skey + "=","");
             return ss;
         }
     }
