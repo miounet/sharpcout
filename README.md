@@ -37,6 +37,7 @@ http://srkmm.ys168.com/
 300速度演示地址：https://www.bilibili.com/video/BV1M3411Y7aB/
 
 更新日志:
+3.1.2 支持标点并出，支持指法正则配置，支持速录方案
 
 1.1版本 修复bug
 
